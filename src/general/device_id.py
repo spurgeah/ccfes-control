@@ -1,4 +1,4 @@
-from src.commands import Commands
+from src.commands import Commands, Errors
 from src.packet import Packet, PacketAck
 
 class PacketGetDeviceId(Packet):
@@ -17,7 +17,7 @@ class PacketGetDeviceIdAck(PacketAck):
         self.command = Commands.GetDeviceIdAck
 
         if (data):
-            self.error = data[0]
+            self.error = Errors(data[0])
             self.deviceId = data[1:11].decode()
 
         

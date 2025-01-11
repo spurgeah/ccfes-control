@@ -6,8 +6,10 @@ class BitVector:
         self.value = value
         self._length = value.bit_length()
 
+
     def __getitem__(self, index):
         return bool((self.value >> index) & 0b01)
+    
 
     def __setitem__(self, index, value):
         if not value in {0, 1}:
@@ -19,9 +21,11 @@ class BitVector:
 
         self._length = max(self._length, index+1)
 
+
     def __len__(self):
         'Mostly advisory'
         return self._length
+    
 
     def extend(self, value: bytes):
         start = self._length
@@ -54,8 +58,10 @@ class BitVector:
 
         return bytes(result)
 
+
     def __repr__(self):
         return f"{type(self).__name__}(0b{self.value: _b})"
+
 
     def __str__(self):
         return '0b' + format(self.value, '_b')

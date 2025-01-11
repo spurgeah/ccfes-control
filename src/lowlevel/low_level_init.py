@@ -6,9 +6,11 @@ class PacketLowLevelInit(Packet):
 
     highVoltage: int
 
+
     def __init__(self):
         self.command = Commands.LowLevelInit
         self.highVoltage = 0
+
 
     def getData(self) -> bytes:
         bb = ByteBuilder()
@@ -21,6 +23,7 @@ class PacketLowLevelInit(Packet):
 class PacketLowLevelInitAck(PacketAck):
 
     result: int
+
 
     def __init__(self, data: bytes):
         self.command = Commands.LowLevelInitAck

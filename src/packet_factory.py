@@ -4,6 +4,7 @@ class PacketFactory:
 
     data = {}
 
+
     def __init__(self):
         for x in Packet.__subclasses__():
             print(f"Register type {x.__name__}")

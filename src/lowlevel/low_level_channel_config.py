@@ -6,9 +6,11 @@ class LowLevelChannelPoint():
     duration: int
     current: int
 
+
     def __init__(self, _duration: int, _current: int):
         self.duration = _duration
         self.current = _current
+
 
     def getData(self) -> bytes:
         c = 2 * self.current + 300
@@ -28,11 +30,13 @@ class PacketLowLevelChannelConfig(Packet):
     channelSelection: int
     points: list[LowLevelChannelPoint]
 
+
     def __init__(self):
         self.command = Commands.LowLevelChannelConfig
         self.executionStimulation = 0
         self.channelSelection = 0
         self.points = []
+
 
     def getData(self) -> bytes:
         bb = ByteBuilder()
@@ -49,6 +53,7 @@ class PacketLowLevelChannelConfig(Packet):
 class PacketLowLevelChannelConfigAck(PacketAck):
 
     result: int
+
 
     def __init__(self, data: bytes):
         self.command = Commands.LowLevelChannelConfigAck

@@ -70,6 +70,7 @@ class Crc16:
     
         return crc
     
+    
     def calcTable():
         table = [0] * 256
         polynomial = 0x1021

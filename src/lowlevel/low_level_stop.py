@@ -12,6 +12,7 @@ class PacketLowLevelStopAck(PacketAck):
 
     result: int
 
+
     def __init__(self, data: bytes):
         self.command = Commands.LowLevelStopAck
 

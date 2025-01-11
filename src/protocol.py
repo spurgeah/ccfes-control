@@ -1,4 +1,7 @@
 import asyncio
+from src.commands import Commands
+from src.general.general_error import PacketGeneralError
+from src.general.unknown_command import PacketUnknownCommand
 from src.packet_factory import PacketFactory
 from src.utils.byte_builder import ByteBuilder
 from src.utils.crc16 import Crc16
@@ -14,6 +17,7 @@ class Protocol:
     StuffingByte: int = 0x81
     StuffingKey: int = 0x55
 
+
     async def sendPacket(packet: Packet, packet_number: int, connection: Connection, factory: PacketFactory) -> PacketAck | None:
 
         connection.write(Protocol.packetToBytes(packet, packet_number))
@@ -21,9 +25,17 @@ class Protocol:
         counter = 100
         while counter > 0:
             incoming_data = connection.read()
-            if Protocol.isValidPackageData(incoming_data):
+            if Protocol.isValidPackageData(incoming_data):                
                 ack_data = Protocol.extractData(incoming_data)
-                return factory.createPacketWithData(ack_data[0], ack_data[1])
+                ack = factory.createPacketWithData(ack_data[0], ack_data[1])
+                if ack.command == Commands.GeneralError:
+                    ge: PacketGeneralError = ack
+                    raise ValueError(f"General error packet {ge.error}")
+                elif ack.command == Commands.UnkownCommand:
+                    uc: PacketUnknownCommand = ack
+                    raise ValueError(f"Unknown command packet {uc.error}")
+                else:
+                    return ack
 
             await asyncio.sleep(0.1)
             counter -= 1
