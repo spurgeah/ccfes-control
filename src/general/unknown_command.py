@@ -1,13 +1,13 @@
-from src.commands import Commands
+from src.commands import Commands, ResultAndError
 from src.packet import PacketAck
 
 
-class PacketUnknownCommand(PacketAck):
+class PacketGeneralUnknownCommand(PacketAck):
 
-    error: int
+    resultError: ResultAndError
 
     def __init__(self, data: bytes):
         self.command = Commands.UnkownCommand
 
         if (data):
-            self.error = data[0]
+            self.resultError = ResultAndError(data[0])

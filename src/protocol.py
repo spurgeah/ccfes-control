@@ -1,7 +1,7 @@
 import asyncio
 from src.commands import Commands
 from src.general.general_error import PacketGeneralError
-from src.general.unknown_command import PacketUnknownCommand
+from src.general.unknown_command import PacketGeneralUnknownCommand
 from src.packet_factory import PacketFactory
 from src.utils.byte_builder import ByteBuilder
 from src.utils.crc16 import Crc16
@@ -32,8 +32,10 @@ class Protocol:
                     ge: PacketGeneralError = ack
                     raise ValueError(f"General error packet {ge.error}")
                 elif ack.command == Commands.UnkownCommand:
-                    uc: PacketUnknownCommand = ack
+                    uc: PacketGeneralUnknownCommand = ack
                     raise ValueError(f"Unknown command packet {uc.error}")
+                elif ack.command != packet.command + 1:
+                    raise ValueError(f"Wrong answer command packet {ack.command}")
                 else:
                     return ack
 
@@ -52,7 +54,7 @@ class Protocol:
         # swap command and packet number to ensure little endianess
         bb.swap(0, 2)
         # append packet data
-        bb.extend(packet.getData())
+        bb.extendBytes(packet.getData())
         # stuff packet data
         stuffed_packet_data = Protocol.stuff(bb.getBytes())
 

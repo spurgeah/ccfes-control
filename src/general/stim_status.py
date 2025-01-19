@@ -7,15 +7,15 @@ class GetStimStatusResult(NamedTuple):
     highVoltageOn: bool
 
 
-class PacketGetStimStatus(Packet):
+class PacketGeneralGetStimStatus(Packet):
 
     def __init__(self):
         self.command = Commands.GetStimStatus
 
 
-class PacketGetStimStatusAck(PacketAck):
+class PacketGeneralGetStimStatusAck(PacketAck):
 
-    successful: int
+    successful: bool
     stimStatus: StimStatus
     highVoltageOn: bool
 

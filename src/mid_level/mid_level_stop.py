@@ -1,23 +1,22 @@
 from src.commands import Commands, ResultAndError
 from src.packet import Packet, PacketAck
 
-class PacketGeneralGetDeviceId(Packet):
+class PacketMidLevelStop(Packet):
 
     def __init__(self):
-        self.command = Commands.GetDeviceId
+        self.command = Commands.MidLevelStop
 
 
-class PacketGeneralGetDeviceIdAck(PacketAck):
+class PacketMidLevelStopAck(PacketAck):
 
     resultError: ResultAndError
-    deviceId: str
 
 
     def __init__(self, data: bytes):
-        self.command = Commands.GetDeviceIdAck
+        self.command = Commands.MidLevelStopAck
 
         if (data):
             self.resultError = ResultAndError(data[0])
-            self.deviceId = data[1:11].decode()
+
 
         

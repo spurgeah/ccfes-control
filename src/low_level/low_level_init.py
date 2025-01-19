@@ -1,4 +1,4 @@
-from src.commands import Commands
+from src.commands import Commands, ResultAndError
 from src.utils.byte_builder import ByteBuilder
 from src.packet import Packet, PacketAck
 
@@ -22,11 +22,11 @@ class PacketLowLevelInit(Packet):
 
 class PacketLowLevelInitAck(PacketAck):
 
-    result: int
+    resultError: ResultAndError
 
 
     def __init__(self, data: bytes):
         self.command = Commands.LowLevelInitAck
         if data:
-            self.result = data
+            self.resultError = ResultAndError(data[0])
  

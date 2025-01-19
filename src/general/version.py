@@ -1,15 +1,15 @@
 from ..commands import Commands
 from ..packet import Packet, PacketAck
 
-class PacketGetExtendedVersion(Packet):
+class PacketGeneralGetExtendedVersion(Packet):
 
     def __init__(self):
         self.command = Commands.GetExtendedVersion
 
 
-class PacketGetExtendedVersionAck(PacketAck):
+class PacketGeneralGetExtendedVersionAck(PacketAck):
     
-    successful: int
+    successful: bool
     firmwareVersion: str
     scienceModeVersion: str
     firmwareHash: int

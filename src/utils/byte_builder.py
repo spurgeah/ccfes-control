@@ -8,8 +8,13 @@ class ByteBuilder():
     data: BitVector
 
 
-    def __init__(self):
-        self.data = BitVector(0)
+    def __init__(self, data = 0):
+        self.data = BitVector(data)
+
+    def getFromPosition(self, bit_position: int, bit_length: int) -> int:
+        result = 0
+        for x in range(bit_length):
+            result |= (self.data[bit_position + x] << x) & 0x1
 
 
     def append(self, value: int | list[int]):
@@ -20,8 +25,12 @@ class ByteBuilder():
                 self.appendIntern(x)
 
 
-    def extend(self, value: bytes):
-        self.data.extend(value)
+    def extendBytes(self, value: bytes):
+            self.data.extend(value)
+
+
+    def extendByteBuilder(self, value: 'ByteBuilder'):
+            self.data.extend(value.getBytes())
 
 
     def setToPosition(self, value: int, bit_position: int, bit_length: int):

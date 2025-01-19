@@ -1,5 +1,7 @@
 from enum import Enum, auto
 
+from src.layer_mid_level import LayerMidLevel
+
 from .layer import Layer
 from .layer_general import LayerGeneral
 from .packet_factory import PacketFactory
@@ -26,14 +28,19 @@ class Device():
 
         # for x in capabilities:
         self.layer.append(LayerGeneral(conn, self.packetFactory))
+        self.layer.append(LayerMidLevel(conn, self.packetFactory))
 
 
     async def initialize(self):
-        await self.getGeneralLayer().initialize()
+        await self.getLayerGeneral().initialize()
 
 
-    def getGeneralLayer(self) -> LayerGeneral:
+    def getLayerGeneral(self) -> LayerGeneral:
         return self.layer[0]
+
+
+    def getLayerMidLevel(self) -> LayerMidLevel:
+        return self.layer[1]
 
 
     def f(self):

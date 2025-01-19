@@ -2,10 +2,10 @@ import asyncio
 from typing import NamedTuple
 
 from src.commands import StimStatus
-from src.general.reset import PacketReset
-from src.general.stim_status import GetStimStatusResult, PacketGetStimStatus
-from .general.device_id import PacketGetDeviceId
-from .general.version import PacketGetExtendedVersion
+from src.general.reset import PacketGeneralReset, PacketGeneralResetAck
+from src.general.stim_status import GetStimStatusResult, PacketGeneralGetStimStatus, PacketGeneralGetStimStatusAck
+from .general.device_id import PacketGeneralGetDeviceId, PacketGeneralGetDeviceIdAck
+from .general.version import PacketGeneralGetExtendedVersion, PacketGeneralGetExtendedVersionAck
 from .packet_factory import PacketFactory
 from .utils.connection import Connection
 from .layer import Layer
@@ -29,30 +29,39 @@ class LayerGeneral(Layer):
 
 
     async def getDeviceId(self):
-        p = PacketGetDeviceId()
+        p = PacketGeneralGetDeviceId()
         ack = await Protocol.sendPacket(p, 0, self.connection, self.factory)
         if ack:
-            self.deviceId = ack.deviceId
+            dgi_ack: PacketGeneralGetDeviceIdAck = ack
+            self.checkResultError(dgi_ack.resultError, "GetDeviceId")
+            self.deviceId = dgi_ack.deviceId
 
 
     async def reset(self):
-        p = PacketReset()
+        p = PacketGeneralReset()
         ack = await Protocol.sendPacket(p, 0, self.connection, self.factory)
         if ack:
-            # ToDo: check error
+            reset_ack: PacketGeneralResetAck = ack
+            self.checkResultError(reset_ack.resultError, "Reset")
             pass
 
 
     async def getStimStatus(self) -> GetStimStatusResult:
-        p = PacketGetStimStatus()
+        p = PacketGeneralGetStimStatus()
         ack = await Protocol.sendPacket(p, 0, self.connection, self.factory)
         if ack:
-            return GetStimStatusResult(ack.stimStatus, ack.highVoltageOn)
+            gss_ack: PacketGeneralGetStimStatusAck = ack
+            if not gss_ack.successful:
+                raise ValueError(f"Error get stim status")
+            return GetStimStatusResult(gss_ack.stimStatus, gss_ack.highVoltageOn)
 
 
     async def getVersion(self):       
-        p = PacketGetExtendedVersion()
+        p = PacketGeneralGetExtendedVersion()
         ack = await Protocol.sendPacket(p, 0, self.connection, self.factory)
         if ack:
-            self.firmwareVersion = ack.firmwareVersion
-            self.scienceModeVersion = ack.scienceModeVersion
+            gev_ack: PacketGeneralGetExtendedVersionAck = ack
+            if not gev_ack.successful:
+                raise ValueError(f"Error get extended version")
+            self.firmwareVersion = gev_ack.firmwareVersion
+            self.scienceModeVersion = gev_ack.scienceModeVersion

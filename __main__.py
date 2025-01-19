@@ -2,6 +2,8 @@ import sys
 import asyncio
 
 from src.device_p24 import DeviceP24
+from src.utils.channel_configuration import MidLevelChannelConfiguration
+from src.utils.channel_point import ChannelPoint
 from src.utils.serial_port_connection import SerialPortConnection
 
 async def main() -> int:
@@ -21,12 +23,53 @@ async def main() -> int:
 
     device = DeviceP24(connection)
     await device.initialize()
-    general = device.getGeneralLayer()
+    general = device.getLayerGeneral()
     print(general.deviceId)
     print(general.firmwareVersion)
     print(general.scienceModeVersion)
 
     ss = await general.getStimStatus()
+
+    c1p1: ChannelPoint = ChannelPoint(200, 20)
+    c1p2: ChannelPoint = ChannelPoint(100, 0)
+    c1p3: ChannelPoint = ChannelPoint(200, -20)
+    cc1: MidLevelChannelConfiguration = MidLevelChannelConfiguration()
+    cc1.isActive = True
+    cc1.periodInMs = 20
+    cc1.ramp = 3
+    cc1.points = [c1p1, c1p2, c1p3]
+
+    c2p1: ChannelPoint = ChannelPoint(100, 10)
+    c2p2: ChannelPoint = ChannelPoint(100, 0)
+    c2p3: ChannelPoint = ChannelPoint(100, -10)
+    cc2: MidLevelChannelConfiguration = MidLevelChannelConfiguration()
+    cc2.isActive = True
+    cc2.periodInMs = 10
+    cc2.ramp = 3
+    cc2.points = [c2p1, c2p2, c2p3]
+
+
+    # F0 81 55 81 7E 81 AA 81 1A 
+    # 04 20 
+    # 03 
+    # 33 00 28 
+    # 06 45 50 00 
+    # 06 44 B0 00 
+    # 06 44 10 00 
+    # 33 00 14 
+    # 06 45 00 00 
+    # 06 44 B0 00 
+    # 06 44 60 00 
+    # 0F
+    mid_level = device.getLayerMidLevel()
+    await mid_level.init(True)
+    await mid_level.update([cc1, cc2])
+    for x in range(10):
+        update = await mid_level.getCurrentData()
+        print(update)
+        
+        await asyncio.sleep(1)
+    await mid_level.stop()
 
     connection.close()         
     

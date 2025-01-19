@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 
 
 class Commands:
@@ -21,8 +21,17 @@ class Commands:
     LowLevelStop: int = 4
     LowLevelStopAck: int = 5
 
+    MidLevelInit: int = 30
+    MidLevelInitAck: int = 31
+    MidLevelUpdate: int = 32
+    MidLevelUpdateAck: int = 33
+    MidLevelStop: int = 34
+    MidLevelStopAck: int = 35
+    MidLevelGetCurrentData: int = 36
+    MidLevelGetCurrentDataAck: int = 37
 
-class Errors(Enum):
+
+class ResultAndError(Enum):
     NO_ERROR = 0
     TRANSFER_ERROR = 1
     PARAMETER_ERROR = 2
@@ -30,6 +39,7 @@ class Errors(Enum):
     ELECTRODE_ERROR = 10
     PULSE_TIMEOUT_ERROR = 16
     PULSE_LOW_CURRENT_ERROR = 28
+
 
 class StimStatus(Enum):
     NO_LEVEL_INITIALIZED = 0
