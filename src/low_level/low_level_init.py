@@ -12,12 +12,12 @@ class PacketLowLevelInit(Packet):
         self.highVoltage = 0
 
 
-    def getData(self) -> bytes:
+    def get_data(self) -> bytes:
         bb = ByteBuilder()
-        bb.setToPosition(0, 0, 1)
-        bb.setToPosition(self.highVoltage, 1, 3)
-        bb.setToPosition(0, 4, 0)
-        return bb.getBytes()
+        bb.set_bit_to_position(0, 0, 1)
+        bb.set_bit_to_position(self.highVoltage, 1, 3)
+        bb.set_bit_to_position(0, 4, 0)
+        return bb.get_bytes()
 
 
 class PacketLowLevelInitAck(PacketAck):

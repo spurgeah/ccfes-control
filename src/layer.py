@@ -1,19 +1,20 @@
+"""Provides base class for all ScienceMode layers"""
+
 from src.commands import ResultAndError
 from .packet_factory import PacketFactory
 from .utils.connection import Connection
 
 
 class Layer():
-
-    connection: Connection
-    factory: PacketFactory
+    """Base class for all layers"""
 
 
     def __init__(self, conn: Connection, packet_factory: PacketFactory):
-        self.connection  = conn
-        self.factory = packet_factory
+        self._connection  = conn
+        self._factory = packet_factory
 
 
-    def checkResultError(self, result_error: ResultAndError, packet: str):
+    def check_result_error(self, result_error: ResultAndError, packet_name: str):
+        """Check if result_error contains an error and if yes prints packet_name"""
         if result_error != ResultAndError.NO_ERROR:
-            raise ValueError(f"Error {packet} {result_error}")
+            raise ValueError(f"Error {packet_name} {result_error}")

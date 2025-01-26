@@ -19,7 +19,7 @@ class LayerMidLevel(Layer):
     async def init(self, do_stop_on_all_errors: bool):
         p = PacketMidLevelInit()
         p.doStopOnAllErrors = do_stop_on_all_errors
-        ack = await Protocol.sendPacket(p, 0, self.connection, self.factory)
+        ack = await Protocol.send_packet(p, 0, self.connection, self.factory)
         if ack:
             init_ack: PacketMidLevelInitAck = ack
             self.checkResultError(init_ack.resultError, "mid level init")
@@ -27,7 +27,7 @@ class LayerMidLevel(Layer):
 
     async def stop(self):
         p = PacketMidLevelStop()
-        ack = await Protocol.sendPacket(p, 0, self.connection, self.factory)
+        ack = await Protocol.send_packet(p, 0, self.connection, self.factory)
         if ack:
             stop_ack: PacketMidLevelStopAck = ack
             self.checkResultError(stop_ack.resultError, "mid level stop")
@@ -37,7 +37,7 @@ class LayerMidLevel(Layer):
         p = PacketMidLevelUpdate()
         p.channelConfiguration = channel_configuration
         # Todo packet number
-        ack = await Protocol.sendPacket(p, 1, self.connection, self.factory)
+        ack = await Protocol.send_packet(p, 1, self.connection, self.factory)
         if ack:
             update_ack: PacketMidLevelUpdateAck = ack
             self.checkResultError(update_ack.resultError, "mid level update")
@@ -45,7 +45,7 @@ class LayerMidLevel(Layer):
 
     async def getCurrentData(self) -> list[bool]:
         p = PacketMidLevelGetCurrentData()
-        ack = await Protocol.sendPacket(p, 0, self.connection, self.factory)
+        ack = await Protocol.send_packet(p, 0, self.connection, self.factory)
         if ack:
             current_ack: PacketMidLevelGetCurrentDataAck = ack
             self.checkResultError(current_ack.resultError, "mid level get current data")

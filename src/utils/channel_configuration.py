@@ -20,11 +20,11 @@ class MidLevelChannelConfiguration():
             raise ValueError(f"Mid level update period must be between 0..131071 {self.periodInMs}")
         
         bb = ByteBuilder()
-        bb.setToPosition(self.ramp, 0, 4)
-        bb.setToPosition(len(self.points), 4, 4)
-        bb.setToPosition(0 if self.periodInMs <= 32767 else 1, 8, 1)
-        bb.setToPosition(self.periodInMs, 9, 15)
+        bb.set_bit_to_position(self.ramp, 0, 4)
+        bb.set_bit_to_position(len(self.points), 4, 4)
+        bb.set_bit_to_position(0 if self.periodInMs <= 32767 else 1, 8, 1)
+        bb.set_bit_to_position(self.periodInMs, 9, 15)
         bb.swap(1, 2)
         for x in self.points:
-            bb.extendBytes(x.getData())
-        return bb.getBytes()
+            bb.extend_bytes(x.getData())
+        return bb.get_bytes()

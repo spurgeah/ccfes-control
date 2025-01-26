@@ -1,3 +1,5 @@
+"""Provides helper class for ScienceMode protocol"""
+
 import asyncio
 from src.commands import Commands
 from src.general.general_error import PacketGeneralError
@@ -9,25 +11,27 @@ from src.packet import Packet, PacketAck
 from src.utils.connection import Connection
 
 
-
 class Protocol:
+    """Helper class for ScienceMode protocol"""
 
-    StartByte = 0xF0
-    StopByte: int = 0x0F
-    StuffingByte: int = 0x81
-    StuffingKey: int = 0x55
+    START_BYTE = 0xF0
+    STOP_BYTE = 0x0F
+    STUFFING_BYTE = 0x81
+    STUFFING_KEY = 0x55
 
 
-    async def sendPacket(packet: Packet, packet_number: int, connection: Connection, factory: PacketFactory) -> PacketAck | None:
+    @staticmethod
+    async def send_packet(packet: Packet, packet_number: int, connection: Connection, factory: PacketFactory) -> PacketAck:
+        """Send a packet and wait for response"""
 
-        connection.write(Protocol.packetToBytes(packet, packet_number))
+        connection.write(Protocol.packet_to_bytes(packet, packet_number))
 
         counter = 100
         while counter > 0:
             incoming_data = connection.read()
-            if Protocol.isValidPackageData(incoming_data):                
-                ack_data = Protocol.extractData(incoming_data)
-                ack = factory.createPacketWithData(ack_data[0], ack_data[1])
+            if Protocol.is_valid_packet_data(incoming_data):                
+                ack_data = Protocol.extract_payload(incoming_data)
+                ack = factory.create_packet_with_data(ack_data[0], ack_data[1])
                 if ack.command == Commands.GeneralError:
                     ge: PacketGeneralError = ack
                     raise ValueError(f"General error packet {ge.error}")
@@ -39,63 +43,69 @@ class Protocol:
                 else:
                     return ack
 
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(0.01)
             counter -= 1
 
-        return None
+        raise ValueError(f"No answer for packet {packet.command}")
 
 
-    def packetToBytes(packet: Packet, packet_number: int) -> bytes:
+    @staticmethod
+    def packet_to_bytes(packet: Packet, packet_number: int) -> bytes:
+        """Builds bytes from a packet"""
         # build payload
         bb = ByteBuilder()
         # command and packet number
-        bb.setToPosition(packet.getCommand(), 0, 10)
-        bb.setToPosition(packet_number, 10, 6)
+        bb.set_bit_to_position(packet.get_command(), 0, 10)
+        bb.set_bit_to_position(packet_number, 10, 6)
         # swap command and packet number to ensure little endianess
         bb.swap(0, 2)
         # append packet data
-        bb.extendBytes(packet.getData())
+        bb.append_bytes(packet.get_data())
         # stuff packet data
-        stuffed_packet_data = Protocol.stuff(bb.getBytes())
+        stuffed_packet_data = Protocol.stuff(bb.get_bytes())
 
         bb.clear()
 
         # stop byte
-        bb.append(Protocol.StartByte)
+        bb.append_byte(Protocol.START_BYTE)
         # packet length
         packet_length: int = len(stuffed_packet_data) + 10
-        bb.append(Protocol.stuffByte(packet_length >> 8))
-        bb.append(Protocol.stuffByte(packet_length))
+        bb.append_bytes(Protocol.stuff_byte(packet_length >> 8))
+        bb.append_bytes(Protocol.stuff_byte(packet_length))
         # crc
         crc_16 = Crc16.crc16xmodem(stuffed_packet_data)
-        bb.append(Protocol.stuffByte(crc_16 >> 8))
-        bb.append(Protocol.stuffByte(crc_16))
+        bb.append_bytes(Protocol.stuff_byte(crc_16 >> 8))
+        bb.append_bytes(Protocol.stuff_byte(crc_16))
         # payload
-        bb.append(stuffed_packet_data)
+        bb.append_bytes(stuffed_packet_data)
         # stop byte
-        bb.append(Protocol.StopByte)
+        bb.append_byte(Protocol.STOP_BYTE)
 
-        bb.print()
-        result = bb.getBytes()
+        print(bb)
+        result = bb.get_bytes()
         return bytes(result)
 
 
-    def isValidPackageData(data: bytes) -> bool:
+    @staticmethod
+    def is_valid_packet_data(data: bytes) -> bool:
+        """Checks if data might contain a valid packet structure, does not check if payload is valid """
         if len(data) == 0:
             return False
-        
+
         result = True
-    
+
         result &= len(data) > 10
-        result &= data[0] == Protocol.StartByte
-        result &= data[-1] == Protocol.StopByte
-        packet_length = int.from_bytes([Protocol.unstuffByte(data[2]), Protocol.unstuffByte(data[4])])
-        crc = int.from_bytes([Protocol.unstuffByte(data[6]), Protocol.unstuffByte(data[8])])
+        result &= data[0] == Protocol.START_BYTE
+        result &= data[-1] == Protocol.STOP_BYTE
+        # packet_length = int.from_bytes([Protocol.unstuffByte(data[2]), Protocol.unstuffByte(data[4])])
+        crc = int.from_bytes([Protocol.unstuff_byte(data[6]), Protocol.unstuff_byte(data[8])])
         result &= crc == Crc16.crc16xmodem(data[9:-1])
         return result
 
 
-    def extractData(data: bytes) -> tuple[int, bytes]:
+    @staticmethod
+    def extract_payload(data: bytes) -> tuple[int, bytes]:
+        """Extract payload from package"""
         # ToDo: take care of packet number
         command: int = int.from_bytes(Protocol.unstuff(data[9:11]))
         payload: bytes = Protocol.unstuff(data[11:-1])
@@ -103,35 +113,43 @@ class Protocol:
         return command, payload
 
 
+    @staticmethod
     def stuff(packet_data: bytes) -> bytes:
+        """Stuff data"""
         result: bytearray = bytearray()
         for b in packet_data:
-            if (b == Protocol.StartByte) or (b == Protocol.StopByte) or (b == Protocol.StuffingByte):
-                result.extend(Protocol.stuffByte(b))
+            if b in [Protocol.START_BYTE, Protocol.STOP_BYTE, Protocol.STUFFING_BYTE]:
+                result.extend(Protocol.stuff_byte(b))
             else:
                 result.append(b)
-        
-        return bytes(result)
-    
 
+        return bytes(result)
+
+
+    @staticmethod
     def unstuff(stuffed_packet_data: bytes) -> bytes:
-        result: bytearray = bytearray()
+        """Unstuff data"""
+        result = bytearray()
         index: int = 0
         while index < len(stuffed_packet_data):
-            if stuffed_packet_data[index] == Protocol.StuffingByte:
+            if stuffed_packet_data[index] == Protocol.STUFFING_BYTE:
                 index += 1
-                result.append(Protocol.stuffByte(stuffed_packet_data[index]))
+                result.append(Protocol.unstuff_byte(stuffed_packet_data[index]))
             else:
                 result.append(stuffed_packet_data[index])
 
             index += 1
-        
+             
         return bytes(result)
 
 
-    def stuffByte(b: int) -> bytes:
-        return bytes([Protocol.StuffingByte, Protocol.StuffingKey ^ (b & 0xFF)])
+    @staticmethod
+    def stuff_byte(b: int) -> bytes:
+        """Stuff a single byte"""
+        return bytes([Protocol.STUFFING_BYTE, Protocol.STUFFING_KEY ^ (b & 0xFF)])
 
 
-    def unstuffByte(b: int) -> int:
-        return Protocol.StuffingKey ^ (b & 0xFF) 
+    @staticmethod
+    def unstuff_byte(b: int) -> int:
+        """Unstuff a byte, b must be follower of stuffing byte"""
+        return Protocol.STUFFING_KEY ^ (b & 0xFF)

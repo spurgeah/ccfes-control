@@ -1,28 +1,38 @@
+"""Provides a paket factory class"""
+
 from src.packet import Packet, PacketAck
 
-class PacketFactory:
-
-    data = {}
+class PacketFactory():
+    """Packet factory class"""
 
 
     def __init__(self):
+        self.data: dict[int, Packet] = {}
+
         for x in Packet.__subclasses__():
-            print(f"Register type {x.__name__}")
-            self.registerPacket(x())
+            # we will not register subclasses of PacketAck here, it will be done in following loop
+            # if (type(x) is PacketAck) or (x not in PacketAck.__subclasses__()):
+            if not isinstance(x, type(PacketAck)):
+                print(f"Register type {x.__name__}")
+                # disable linter warning, that a parameter is missing, which seems to be wrong
+                # pylint: disable = no-value-for-parameter
+                self.register_packet(x())
 
         for x in PacketAck.__subclasses__():
             print(f"Register type {x.__name__}")
-            self.registerPacket(x(None))
+            self.register_packet(x(None))
 
 
-    def registerPacket(self, packet: Packet):
-        self.data[packet.getCommand()] = packet
+    def register_packet(self, packet: Packet):
+        """Register a packet"""
+        self.data[packet.get_command()] = packet
 
 
-    def createPacket(self, command: int) -> Packet:
-        return self.data[command].createCopy()
+    def create_packet(self, command: int) -> Packet:
+        """Create a packet based on command number"""
+        return self.data[command].create_copy()
 
 
-    def createPacketWithData(self, command: int, data: bytes) -> Packet:
-        # return copy.deepcopy(self.data[command])
-        return self.data[command].createCopyWithData(data)
+    def create_packet_with_data(self, command: int, data: bytes) -> Packet:
+        """Create a acknowledge packet based on command number with data"""
+        return self.data[command].create_copy_with_data(data)

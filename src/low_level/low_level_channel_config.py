@@ -20,16 +20,16 @@ class PacketLowLevelChannelConfig(Packet):
         self.points = []
 
 
-    def getData(self) -> bytes:
+    def get_data(self) -> bytes:
         bb = ByteBuilder()
         # Todo: check if is there at least one point
-        bb.setToPosition(len(self.points) - 1, 0, 4)
-        bb.setToPosition(0, 4, 1)
-        bb.setToPosition(self.channelSelection, 5, 2)
-        bb.setToPosition(self.executionStimulation, 7, 1)
+        bb.set_bit_to_position(len(self.points) - 1, 0, 4)
+        bb.set_bit_to_position(0, 4, 1)
+        bb.set_bit_to_position(self.channelSelection, 5, 2)
+        bb.set_bit_to_position(self.executionStimulation, 7, 1)
         [(bb.extend(x.getData())) for x in self.points]
 
-        return bb.getBytes()
+        return bb.get_bytes()
 
 
 class PacketLowLevelChannelConfigAck(PacketAck):

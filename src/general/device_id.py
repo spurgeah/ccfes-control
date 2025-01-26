@@ -1,23 +1,40 @@
+"""Provides classes for general GetDeviceId"""
+
 from src.commands import Commands, ResultAndError
 from src.packet import Packet, PacketAck
 
 class PacketGeneralGetDeviceId(Packet):
+    """Packet for general GetDeviceId"""
+
 
     def __init__(self):
-        self.command = Commands.GetDeviceId
+        super().__init__()
+        self._command = Commands.GetDeviceId
 
 
 class PacketGeneralGetDeviceIdAck(PacketAck):
-
-    resultError: ResultAndError
-    deviceId: str
+    """Packet for general GetDeviceId acknowledge"""
 
 
     def __init__(self, data: bytes):
-        self.command = Commands.GetDeviceIdAck
+        super().__init__(data)
+        self._command = Commands.GetDeviceIdAck
+        self._result_error = ResultAndError.NO_ERROR
 
-        if (data):
-            self.resultError = ResultAndError(data[0])
-            self.deviceId = data[1:11].decode()
+        if data:
+            self._result_error = ResultAndError(data[0])
+            self._device_id = data[1:11].decode()
 
-        
+
+    def get_result_error(self) -> ResultAndError:
+        """Getter for ResultError"""
+        return self._result_error
+
+
+    def get_device_id(self) -> str:
+        """Getter for DeviceId"""
+        return self._device_id
+
+
+    result_error = property(get_result_error)
+    device_id = property(get_device_id)

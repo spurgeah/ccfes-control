@@ -17,8 +17,8 @@ class ChannelPoint():
         c = 2 * self.currentMilliAmpere + 300
         
         bb = ByteBuilder()
-        bb.setToPosition(0, 0, 10)
-        bb.setToPosition(c, 10, 10)
-        bb.setToPosition(self.durationMicroSeconds, 20, 12)
+        bb.set_bit_to_position(0, 0, 10)
+        bb.set_bit_to_position(c, 10, 10)
+        bb.set_bit_to_position(self.durationMicroSeconds, 20, 12)
         bb.swap(0, 4)
-        return bb.getBytes()
+        return bb.get_bytes()
