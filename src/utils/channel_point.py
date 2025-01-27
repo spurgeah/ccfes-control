@@ -25,6 +25,11 @@ class ChannelPoint():
 
     def get_data(self) -> bytes:
         """Convert information to bytes"""
+        if (self._current_in_milli_ampere < -150) or (self._current_in_milli_ampere > 150):
+            raise ValueError(f"Channel point current must be between -150..150 {self._current_in_milli_ampere}")
+        if (self._duration_in_micro_seconds < 0) or (self._duration_in_micro_seconds > 4095):
+            raise ValueError(f"Channel point duration must be between 0..4095 {self._duration_in_micro_seconds}")
+
         c = 2 * self._current_in_milli_ampere + 300
 
         bb = ByteBuilder()

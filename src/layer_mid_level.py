@@ -35,7 +35,7 @@ class LayerMidLevel(Layer):
     async def update(self, channel_configuration: list[MidLevelChannelConfiguration]):
         """Send mid level update command and waits for response"""
         p = PacketMidLevelUpdate()
-        p. channel_configuration = channel_configuration
+        p.channel_configuration = channel_configuration
         # Todo packet number
         ack = await Protocol.send_packet(p, 1, self._connection, self._packet_factory)
         if ack:
