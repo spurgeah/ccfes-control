@@ -11,7 +11,7 @@ class Layer():
 
     def __init__(self, conn: Connection, packet_factory: PacketFactory):
         self._connection  = conn
-        self._factory = packet_factory
+        self._packet_factory = packet_factory
 
 
     def check_result_error(self, result_error: ResultAndError, packet_name: str):

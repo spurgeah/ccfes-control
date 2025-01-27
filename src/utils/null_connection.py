@@ -1,23 +1,26 @@
+"""Provides a class for a null connection"""
+
 from src.utils.connection import Connection
 
 class NullConnection(Connection):
+    """Null connection class (only for testing)"""
 
-    isOpen: bool = False
 
     def __init__(self):
-        pass
+        self._is_open = False
+
 
     def open(self):
-        self.isOpen = True
+        self._is_open = True
 
 
     def close(self):
-        self.isOpen = False
+        self._is_open = False
 
 
-    def isOpen(self):
-        return self.isOpen
-    
+    def is_open(self) -> bool:
+        return self._is_open
+
 
     def write(self, data: bytes):
         pass

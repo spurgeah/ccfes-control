@@ -26,15 +26,13 @@ class PacketGeneralGetDeviceIdAck(PacketAck):
             self._device_id = data[1:11].decode()
 
 
-    def get_result_error(self) -> ResultAndError:
+    @property
+    def result_error(self) -> ResultAndError:
         """Getter for ResultError"""
         return self._result_error
 
 
-    def get_device_id(self) -> str:
+    @property
+    def device_id(self) -> str:
         """Getter for DeviceId"""
         return self._device_id
-
-
-    result_error = property(get_result_error)
-    device_id = property(get_device_id)

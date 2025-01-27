@@ -34,40 +34,38 @@ class PacketGeneralGetExtendedVersionAck(PacketAck):
             self._hash_type = data[11]
             self._is_valid_hash = data[12] == 1
 
-        
-    def get_successful(self) -> bool:
+
+    @property
+    def successful(self) -> bool:
         """Getter for Successful"""
         return self._successful
 
 
-    def get_firmware_version(self) -> str:
+    @property
+    def firmware_version(self) -> str:
         """Getter for FirmwareVersion"""
         return self._firmware_version
 
 
-    def get_science_mode_version(self) -> str:
+    @property
+    def science_mode_version(self) -> str:
         """Getter for ^ScienceModeVersion"""
         return self._science_mode_version
 
 
-    def get_firmware_hash(self) -> int:
+    @property
+    def firmware_hash(self) -> int:
         """Getter for FirmwareHash"""
         return self._firmware_hash
-    
 
-    def get_hash_type(self) -> int:
+
+    @property
+    def hash_type(self) -> int:
         """Getter for HashType"""
         return self._hash_type
 
 
-    def get_is_valid_hash(self) -> bool:
+    @property
+    def is_valid_hash(self) -> bool:
         """Getter for IsValidHash"""
         return self._is_valid_hash
-
-
-    successful = property(get_successful)
-    firmware_version = property(get_firmware_version)
-    science_mode_version = property(get_science_mode_version)
-    firmware_hash = property(get_firmware_hash)
-    hash_type = property(get_hash_type)
-    is_valid_hash = property(get_is_valid_hash)

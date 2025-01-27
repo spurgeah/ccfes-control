@@ -8,7 +8,8 @@ class Packet():
         self._command = -1
 
 
-    def get_command(self) -> int:
+    @property
+    def command(self) -> int:
         """Getter for command"""
         return self._command
 
@@ -16,14 +17,11 @@ class Packet():
     def get_data(self) -> bytes:
         """Return packet payload"""
         return []
-    
+
 
     def create_copy(self) -> 'Packet':
         """Returns a copy"""
         return type(self)()
-
-
-    command = property(get_command)
 
 
 class PacketAck(Packet):

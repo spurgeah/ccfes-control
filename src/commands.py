@@ -1,7 +1,9 @@
+"""Provides all science mode command numbers"""
+
 from enum import Enum
 
-
 class Commands:
+    """Class with all commands"""
 
     GetDeviceId: int = 52
     GetDeviceIdAck: int = 53
@@ -13,7 +15,7 @@ class Commands:
     GetExtendedVersionAck: int = 69
     GeneralError: int = 66
     UnkownCommand: int = 67
-    
+
     LowLevelInit: int = 0
     LowLevelInitAck: int = 1
     LowLevelChannelConfig: int = 2
@@ -31,7 +33,9 @@ class Commands:
     MidLevelGetCurrentDataAck: int = 37
 
 
+# ToDo wrong file
 class ResultAndError(Enum):
+    """Represent science mode type ResultAndError"""
     NO_ERROR = 0
     TRANSFER_ERROR = 1
     PARAMETER_ERROR = 2
@@ -41,8 +45,11 @@ class ResultAndError(Enum):
     PULSE_LOW_CURRENT_ERROR = 28
 
 
+# ToDo wrong file
 class StimStatus(Enum):
+    """Represents science mode type StimStatus"""
     NO_LEVEL_INITIALIZED = 0
     LOW_LEVEL_INITIALIZED = 1
     MID_LEVEL_INITIALIZED = 2
     MID_LEVEL_RUNNING = 3
+    

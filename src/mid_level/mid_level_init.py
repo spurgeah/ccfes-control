@@ -14,23 +14,22 @@ class PacketMidLevelInit(Packet):
         self._do_stop_on_all_errors = False
 
 
-    def get_data(self) -> bytes:
-        bb = ByteBuilder()
-        bb.append_byte(1 if self._do_stop_on_all_errors else 0)
-        return bb.get_bytes()
-
-
-    def get_do_stop_on_all_errors(self) -> bool:
+    @property
+    def do_stop_on_all_errors(self) -> bool:
         """Getter for do stop on all errors"""
         return self._do_stop_on_all_errors
 
 
-    def set_do_stop_on_all_errors(self, do_stop_on_all_errors: bool):
+    @do_stop_on_all_errors.setter
+    def do_stop_on_all_errors(self, do_stop_on_all_errors: bool):
         """Setter for do stop on all errors"""
         self._do_stop_on_all_errors = do_stop_on_all_errors
 
 
-    do_stop_on_all_errors = property(get_do_stop_on_all_errors, set_do_stop_on_all_errors)
+    def get_data(self) -> bytes:
+        bb = ByteBuilder()
+        bb.append_byte(1 if self._do_stop_on_all_errors else 0)
+        return bb.get_bytes()
 
 
 class PacketMidLevelInitAck(PacketAck):
@@ -46,9 +45,7 @@ class PacketMidLevelInitAck(PacketAck):
             self._result_error = ResultAndError(data[0])
 
 
-    def get_result_error(self) -> ResultAndError:
+    @property
+    def result_error(self) -> ResultAndError:
         """Getter for ResultError"""
         return self._result_error
-
-
-    result_error = property(get_result_error)

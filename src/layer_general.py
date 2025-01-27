@@ -1,11 +1,7 @@
 """Provices general layer"""
 
-import asyncio
-from typing import NamedTuple
-
-from src.commands import StimStatus
-from src.general.reset import PacketGeneralReset, PacketGeneralResetAck
-from src.general.stim_status import GetStimStatusResult, PacketGeneralGetStimStatus, PacketGeneralGetStimStatusAck
+from .general.reset import PacketGeneralReset, PacketGeneralResetAck
+from .general.stim_status import GetStimStatusResult, PacketGeneralGetStimStatus, PacketGeneralGetStimStatusAck
 from .general.device_id import PacketGeneralGetDeviceId, PacketGeneralGetDeviceIdAck
 from .general.version import PacketGeneralGetExtendedVersion, PacketGeneralGetExtendedVersionAck
 from .packet_factory import PacketFactory
@@ -52,7 +48,7 @@ class LayerGeneral(Layer):
     async def get_device_id(self) -> str:
         """Send get device id command and waits for response"""
         p = PacketGeneralGetDeviceId()
-        ack = await Protocol.send_packet(p, 0, self._connection, self._factory)
+        ack = await Protocol.send_packet(p, 0, self._connection, self._packet_factory)
         if ack:
             dgi_ack: PacketGeneralGetDeviceIdAck = ack
             self.check_result_error(dgi_ack.result_error, "GetDeviceId")
@@ -63,7 +59,7 @@ class LayerGeneral(Layer):
     async def reset(self):
         """Sends reset command and waits for response"""
         p = PacketGeneralReset()
-        ack = await Protocol.send_packet(p, 0, self._connection, self._factory)
+        ack = await Protocol.send_packet(p, 0, self._connection, self._packet_factory)
         if ack:
             reset_ack: PacketGeneralResetAck = ack
             self.check_result_error(reset_ack.resultError, "Reset")
@@ -72,7 +68,7 @@ class LayerGeneral(Layer):
     async def get_stim_status(self) -> GetStimStatusResult:
         """Sends get stim status and waits for response"""
         p = PacketGeneralGetStimStatus()
-        ack = await Protocol.send_packet(p, 0, self._connection, self._factory)
+        ack = await Protocol.send_packet(p, 0, self._connection, self._packet_factory)
         if ack:
             gss_ack: PacketGeneralGetStimStatusAck = ack
             if not gss_ack.successful:
@@ -83,7 +79,7 @@ class LayerGeneral(Layer):
     async def get_version(self) -> tuple[str, str]:
         """Sends get extended version and waits for response, returns firmware and science mode version"""      
         p = PacketGeneralGetExtendedVersion()
-        ack = await Protocol.send_packet(p, 0, self._connection, self._factory)
+        ack = await Protocol.send_packet(p, 0, self._connection, self._packet_factory)
         if ack:
             gev_ack: PacketGeneralGetExtendedVersionAck = ack
             if not gev_ack.successful:

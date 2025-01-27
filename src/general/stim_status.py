@@ -36,21 +36,19 @@ class PacketGeneralGetStimStatusAck(PacketAck):
             self._high_voltage_on = data[2] == 6
 
 
-    def get_successful(self) -> bool:
+    @property
+    def successful(self) -> bool:
         """Getter for Successful"""
         return self._successful
 
 
-    def get_stim_status(self) -> StimStatus:
+    @property
+    def stim_status(self) -> StimStatus:
         """Getter for StimStatus"""
         return self._stim_status
 
 
-    def get_high_voltage_on(self) -> bool:
+    @property
+    def high_voltage_on(self) -> bool:
         """Getter for HighVoltageOn"""
         return self._high_voltage_on
-
-
-    successful = property(get_successful)
-    stim_status = property(get_stim_status)
-    high_voltage_on = property(get_high_voltage_on)

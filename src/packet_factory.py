@@ -25,7 +25,7 @@ class PacketFactory():
 
     def register_packet(self, packet: Packet):
         """Register a packet"""
-        self.data[packet.get_command()] = packet
+        self.data[packet.command] = packet
 
 
     def create_packet(self, command: int) -> Packet:

@@ -2,50 +2,50 @@
 
 class BitVector():
     """Simple bitvector class"""
-    
+
     @staticmethod
     def init_from_int(value: int = 0, bit_length: int = 0) -> 'BitVector':
         """Creates new BitVector instance from an integer value with bit_length"""
         result = BitVector()
         result.set_from_int(value, bit_length)
         return result
-    
+
 
     def __init__(self):
         self.data: list[int] = []
         self.set_from_int(0, 0)
 
-    
+
     def set_from_int(self, value: int = 0, bit_length: int = 0):
         """Set to an integer value with bit_length"""
         bl = bit_length
         if bl == 0:
             bl = value.bit_length()
         self.data = [0] * bl
-        
+
         for x in range(bl):
             self.data[x] = (value >> x) & 0x1
-            
-        
+
+
     def __getitem__(self, index: int) -> int:
-        if (index < 0) or (index >= len(self.data)):                    
+        if (index < 0) or (index >= len(self.data)):
             raise ValueError(f"Bit vector index out of bounds {index} [0 - {len(self.data)}]")
 
         return self.data[index]
-    
+
 
     def __setitem__(self, index: int, value: int):
         if not value in {0, 1}:
             raise ValueError(f"Bit vector wrong value {value}")
-        if (index < 0) or (index >= len(self.data)):                    
+        if (index < 0) or (index >= len(self.data)):
             raise ValueError(f"Bit vector index out of bounds {index} [0 - {len(self.data)}]")
-        
+
         self.data[index] = value
 
 
     def __len__(self) -> int:
         return len(self.data)
-    
+
 
     def set_length(self, new_length: int):
         """Set length to new_length, does preserve current data"""
@@ -79,7 +79,7 @@ class BitVector():
             value |= self[position] << bit_counter
             position += 1
             bit_counter += 1
-        
+
         if bit_counter > 0:
             result.append(value)
 

@@ -1,21 +1,31 @@
+"""Provides a base class for a connection"""
 
-class Connection():
+from abc import ABC, abstractmethod
 
+class Connection(ABC):
+    """Abstract base class for connection"""
+
+
+    @abstractmethod
     def open(self):
-        pass
+        """Open connection"""
 
 
+    @abstractmethod
     def close(self):
-        pass
+        """Close connection"""
 
 
-    def isOpen(self) -> bool:
-        pass
+    @abstractmethod
+    def is_open(self) -> bool:
+        """Checks if connection is open"""
 
 
+    @abstractmethod
     def write(self, data: bytes):
-        pass
+        """Write data to connection"""
 
 
+    @abstractmethod
     def read(self) -> bytes:
-        pass
+        """Read all data from connection"""

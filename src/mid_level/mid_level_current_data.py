@@ -38,21 +38,19 @@ class PacketMidLevelGetCurrentDataAck(PacketAck):
                 self._channel_error[x] = bb.get_bit_from_position(x * 4, 4)
 
 
-    def get_result_error(self) -> ResultAndError:
+    @property
+    def result_error(self) -> ResultAndError:
         """Getter for ResultError"""
         return self._result_error
 
 
-    def get_is_stimulation_active(self) -> list[bool]:
+    @property
+    def is_stimulation_active(self) -> list[bool]:
         """Getter for IsStimulationActive"""
         return self._is_stimulation_active
 
 
-    def get_channel_error(self) -> list[int]:
+    @property
+    def channel_error(self) -> list[int]:
         """Getter for ChannelError"""
         return self._channel_error
-
-
-    result_error = property(get_result_error)
-    is_stimulation_active = property(get_is_stimulation_active)
-    channel_error = property(get_channel_error)

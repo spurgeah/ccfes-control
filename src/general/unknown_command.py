@@ -17,9 +17,7 @@ class PacketGeneralUnknownCommand(PacketAck):
             self._result_error = ResultAndError(data[0])
 
 
-    def get_result_error(self) -> ResultAndError:
+    @property
+    def result_error(self) -> ResultAndError:
         """Getter for ResultError"""
         return self._result_error
-
-
-    result_error = property(get_result_error)

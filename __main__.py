@@ -29,7 +29,7 @@ async def main() -> int:
 
     device = DeviceP24(connection)
     # await device.initialize()
-    # general = device.getLayerGeneral()
+    # general = device.get_layer_general()
     # print(general.deviceId)
     # print(general.firmwareVersion)
     # print(general.scienceModeVersion)
@@ -39,21 +39,12 @@ async def main() -> int:
     c1p1: ChannelPoint = ChannelPoint(200, 20)
     c1p2: ChannelPoint = ChannelPoint(100, 0)
     c1p3: ChannelPoint = ChannelPoint(200, -20)
-    cc1: MidLevelChannelConfiguration = MidLevelChannelConfiguration()
-    cc1.isActive = True
-    cc1.periodInMs = 20
-    cc1.ramp = 3
-    cc1.points = [c1p1, c1p2, c1p3]
+    cc1: MidLevelChannelConfiguration = MidLevelChannelConfiguration(True, 3, 20, [c1p1, c1p2, c1p3])
 
     c2p1: ChannelPoint = ChannelPoint(100, 10)
     c2p2: ChannelPoint = ChannelPoint(100, 0)
     c2p3: ChannelPoint = ChannelPoint(100, -10)
-    cc2: MidLevelChannelConfiguration = MidLevelChannelConfiguration()
-    cc2.isActive = True
-    cc2.periodInMs = 10
-    cc2.ramp = 3
-    cc2.points = [c2p1, c2p2, c2p3]
-
+    cc2: MidLevelChannelConfiguration = MidLevelChannelConfiguration(True, 3, 10, [c2p1, c2p2, c2p3])
 
     # F0 81 55 81 7E 81 AA 81 1A 
     # 04 20 
@@ -67,7 +58,7 @@ async def main() -> int:
     # 06 44 B0 00 
     # 06 44 60 00 
     # 0F
-    mid_level = device.getLayerMidLevel()
+    mid_level = device.get_layer_mid_level()
     # await mid_level.init(True)
     await mid_level.update([cc1, cc2])
     for x in range(10):

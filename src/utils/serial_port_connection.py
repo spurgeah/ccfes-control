@@ -1,35 +1,34 @@
-import serial
+"""Provides a class for a serial connection"""
 
+import serial
 from src.utils.connection import Connection
 
 class SerialPortConnection(Connection):
-
-    ser: serial.Serial
+    """Serial connection class"""
 
 
     def __init__(self, port: str):
-        self.ser = serial.Serial(port, timeout = 0)
+        self._ser = serial.Serial(port, timeout = 0)
 
 
     def open(self):
-        # self.ser.open()
-        pass
+        self._ser.open()
 
 
     def close(self):
-        self.ser.close()
+        self._ser.close()
 
 
-    def isOpen(self):
-        return self.ser.is_open
-    
+    def is_open(self) -> bool:
+        return self._ser.is_open
+
 
     def write(self, data: bytes):
-        self.ser.write(data)
+        self._ser.write(data)
 
 
     def read(self) -> bytes:
         result = []
-        if self.ser.in_waiting > 0:
-            result = self.ser.read_all()
+        if self._ser.in_waiting > 0:
+            result = self._ser.read_all()
         return bytes(result)

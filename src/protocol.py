@@ -29,7 +29,7 @@ class Protocol:
         counter = 100
         while counter > 0:
             incoming_data = connection.read()
-            if Protocol.is_valid_packet_data(incoming_data):                
+            if Protocol.is_valid_packet_data(incoming_data):
                 ack_data = Protocol.extract_payload(incoming_data)
                 ack = factory.create_packet_with_data(ack_data[0], ack_data[1])
                 if ack.command == Commands.GeneralError:
@@ -55,7 +55,7 @@ class Protocol:
         # build payload
         bb = ByteBuilder()
         # command and packet number
-        bb.set_bit_to_position(packet.get_command(), 0, 10)
+        bb.set_bit_to_position(packet.command, 0, 10)
         bb.set_bit_to_position(packet_number, 10, 6)
         # swap command and packet number to ensure little endianess
         bb.swap(0, 2)
@@ -73,7 +73,7 @@ class Protocol:
         bb.append_bytes(Protocol.stuff_byte(packet_length >> 8))
         bb.append_bytes(Protocol.stuff_byte(packet_length))
         # crc
-        crc_16 = Crc16.crc16xmodem(stuffed_packet_data)
+        crc_16 = Crc16.crc16_xmodem(stuffed_packet_data)
         bb.append_bytes(Protocol.stuff_byte(crc_16 >> 8))
         bb.append_bytes(Protocol.stuff_byte(crc_16))
         # payload
@@ -99,7 +99,7 @@ class Protocol:
         result &= data[-1] == Protocol.STOP_BYTE
         # packet_length = int.from_bytes([Protocol.unstuffByte(data[2]), Protocol.unstuffByte(data[4])])
         crc = int.from_bytes([Protocol.unstuff_byte(data[6]), Protocol.unstuff_byte(data[8])])
-        result &= crc == Crc16.crc16xmodem(data[9:-1])
+        result &= crc == Crc16.crc16_xmodem(data[9:-1])
         return result
 
 
@@ -139,7 +139,7 @@ class Protocol:
                 result.append(stuffed_packet_data[index])
 
             index += 1
-             
+
         return bytes(result)
 
 
