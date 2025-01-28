@@ -104,13 +104,17 @@ class Protocol:
 
 
     @staticmethod
-    def extract_payload(data: bytes) -> tuple[int, bytes]:
+    def extract_payload(data: bytes) -> tuple[int, int, bytes]:
         """Extract payload from package"""
-        # ToDo: take care of packet number
-        command: int = int.from_bytes(Protocol.unstuff(data[9:11]))
-        payload: bytes = Protocol.unstuff(data[11:-1])
+        bb = ByteBuilder()
+        bb.append_bytes(Protocol.unstuff(data[9:11]))
+        bb.swap(0, 2)
 
-        return command, payload
+        command = bb.get_bit_from_position(0, 10)
+        nr = bb.get_bit_from_position(10, 6)
+        payload = Protocol.unstuff(data[11:-1])
+
+        return command, nr, payload
 
 
     @staticmethod

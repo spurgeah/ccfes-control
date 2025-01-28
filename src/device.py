@@ -5,6 +5,7 @@ from src.layer_mid_level import LayerMidLevel
 from .layer import Layer
 from .layer_general import LayerGeneral
 from .packet_factory import PacketFactory
+from .protocol.packet_number_generator import PacketNumberGenerator
 from .utils.connection import Connection
 
 
@@ -19,20 +20,18 @@ class DeviceCapabilities(Enum):
 class Device():
     """Base class for a science mode devices"""
 
-    connection: Connection
-    packetFactory: PacketFactory
-    layer: list[Layer] = []
-
 
     def __init__(self, conn: Connection, capabilities: set[DeviceCapabilities]):
         self._connection  = conn
         self._packet_factory = PacketFactory()
+        self._packet_number_generator = PacketNumberGenerator()
         self._capabilities = capabilities
+        self._layer: list[Layer] = []
 
         # ToDo: create layer depending on capabilites and change access functions
         # for x in capabilities:
-        self.layer.append(LayerGeneral(self._connection, self._packet_factory))
-        self.layer.append(LayerMidLevel(self._connection, self._packet_factory))
+        self._layer.append(LayerGeneral(self._connection, self._packet_factory, self._packet_number_generator))
+        self._layer.append(LayerMidLevel(self._connection, self._packet_factory, self._packet_number_generator))
 
 
     @property
@@ -48,9 +47,9 @@ class Device():
 
     def get_layer_general(self) -> LayerGeneral:
         """Helper function to access general layer"""
-        return self.layer[0]
+        return self._layer[0]
 
 
     def get_layer_mid_level(self) -> LayerMidLevel:
         """Helper function to access mid level layer"""
-        return self.layer[1]
+        return self._layer[1]
