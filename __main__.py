@@ -4,8 +4,8 @@ import sys
 import asyncio
 
 from src.device_p24 import DeviceP24
-from src.utils.channel_configuration import MidLevelChannelConfiguration
-from src.utils.channel_point import ChannelPoint
+from src.mid_level.mid_level_types import MidLevelChannelConfiguration
+from src.types.channel_point import ChannelPoint
 from src.utils.null_connection import NullConnection
 from src.utils.serial_port_connection import SerialPortConnection
 

@@ -3,7 +3,7 @@
 from src.commands import Commands, ResultAndError
 from src.packet import Packet, PacketAck
 from src.utils.byte_builder import ByteBuilder
-from src.utils.channel_configuration import MidLevelChannelConfiguration
+from src.mid_level.mid_level_types import MidLevelChannelConfiguration
 
 
 class PacketMidLevelUpdate(Packet):
@@ -20,6 +20,7 @@ class PacketMidLevelUpdate(Packet):
     def channel_configuration(self) -> list[MidLevelChannelConfiguration]:
         """Getter for channel configuration"""
         return self._channel_configuration
+
 
     @channel_configuration.setter
     def channel_configuration(self, channel_configuration: list[MidLevelChannelConfiguration]):
