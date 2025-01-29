@@ -1,7 +1,7 @@
 """Provides packet classes for mid level GetCurrentData"""
 
-from src.commands import Commands, ResultAndError
-from src.packet import Packet, PacketAck
+from src.protocol.commands import Commands, ResultAndError
+from src.protocol.packet import Packet, PacketAck
 from src.utils.bit_vector import BitVector
 from src.utils.byte_builder import ByteBuilder
 

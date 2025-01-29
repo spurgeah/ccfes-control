@@ -1,8 +1,8 @@
 """Provides classes for general GetStimStatus"""
 
 from typing import NamedTuple
-from src.commands import Commands, StimStatus
-from src.packet import Packet, PacketAck
+from src.protocol.commands import Commands, StimStatus
+from src.protocol.packet import Packet, PacketAck
 
 class GetStimStatusResult(NamedTuple):
     """Helper class for stim result"""

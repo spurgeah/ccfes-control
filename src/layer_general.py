@@ -5,7 +5,7 @@ from .general.reset import PacketGeneralReset, PacketGeneralResetAck
 from .general.stim_status import GetStimStatusResult, PacketGeneralGetStimStatus, PacketGeneralGetStimStatusAck
 from .general.device_id import PacketGeneralGetDeviceId, PacketGeneralGetDeviceIdAck
 from .general.version import PacketGeneralGetExtendedVersion, PacketGeneralGetExtendedVersionAck
-from .packet_factory import PacketFactory
+from .protocol.packet_factory import PacketFactory
 from .utils.connection import Connection
 from .layer import Layer
 from .protocol.protocol import Protocol

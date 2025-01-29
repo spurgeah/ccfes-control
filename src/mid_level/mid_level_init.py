@@ -1,7 +1,7 @@
 """Provides classes for mid level Init"""
 
-from src.commands import Commands, ResultAndError
-from src.packet import Packet, PacketAck
+from src.protocol.commands import Commands, ResultAndError
+from src.protocol.packet import Packet, PacketAck
 from src.utils.byte_builder import ByteBuilder
 
 class PacketMidLevelInit(Packet):

@@ -1,7 +1,7 @@
 """Provides classes for mid level Stop"""
 
-from src.commands import Commands, ResultAndError
-from src.packet import Packet, PacketAck
+from src.protocol.commands import Commands, ResultAndError
+from src.protocol.packet import Packet, PacketAck
 
 class PacketMidLevelStop(Packet):
     """Packet for mid level Stop"""

@@ -1,9 +1,9 @@
 """Provides packet classes for low level init"""
 
-from src.commands import Commands, ResultAndError
+from src.protocol.commands import Commands, ResultAndError
 from src.low_level.low_level_types import LowLevelMode
 from src.utils.byte_builder import ByteBuilder
-from src.packet import Packet, PacketAck
+from src.protocol.packet import Packet, PacketAck
 
 class PacketLowLevelInit(Packet):
     """Packet for low level init"""

@@ -1,7 +1,7 @@
 """Provides classes for general Error"""
 
-from src.commands import Commands, ResultAndError
-from src.packet import PacketAck
+from src.protocol.commands import Commands, ResultAndError
+from src.protocol.packet import PacketAck
 
 
 class PacketGeneralError(PacketAck):

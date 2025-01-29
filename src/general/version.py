@@ -1,7 +1,7 @@
 """Provides classes for general GetVersion"""
 
-from src.commands import Commands
-from src.packet import Packet, PacketAck
+from src.protocol.commands import Commands
+from src.protocol.packet import Packet, PacketAck
 
 class PacketGeneralGetExtendedVersion(Packet):
     """Packet for general GetExtendetVersion"""

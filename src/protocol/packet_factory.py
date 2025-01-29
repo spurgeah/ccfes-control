@@ -1,6 +1,6 @@
 """Provides a paket factory class"""
 
-from src.packet import Packet, PacketAck
+from src.protocol.packet import Packet, PacketAck
 
 class PacketFactory():
     """Packet factory class"""

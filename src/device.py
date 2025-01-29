@@ -4,7 +4,7 @@ from enum import Enum, auto
 from src.layer_mid_level import LayerMidLevel
 from .layer import Layer
 from .layer_general import LayerGeneral
-from .packet_factory import PacketFactory
+from .protocol.packet_factory import PacketFactory
 from .protocol.packet_number_generator import PacketNumberGenerator
 from .utils.connection import Connection
 

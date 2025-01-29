@@ -1,7 +1,7 @@
 """Provides classes for general GetDeviceId"""
 
-from src.commands import Commands, ResultAndError
-from src.packet import Packet, PacketAck
+from ..protocol.commands import Commands, ResultAndError
+from ..protocol.packet import Packet, PacketAck
 
 class PacketGeneralGetDeviceId(Packet):
     """Packet for general GetDeviceId"""
