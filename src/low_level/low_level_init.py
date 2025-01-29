@@ -1,6 +1,7 @@
 """Provides packet classes for low level init"""
 
 from src.commands import Commands, ResultAndError
+from src.low_level.low_level_types import LowLevelMode
 from src.utils.byte_builder import ByteBuilder
 from src.packet import Packet, PacketAck
 
@@ -11,7 +12,20 @@ class PacketLowLevelInit(Packet):
     def __init__(self):
         super().__init__()
         self._command = Commands.LowLevelInit
+        self._mode = LowLevelMode.NO_MEASUREMENT
         self._high_voltage = 0
+
+
+    @property
+    def mode(self) -> LowLevelMode:
+        """Getter for mode"""
+        return self._mode
+
+
+    @mode.setter
+    def mode(self, value: LowLevelMode):
+        """Setter for mode"""
+        self._mode = value
 
 
     @property
@@ -30,7 +44,8 @@ class PacketLowLevelInit(Packet):
         bb = ByteBuilder()
         bb.set_bit_to_position(0, 0, 1)
         bb.set_bit_to_position(self._high_voltage, 1, 3)
-        bb.set_bit_to_position(0, 4, 0)
+        bb.set_bit_to_position(self._mode, 4, 3)
+        bb.set_bit_to_position(0, 7, 0)
         return bb.get_bytes()
 
 

@@ -10,7 +10,7 @@ class LowLevelResult(Enum):
     TIMEOUT_STIMULATION = 3
 
 
-class LowLevelMeasurement(Enum):
+class LowLevelMode(Enum):
     """Represent low level type for measurement"""
     NO_MEASUREMENT = 0
     STIM_CURRENT = 1

@@ -1,7 +1,7 @@
 """Provides packet classes for low level channel config"""
 
 from src.commands import Commands
-from src.low_level.low_level_types import LowLevelMeasurement, LowLevelResult
+from src.low_level.low_level_types import LowLevelMode, LowLevelResult
 from src.types.types import Connector, Channel
 from src.utils.byte_builder import ByteBuilder
 from src.packet import Packet, PacketAck
@@ -92,7 +92,7 @@ class PacketLowLevelChannelConfigAck(PacketAck):
         self._result = LowLevelResult.SUCCESSFUL
         self._connector = 0
         self._channel = 0
-        self._measurement = LowLevelMeasurement.NO_MEASUREMENT
+        self._mode = LowLevelMode.NO_MEASUREMENT
         # only present when measurement is active
         self._sampling_time_in_microseconds = 0
         self._measurement_samples: list[int] = None
@@ -103,9 +103,9 @@ class PacketLowLevelChannelConfigAck(PacketAck):
             self._result = LowLevelResult(data[0])
             self._channel = bb.get_bit_from_position(8, 4)
             self._connector = bb.get_bit_from_position(12, 4)
-            self._measurement = LowLevelMeasurement(data[2])
+            self._mode = LowLevelMode(data[2])
             # only present when measurement is active
-            if self._measurement != LowLevelMeasurement.NO_MEASUREMENT:
+            if self._mode != LowLevelMode.NO_MEASUREMENT:
                 self._sampling_time_in_microseconds = bb.get_bit_from_position(16, 16)
                 self._measurement_samples = [0] * 128
                 for x in enumerate(self._measurement_samples):
@@ -132,6 +132,6 @@ class PacketLowLevelChannelConfigAck(PacketAck):
 
 
     @property
-    def measurement(self) -> LowLevelMeasurement:
-        """Getter for measurement"""
-        return self._measurement
+    def mode(self) -> LowLevelMode:
+        """Getter for mode"""
+        return self._mode
