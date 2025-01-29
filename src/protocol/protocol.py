@@ -3,7 +3,7 @@
 import asyncio
 from src.protocol.commands import Commands
 from src.general.general_error import PacketGeneralError
-from src.general.unknown_command import PacketGeneralUnknownCommand
+from src.general.general_unknown_command import PacketGeneralUnknownCommand
 from src.protocol.packet_factory import PacketFactory
 from src.utils.byte_builder import ByteBuilder
 from src.utils.crc16 import Crc16

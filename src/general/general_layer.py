@@ -1,10 +1,10 @@
 """Provices general layer"""
 
 from ..protocol.packet_number_generator import PacketNumberGenerator
-from .reset import PacketGeneralReset, PacketGeneralResetAck
-from .stim_status import GetStimStatusResult, PacketGeneralGetStimStatus, PacketGeneralGetStimStatusAck
-from .device_id import PacketGeneralGetDeviceId, PacketGeneralGetDeviceIdAck
-from .version import PacketGeneralGetExtendedVersion, PacketGeneralGetExtendedVersionAck
+from .general_reset import PacketGeneralReset, PacketGeneralResetAck
+from .general_stim_status import GetStimStatusResult, PacketGeneralGetStimStatus, PacketGeneralGetStimStatusAck
+from .general_device_id import PacketGeneralGetDeviceId, PacketGeneralGetDeviceIdAck
+from .general_version import PacketGeneralGetExtendedVersion, PacketGeneralGetExtendedVersionAck
 from ..protocol.packet_factory import PacketFactory
 from ..utils.connection import Connection
 from ..layer import Layer

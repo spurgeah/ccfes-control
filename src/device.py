@@ -2,9 +2,9 @@
 
 from enum import Enum, auto
 from typing import Type
-from src.mid_level.layer_mid_level import LayerMidLevel
+from src.mid_level.mid_level_layer import LayerMidLevel
 from .layer import Layer
-from .general.layer_general import LayerGeneral
+from .general.general_layer import LayerGeneral
 from .protocol.packet_factory import PacketFactory
 from .protocol.packet_number_generator import PacketNumberGenerator
 from .utils.connection import Connection
