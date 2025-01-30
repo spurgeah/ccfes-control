@@ -1,7 +1,8 @@
 """Provides device class representing a science mode device"""
 
-from enum import Enum, auto
+from enum import Enum
 from typing import Type
+from src.low_level.low_level_layer import LayerLowLevel
 from src.mid_level.mid_level_layer import LayerMidLevel
 from .layer import Layer
 from .general.general_layer import LayerGeneral
@@ -12,10 +13,10 @@ from .utils.connection import Connection
 
 class DeviceCapability(Enum):
     """Represent device capabilities"""
-    GENERAL = auto()
-    LOW_LEVEL = auto()
-    MID_LEVEL = auto()
-    DYSCOM = auto()
+    GENERAL = 0
+    LOW_LEVEL = 1
+    MID_LEVEL = 2
+    DYSCOM = 3
 
 
 class Device():
@@ -30,7 +31,26 @@ class Device():
         self._layer: dict[DeviceCapability, Layer] = {}
 
         self._add_layer(DeviceCapability.GENERAL, capabilities, LayerGeneral)
+        self._add_layer(DeviceCapability.LOW_LEVEL, capabilities, LayerLowLevel)
         self._add_layer(DeviceCapability.MID_LEVEL, capabilities, LayerMidLevel)
+
+
+    @property
+    def connection(self) -> Connection:
+        """Getter for connection"""
+        return self._connection
+
+
+    @property
+    def packet_factory(self) -> PacketFactory:
+        """Getter for packet factory"""
+        return self._packet_factory
+
+
+    @property
+    def packet_number_generator(self) -> PacketNumberGenerator:
+        """Getter for packet number generator"""
+        return self._capabilities
 
 
     @property
@@ -54,6 +74,17 @@ class Device():
         return self._layer[DeviceCapability.MID_LEVEL]
 
 
+    def get_layer_low_level(self) -> LayerLowLevel:
+        """Helper function to access low level layer"""
+        return self._layer[DeviceCapability.LOW_LEVEL]
+
+
+    def add_layer(self, capability: DeviceCapability, layer: Layer):
+        """Add layer"""
+        self._layer[capability] = layer
+
+
     def _add_layer(self, capability: DeviceCapability, used_capabilities: set[DeviceCapability], layer_class: Type[Layer]):
+        """Helper method that checks if capability is in used_capabilities and if yes add a layer_class instance"""
         if capability in used_capabilities:
-            self._layer[capability] = layer_class(self._connection, self._packet_factory, self._packet_number_generator)
+            self.add_layer(capability, layer_class(self._connection, self._packet_factory, self._packet_number_generator))

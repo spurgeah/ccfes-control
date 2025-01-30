@@ -21,17 +21,27 @@ class Protocol:
 
 
     @staticmethod
-    async def send_packet(packet: Packet, packet_number: int, connection: Connection, factory: PacketFactory) -> PacketAck:
+    async def send_packet(packet: Packet, packet_number: int, connection: Connection) -> PacketAck:
+        """Send a packet and returns immediately"""
+        packet.number = packet_number
+        connection.write(Protocol.packet_to_bytes(packet))
+
+
+    @staticmethod
+    async def send_packet_and_wait(packet: Packet, packet_number: int, connection: Connection, factory: PacketFactory) -> PacketAck:
         """Send a packet and wait for response"""
 
-        connection.write(Protocol.packet_to_bytes(packet, packet_number))
+        Protocol.send_packet(packet, packet_number, connection)
 
         counter = 100
         while counter > 0:
             incoming_data = connection.read()
             if Protocol.is_valid_packet_data(incoming_data):
-                ack_data = Protocol.extract_payload(incoming_data)
-                ack = factory.create_packet_with_data(ack_data[0], ack_data[1])
+                ack_data = Protocol.extract_packet_data(incoming_data)
+                if packet_number != ack_data[1]:
+                    raise ValueError(f"Packet number mismatch {packet_number} - {ack_data[1]}")
+
+                ack = factory.create_packet_with_data(ack_data[0], ack_data[1], ack_data[2])
                 if ack.command == Commands.GeneralError:
                     ge: PacketGeneralError = ack
                     raise ValueError(f"General error packet {ge.error}")
@@ -40,8 +50,8 @@ class Protocol:
                     raise ValueError(f"Unknown command packet {uc.error}")
                 elif ack.command != packet.command + 1:
                     raise ValueError(f"Wrong answer command packet {ack.command}")
-                else:
-                    return ack
+
+                return ack
 
             await asyncio.sleep(0.01)
             counter -= 1
@@ -50,13 +60,13 @@ class Protocol:
 
 
     @staticmethod
-    def packet_to_bytes(packet: Packet, packet_number: int) -> bytes:
+    def packet_to_bytes(packet: Packet) -> bytes:
         """Builds bytes from a packet"""
         # build payload
         bb = ByteBuilder()
         # command and packet number
         bb.set_bit_to_position(packet.command, 0, 10)
-        bb.set_bit_to_position(packet_number, 10, 6)
+        bb.set_bit_to_position(packet.number, 10, 6)
         # swap command and packet number to ensure little endianess
         bb.swap(0, 2)
         # append packet data
@@ -87,32 +97,58 @@ class Protocol:
 
 
     @staticmethod
-    def is_valid_packet_data(data: bytes) -> bool:
-        """Checks if data might contain a valid packet structure, does not check if payload is valid """
-        if len(data) == 0:
+    def is_valid_packet_data(buffer: bytes) -> bool:
+        """Checks if buffer might contain a valid packet structure, does not check if payload is valid """
+        if len(buffer) == 0:
             return False
 
         result = True
 
-        result &= len(data) > 10
-        result &= data[0] == Protocol.START_BYTE
-        result &= data[-1] == Protocol.STOP_BYTE
+        result &= len(buffer) > 10
+        result &= buffer[0] == Protocol.START_BYTE
+        result &= buffer[-1] == Protocol.STOP_BYTE
         # packet_length = int.from_bytes([Protocol.unstuffByte(data[2]), Protocol.unstuffByte(data[4])])
-        crc = int.from_bytes([Protocol.unstuff_byte(data[6]), Protocol.unstuff_byte(data[8])])
-        result &= crc == Crc16.crc16_xmodem(data[9:-1])
+        crc = int.from_bytes([Protocol.unstuff_byte(buffer[6]), Protocol.unstuff_byte(buffer[8])])
+        result &= crc == Crc16.crc16_xmodem(buffer[9:-1])
         return result
 
 
     @staticmethod
-    def extract_payload(data: bytes) -> tuple[int, int, bytes]:
-        """Extract payload from package"""
+    def find_packet_in_buffer(buffer: bytes) -> tuple[int, int] | None:
+        """Tries to find a valid packet in buffer, return start and stop index of packet if found or None otherwise"""
+        start = 0
+        while True:
+            # Find start of packet
+            # (0xF0 does not always indicate a packet start, so check additionally for stuffing byte)
+            start = buffer.find([Protocol.START_BYTE, Protocol.STUFFING_BYTE], start)
+            if start != -1:
+                # we found a start, so use minimal packet length as starting index to find stop
+                stop = buffer.find([Protocol.STOP_BYTE], start + 12)
+                if stop != -1:
+                    # we found a packet end, lets check if its valid
+                    if Protocol.is_valid_packet_data(buffer[start:stop+1]):
+                        return start, stop
+
+                    # found packet is not valid, so check for more packets afterwards
+                    start = stop
+                else:
+                    # we found no stop byte, so there is no complete packet in buffer
+                    return None
+            else:
+                # we found no start byte, so there is no complete packet in buffer
+                return None
+
+
+    @staticmethod
+    def extract_packet_data(buffer: bytes) -> tuple[int, int, bytes]:
+        """Extract command, packet number and payload from buffer and returns these as tuple, buffer must contain valid packet data"""
         bb = ByteBuilder()
-        bb.append_bytes(Protocol.unstuff(data[9:11]))
+        bb.append_bytes(Protocol.unstuff(buffer[9:11]))
         bb.swap(0, 2)
 
         command = bb.get_bit_from_position(0, 10)
         nr = bb.get_bit_from_position(10, 6)
-        payload = Protocol.unstuff(data[11:-1])
+        payload = Protocol.unstuff(buffer[11:-1])
 
         return command, nr, payload
 

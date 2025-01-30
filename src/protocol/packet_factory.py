@@ -30,9 +30,13 @@ class PacketFactory():
 
     def create_packet(self, command: int) -> Packet:
         """Create a packet based on command number"""
-        return self.data[command].create_copy()
+        copy = self.data[command].create_copy()
+        return copy
 
 
-    def create_packet_with_data(self, command: int, data: bytes) -> Packet:
+    def create_packet_with_data(self, command: int, number: int, data: bytes) -> PacketAck:
         """Create a acknowledge packet based on command number with data"""
-        return self.data[command].create_copy_with_data(data)
+        proto: PacketAck = self.data[command]
+        copy = proto.create_copy_with_data(data)
+        copy.number = number
+        return copy

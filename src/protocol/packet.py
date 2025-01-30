@@ -6,12 +6,25 @@ class Packet():
 
     def __init__(self):
         self._command = -1
+        self._number = 0
 
 
     @property
     def command(self) -> int:
         """Getter for command"""
         return self._command
+
+
+    @property
+    def number(self) -> int:
+        """Getter for number"""
+        return self._number
+
+
+    @number.setter
+    def number(self, value: int):
+        """Setter for number"""
+        self._number = value
 
 
     def get_data(self) -> bytes:

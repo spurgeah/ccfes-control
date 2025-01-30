@@ -1,7 +1,7 @@
 """Provides packet classes for low level init"""
 
 from src.protocol.commands import Commands, ResultAndError
-from src.low_level.low_level_types import LowLevelMode
+from src.low_level.low_level_types import LowLevelHighVoltageSource, LowLevelMode
 from src.utils.byte_builder import ByteBuilder
 from src.protocol.packet import Packet, PacketAck
 
@@ -13,7 +13,7 @@ class PacketLowLevelInit(Packet):
         super().__init__()
         self._command = Commands.LowLevelInit
         self._mode = LowLevelMode.NO_MEASUREMENT
-        self._high_voltage = 0
+        self._high_voltage_source = LowLevelHighVoltageSource.STANDARD
 
 
     @property
@@ -29,21 +29,21 @@ class PacketLowLevelInit(Packet):
 
 
     @property
-    def high_voltage(self) -> int:
-        """Getter for high voltage"""
-        return self._high_voltage
+    def high_voltage_source(self) -> int:
+        """Getter for high voltage source"""
+        return self._high_voltage_source
 
 
-    @high_voltage.setter
-    def high_voltage(self, value: int):
-        """Setter for high voltage"""
-        self._high_voltage = value
+    @high_voltage_source.setter
+    def high_voltage_source(self, value: int):
+        """Setter for high voltage source"""
+        self._high_voltage_source = value
 
 
     def get_data(self) -> bytes:
         bb = ByteBuilder()
         bb.set_bit_to_position(0, 0, 1)
-        bb.set_bit_to_position(self._high_voltage, 1, 3)
+        bb.set_bit_to_position(self._high_voltage_source, 1, 3)
         bb.set_bit_to_position(self._mode, 4, 3)
         bb.set_bit_to_position(0, 7, 0)
         return bb.get_bytes()

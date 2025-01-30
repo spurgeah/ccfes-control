@@ -14,34 +14,34 @@ class PacketLowLevelChannelConfig(Packet):
     def __init__(self):
         super().__init__()
         self._command = Commands.LowLevelChannelConfig
-        self._execution_stimulation = False
-        self._channel_selection: Channel = Channel.RED
+        self._execute_stimulation = False
+        self._channel: Channel = Channel.RED
         self._connector: Connector = Connector.YELLOW
-        self._points = []
+        self._points: list[ChannelPoint] = []
 
 
     @property
-    def execution_stimulation(self) -> bool:
-        """Getter for execution stimulation"""
-        return self._execution_stimulation
+    def execute_stimulation(self) -> bool:
+        """Getter for execute stimulation"""
+        return self._execute_stimulation
 
 
-    @execution_stimulation.setter
-    def execution_stimulation(self, value: bool):
-        """Setter for execution stimulation"""
-        self._execution_stimulation = value
+    @execute_stimulation.setter
+    def execute_stimulation(self, value: bool):
+        """Setter for execute stimulation"""
+        self._execute_stimulation = value
 
 
     @property
     def channel(self) -> Channel:
         """Getter for channel selection"""
-        return self._channel_selection
+        return self._channel
 
 
     @channel.setter
     def channel(self, value: Channel):
         """Setter for channel selection"""
-        self._channel_selection = value
+        self._channel = value
 
 
     @property
@@ -75,8 +75,8 @@ class PacketLowLevelChannelConfig(Packet):
         bb = ByteBuilder()
         bb.set_bit_to_position(len(self._points) - 1, 0, 4)
         bb.set_bit_to_position(self._connector, 4, 1)
-        bb.set_bit_to_position(self._channel_selection, 5, 2)
-        bb.set_bit_to_position(1 if self._execution_stimulation else 0, 7, 1)
+        bb.set_bit_to_position(self._channel, 5, 2)
+        bb.set_bit_to_position(1 if self._execute_stimulation else 0, 7, 1)
         for x in self._points:
             bb.append_bytes(x.get_data())
 
@@ -108,8 +108,8 @@ class PacketLowLevelChannelConfigAck(PacketAck):
             if self._mode != LowLevelMode.NO_MEASUREMENT:
                 self._sampling_time_in_microseconds = bb.get_bit_from_position(16, 16)
                 self._measurement_samples = [0] * 128
-                for x in enumerate(self._measurement_samples):
-                    self._measurement_samples[x] = bb.get_bit_from_position(32 + x * 16, 16)
+                for index, _ in enumerate(self._measurement_samples):
+                    self._measurement_samples[index] = bb.get_bit_from_position(32 + index * 16, 16)
 
 
 

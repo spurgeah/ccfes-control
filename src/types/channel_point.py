@@ -6,9 +6,9 @@ class ChannelPoint():
     """Class for channel point"""
 
 
-    def __init__(self, duration_micro_seconds: int, current_milli_amper: int):
+    def __init__(self, duration_micro_seconds: int, current_milli_ampere: int):
         self._duration_in_micro_seconds = duration_micro_seconds
-        self._current_in_milli_ampere = current_milli_amper
+        self._current_in_milli_ampere = current_milli_ampere
 
 
     @property

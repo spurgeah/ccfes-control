@@ -16,3 +16,9 @@ class LowLevelMode(Enum):
     STIM_CURRENT = 1
     STIM_VOLTAGE = 2
     HIGH_VOLTAGE_SOURCE = 3
+
+
+class LowLevelHighVoltageSource(Enum):
+    """Represent low level high voltage source"""
+    STANDARD = 0
+    OFF = 1
