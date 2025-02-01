@@ -1,8 +1,8 @@
 """Provices low level layer"""
 
 from src.low_level.low_level_channel_config import PacketLowLevelChannelConfig
-from src.low_level.low_level_init import PacketLowLevelInit
-from src.low_level.low_level_stop import PacketLowLevelStop
+from src.low_level.low_level_init import PacketLowLevelInit, PacketLowLevelInitAck
+from src.low_level.low_level_stop import PacketLowLevelStop, PacketLowLevelStopAck
 from src.low_level.low_level_types import LowLevelHighVoltageSource, LowLevelMode
 from src.types.channel_point import ChannelPoint
 from src.types.types import Channel, Connector
@@ -37,15 +37,17 @@ class LayerLowLevel(Layer):
         p = PacketLowLevelInit()
         p.mode = mode
         p.high_voltage_source = high_voltage_source
-        await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
-                                            self._connection, self._packet_factory)
+        ack: PacketLowLevelInitAck = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
+                                                                         self._connection, self._packet_factory)
+        self.check_result_error(ack.result_error, "LowLevelInit")
 
 
     async def stop(self):
         """Send low level stop command and waits for response"""
         p = PacketLowLevelStop()
-        await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
-                                            self._connection, self._packet_factory)
+        ack: PacketLowLevelStopAck = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
+                                                                        self._connection, self._packet_factory)
+        self.check_result_error(ack.result_error, "LowLevelStop")
 
 
     def send_init(self, mode: LowLevelMode, high_voltage_source: LowLevelHighVoltageSource):
