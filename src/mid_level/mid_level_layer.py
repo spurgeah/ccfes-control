@@ -53,6 +53,6 @@ class LayerMidLevel(Layer):
         if ack:
             current_ack: PacketMidLevelGetCurrentDataAck = ack
             self.check_result_error(current_ack.result_error, "mid level get current data")
-            if True in current_ack.channelError:
+            if True in current_ack.channel_error:
                 raise ValueError(f"Error mid level get current data channel error {current_ack.channel_error}")
             return current_ack.is_stimulation_active

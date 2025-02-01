@@ -2,29 +2,14 @@
 
 import asyncio
 import sys
-import threading
-from typing import Callable
 
+from examples.example_utils import ExampleUtils, KeyboardInputThread
 from src.device_p24 import DeviceP24
 from src.low_level.low_level_layer import LayerLowLevel
 from src.types.channel_point import ChannelPoint
 from src.types.types import Channel, Connector
 from src.utils.null_connection import NullConnection
 from src.utils.serial_port_connection import SerialPortConnection
-
-class KeyboardInputThread(threading.Thread):
-    """Thread for non blocking keyboard input"""
-
-    def __init__(self, input_cbk: Callable[[str], bool]):
-        self._input_cbk = input_cbk
-        super().__init__(name = "keyboard_input_thread", daemon = True)
-        self.start()
-
-
-    def run(self):
-        while True:
-            if self._input_cbk(input()):
-                break
 
 
 def send_channel_config(low_level_layer: LayerLowLevel, connector: Connector):
@@ -41,11 +26,7 @@ async def main() -> int:
     """Main function"""
 
     # get comport from command line argument
-    if len(sys.argv) != 2:
-        print("Serial port command line argument missing (e.g. python -m example_low_level.py COM3)")
-        sys.exit(1)
-
-    com_port = sys.argv[1]
+    com_port = ExampleUtils.get_comport_from_commandline_argument()
     # create serial port connection
     connection = SerialPortConnection(com_port)
     connection = NullConnection()
@@ -61,6 +42,7 @@ async def main() -> int:
     # get low level layer to call low level commands
     low_level_layer = device.get_layer_low_level()
 
+    # keyboard is our trigger to start specific stimulation
     def input_callback(input_value: str) -> bool:
         """Callback call from keyboard input thread"""
         print(f"Input value {input_value}")
