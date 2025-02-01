@@ -4,6 +4,7 @@ from enum import Enum
 from typing import Type
 from src.low_level.low_level_layer import LayerLowLevel
 from src.mid_level.mid_level_layer import LayerMidLevel
+from src.protocol.types import StimStatus
 from .layer import Layer
 from .general.general_layer import LayerGeneral
 from .protocol.packet_factory import PacketFactory
@@ -60,8 +61,14 @@ class Device():
 
 
     async def initialize(self):
-        """Initialize device"""
+        """Initialize device to get basic information (serial, versions) and stop any active stimulation/measurement"""
         await self.get_layer_general().initialize()
+        # get stim status to see if low/mid level is initialized or running
+        stim_status = await self.get_layer_general().get_stim_status()
+        if stim_status.stim_status == StimStatus.LOW_LEVEL_INITIALIZED:
+            await self.get_layer_low_level().stop()
+        elif stim_status.stim_status in [StimStatus.MID_LEVEL_INITIALIZED, StimStatus.MID_LEVEL_RUNNING]:
+            await self.get_layer_mid_level().stop()
 
 
     def get_layer_general(self) -> LayerGeneral:

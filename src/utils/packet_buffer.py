@@ -6,7 +6,7 @@ from src.protocol.protocol import Protocol
 
 class PacketBuffer():
     """Class for handling a buffer and provides methods to take care of arriving acknowledges"""
-    
+
     def __init__(self, packet_factory: PacketFactory):
         self._buffer: bytes = []
         self._open_acknowledges: dict[tuple[int, int], int] = {}
