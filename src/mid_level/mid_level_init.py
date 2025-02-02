@@ -1,7 +1,8 @@
 """Provides classes for mid level Init"""
 
-from src.protocol.commands import Commands, ResultAndError
+from src.protocol.commands import Commands
 from src.protocol.packet import Packet, PacketAck
+from src.protocol.types import ResultAndError
 from src.utils.byte_builder import ByteBuilder
 
 class PacketMidLevelInit(Packet):
@@ -41,7 +42,7 @@ class PacketMidLevelInitAck(PacketAck):
         self._command = Commands.MidLevelInitAck
         self._result_error = ResultAndError.NO_ERROR
 
-        if data:
+        if not data is None:
             self._result_error = ResultAndError(data[0])
 
 

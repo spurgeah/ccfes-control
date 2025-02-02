@@ -26,7 +26,7 @@ class PacketGeneralGetExtendedVersionAck(PacketAck):
         self._hash_type = 0
         self._is_valid_hash = False
 
-        if data:
+        if not data is None:
             self._successful = data[0] == 0
             self._firmware_version = f"{data[1]}.{data[2]}.{data[3]}"
             self._science_mode_version = f"{data[4]}.{data[5]}.{data[6]}"

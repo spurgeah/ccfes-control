@@ -14,8 +14,8 @@ from src.utils.serial_port_connection import SerialPortConnection
 async def main() -> int:
     """Main function"""
 
-    # connection = SerialPortConnection('COM3')
-    connection = NullConnection()
+    connection = SerialPortConnection('COM3')
+    # connection = NullConnection()
     connection.open()
 
     device = DeviceP24(connection)
@@ -25,23 +25,21 @@ async def main() -> int:
     print(general.firmware_version)
     print(general.science_mode_version)
 
-    # ss = await general.getStimStatus()
-
     c1p1: ChannelPoint = ChannelPoint(200, 20)
     c1p2: ChannelPoint = ChannelPoint(100, 0)
     c1p3: ChannelPoint = ChannelPoint(200, -20)
     cc1: MidLevelChannelConfiguration = MidLevelChannelConfiguration(True, 3, 20, [c1p1, c1p2, c1p3])
 
-    c2p1: ChannelPoint = ChannelPoint(100, 10)
+    c2p1: ChannelPoint = ChannelPoint(100, 100)
     c2p2: ChannelPoint = ChannelPoint(100, 0)
-    c2p3: ChannelPoint = ChannelPoint(100, -10)
+    c2p3: ChannelPoint = ChannelPoint(100, -100)
     cc2: MidLevelChannelConfiguration = MidLevelChannelConfiguration(True, 3, 10, [c2p1, c2p2, c2p3])
 
     mid_level = device.get_layer_mid_level()
-    await mid_level.init(True)
+    await mid_level.init(False)
     await mid_level.update([cc1, cc2])
-    for _ in range(10):
-        update = await mid_level.getCurrentData()
+    for _ in range(100):
+        update = await mid_level.get_current_data()
         print(update)
 
         await asyncio.sleep(1)

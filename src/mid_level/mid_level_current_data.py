@@ -1,7 +1,8 @@
 """Provides packet classes for mid level GetCurrentData"""
 
-from src.protocol.commands import Commands, ResultAndError
+from src.protocol.commands import Commands
 from src.protocol.packet import Packet, PacketAck
+from src.protocol.types import ResultAndError
 from src.utils.bit_vector import BitVector
 from src.utils.byte_builder import ByteBuilder
 
@@ -27,15 +28,27 @@ class PacketMidLevelGetCurrentDataAck(PacketAck):
         super().__init__(data)
         self._command = Commands.MidLevelGetCurrentDataAck
         self._result_error = ResultAndError.NO_ERROR
-        self._is_stimulation_active = [False] * 8
-        self._channel_error = [0] * 8
+        self._data_selection = 0
+        self._is_stimulation_active_per_channel = [False] * 8
+        self._channel_error = [ResultAndError.NO_ERROR] * 8
 
-        if data:
+        if not data is None:
             self._result_error = ResultAndError(data[0])
-            self._is_stimulation_active = [0 if x == 0 else 1 for x in BitVector.init_from_int(data[2])]
-            bb = ByteBuilder(int.from_bytes(data[3:6], 'little'))
-            for x in range(self._channel_error):
-                self._channel_error[x] = bb.get_bit_from_position(x * 4, 4)
+            # data selection should always be 4 (Returns all error from all channels)
+            self._data_selection = data[1]
+            self._is_stimulation_active_per_channel = [x != 0 for x in BitVector.init_from_int(data[2], 8)]
+            bb = ByteBuilder()
+            bb.append_bytes(data[3:7])
+            for index, _ in enumerate(self._channel_error):
+                tmp = bb.get_bit_from_position(index * 4, 4)
+                if tmp == 0:
+                    self._channel_error[index] = ResultAndError.NO_ERROR
+                elif tmp == 1:
+                    self._channel_error[index] = ResultAndError.ELECTRODE_ERROR
+                elif tmp == 2:
+                    self._channel_error[index] = ResultAndError.PULSE_TIMEOUT_ERROR
+                elif tmp == 3:
+                    self._channel_error[index] = ResultAndError.PULSE_LOW_CURRENT_ERROR
 
 
     @property
@@ -45,9 +58,9 @@ class PacketMidLevelGetCurrentDataAck(PacketAck):
 
 
     @property
-    def is_stimulation_active(self) -> list[bool]:
+    def is_stimulation_active_per_channel(self) -> list[bool]:
         """Getter for IsStimulationActive"""
-        return self._is_stimulation_active
+        return self._is_stimulation_active_per_channel
 
 
     @property

@@ -8,7 +8,8 @@ class SerialPortConnection(Connection):
 
 
     def __init__(self, port: str):
-        self._ser = serial.Serial(port, timeout = 0)
+        self._ser = serial.Serial(timeout = 0)
+        self._ser.port = port
 
 
     def open(self):
@@ -31,4 +32,5 @@ class SerialPortConnection(Connection):
         result = []
         if self._ser.in_waiting > 0:
             result = self._ser.read_all()
+            print(f"Incoming {len(result)} - {result.hex(' ').upper()}")
         return bytes(result)

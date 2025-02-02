@@ -1,6 +1,6 @@
 """Provides base class for all ScienceMode layers"""
 
-from .protocol.commands import ResultAndError
+from src.protocol.types import ResultAndError
 from .protocol.packet_factory import PacketFactory
 from .protocol.packet_number_generator import PacketNumberGenerator
 from .utils.connection import Connection

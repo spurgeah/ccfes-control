@@ -10,6 +10,7 @@ class PacketNumberGenerator():
 
     def get_next_number(self) -> int:
         """Returns next packet number, this function modifies state of class"""
+        return 0
         self._current_number += 1
         # packet number is a 6-bit value
         if self._current_number > 63:

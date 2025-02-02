@@ -1,7 +1,8 @@
 """Provides classes for general Reset"""
 
-from src.protocol.commands import Commands, ResultAndError
+from src.protocol.commands import Commands
 from src.protocol.packet import Packet, PacketAck
+from src.protocol.types import ResultAndError
 
 class PacketGeneralReset(Packet):
     """Packet for general Reset"""
@@ -21,7 +22,7 @@ class PacketGeneralResetAck(PacketAck):
         self._command = Commands.ResetAck
         self._result_error = ResultAndError.NO_ERROR
 
-        if data:
+        if not data is None:
             self._result_error = ResultAndError(data[0])
 
 

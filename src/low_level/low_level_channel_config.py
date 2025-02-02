@@ -97,7 +97,7 @@ class PacketLowLevelChannelConfigAck(PacketAck):
         self._sampling_time_in_microseconds = 0
         self._measurement_samples: list[int] = None
 
-        if data:
+        if not data is None:
             bb = ByteBuilder()
             bb.append_bytes(data)
             self._result = LowLevelResult(data[0])

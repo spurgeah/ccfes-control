@@ -15,7 +15,7 @@ class ByteBuilder():
         """Returns bits starting with bit_position and a count of bit_length"""
         result = 0
         for x in range(bit_length):
-            result |= (self.data[bit_position + x] << x) & 0x1
+            result |= (self.data[bit_position + x] << x)
         return result
 
 
@@ -85,4 +85,3 @@ class ByteBuilder():
         self.data.set_length(start + 8)
         for x in range(8):
             self.data[start + x] = (value >> x) & 0x1
-            

@@ -1,7 +1,8 @@
 """Provides classes for mid level Update"""
 
-from src.protocol.commands import Commands, ResultAndError
+from src.protocol.commands import Commands
 from src.protocol.packet import Packet, PacketAck
+from src.protocol.types import ResultAndError
 from src.utils.byte_builder import ByteBuilder
 from src.mid_level.mid_level_types import MidLevelChannelConfiguration
 
@@ -51,7 +52,7 @@ class PacketMidLevelUpdateAck(PacketAck):
         self._command = Commands.MidLevelUpdateAck
         self._result_error = ResultAndError.NO_ERROR
 
-        if data:
+        if not data is None:
             self._result_error = ResultAndError(data[0])
 
 

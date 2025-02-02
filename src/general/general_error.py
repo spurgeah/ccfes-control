@@ -1,7 +1,8 @@
 """Provides classes for general Error"""
 
-from src.protocol.commands import Commands, ResultAndError
+from src.protocol.commands import Commands
 from src.protocol.packet import PacketAck
+from src.protocol.types import ResultAndError
 
 
 class PacketGeneralError(PacketAck):
@@ -13,7 +14,7 @@ class PacketGeneralError(PacketAck):
         self._command = Commands.GeneralError
         self._result_error = ResultAndError.NO_ERROR
 
-        if data:
+        if not data is None:
             self._result_error = ResultAndError(data[0])
 
 

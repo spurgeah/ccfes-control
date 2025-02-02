@@ -3,7 +3,7 @@
 import sys
 import asyncio
 
-from examples.example_utils import ExampleUtils
+from example_utils import ExampleUtils
 from src.device_p24 import DeviceP24
 from src.utils.null_connection import NullConnection
 from src.utils.serial_port_connection import SerialPortConnection

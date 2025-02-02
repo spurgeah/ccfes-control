@@ -21,7 +21,7 @@ class Protocol:
 
 
     @staticmethod
-    async def send_packet(packet: Packet, packet_number: int, connection: Connection) -> PacketAck:
+    def send_packet(packet: Packet, packet_number: int, connection: Connection) -> PacketAck:
         """Send a packet and returns immediately"""
         packet.number = packet_number
         connection.write(Protocol.packet_to_bytes(packet))
@@ -33,7 +33,7 @@ class Protocol:
 
         Protocol.send_packet(packet, packet_number, connection)
 
-        counter = 100
+        counter = 1000
         while counter > 0:
             incoming_data = connection.read()
             if Protocol.is_valid_packet_data(incoming_data):
@@ -91,7 +91,7 @@ class Protocol:
         # stop byte
         bb.append_byte(Protocol.STOP_BYTE)
 
-        print(bb)
+        print(f"Outgoing {bb}")
         result = bb.get_bytes()
         return bytes(result)
 

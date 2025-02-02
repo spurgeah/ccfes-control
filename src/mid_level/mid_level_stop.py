@@ -1,7 +1,8 @@
 """Provides classes for mid level Stop"""
 
-from src.protocol.commands import Commands, ResultAndError
+from src.protocol.commands import Commands
 from src.protocol.packet import Packet, PacketAck
+from src.protocol.types import ResultAndError
 
 class PacketMidLevelStop(Packet):
     """Packet for mid level Stop"""
@@ -20,7 +21,7 @@ class PacketMidLevelStopAck(PacketAck):
         self._command = Commands.MidLevelStopAck
         self._result_error = ResultAndError.NO_ERROR
 
-        if data:
+        if not data is None:
             self._result_error = ResultAndError(data[0])
 
 

@@ -12,7 +12,9 @@ class BitVector():
 
 
     def __init__(self):
-        self.data: list[int] = []
+        self._data: list[int] = []
+        self._current = 0
+
         self.set_from_int(0, 0)
 
 
@@ -21,45 +23,50 @@ class BitVector():
         bl = bit_length
         if bl == 0:
             bl = value.bit_length()
-        self.data = [0] * bl
+        self._data = [0] * bl
 
         for x in range(bl):
-            self.data[x] = (value >> x) & 0x1
+            self._data[x] = (value >> x) & 0x1
 
 
     def __getitem__(self, index: int) -> int:
-        if (index < 0) or (index >= len(self.data)):
-            raise ValueError(f"Bit vector index out of bounds {index} [0 - {len(self.data)}]")
+        if (index < 0) or (index >= len(self._data)):
+            raise ValueError(f"Bit vector index out of bounds {index} [0 - {len(self._data)}]")
 
-        return self.data[index]
+        return self._data[index]
 
 
     def __setitem__(self, index: int, value: int):
         if not value in {0, 1}:
             raise ValueError(f"Bit vector wrong value {value}")
-        if (index < 0) or (index >= len(self.data)):
-            raise ValueError(f"Bit vector index out of bounds {index} [0 - {len(self.data)}]")
+        if (index < 0) or (index >= len(self._data)):
+            raise ValueError(f"Bit vector index out of bounds {index} [0 - {len(self._data)}]")
 
-        self.data[index] = value
+        self._data[index] = value
 
 
     def __len__(self) -> int:
-        return len(self.data)
+        return len(self._data)
+
+
+    def __iter__(self):
+        for x in self._data:
+            yield x
 
 
     def set_length(self, new_length: int):
         """Set length to new_length, does preserve current data"""
-        length_difference = new_length - len(self.data)
+        length_difference = new_length - len(self._data)
         if length_difference > 0:
             self.extend(BitVector.init_from_int(0, length_difference))
         elif length_difference < 0:
-            self.data = self.data[0:new_length]
+            self._data = self._data[0:new_length]
 
 
     def extend(self, value: 'BitVector'):
         """Extends current data with value"""
         if isinstance(value, BitVector):
-            self.data += value.data
+            self._data += value._data
 
 
     def get_bytes(self) -> bytes:
@@ -69,7 +76,7 @@ class BitVector():
 
         value = 0
         bit_counter = 0
-        bl = len(self.data)
+        bl = len(self._data)
         while position < bl:
             if bit_counter == 8:
                 result.append(value)
@@ -87,8 +94,8 @@ class BitVector():
 
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}(0b{self.data: _b})"
+        return f"{type(self).__name__}(0b{self._data: _b})"
 
 
     def __str__(self) -> str:
-        return '0b' + format(self.data, '_b')
+        return '0b' + format(self._data, '_b')

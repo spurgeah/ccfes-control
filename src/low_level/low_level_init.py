@@ -1,7 +1,8 @@
 """Provides packet classes for low level init"""
 
-from src.protocol.commands import Commands, ResultAndError
+from src.protocol.commands import Commands
 from src.low_level.low_level_types import LowLevelHighVoltageSource, LowLevelMode
+from src.protocol.types import ResultAndError
 from src.utils.byte_builder import ByteBuilder
 from src.protocol.packet import Packet, PacketAck
 
@@ -58,7 +59,7 @@ class PacketLowLevelInitAck(PacketAck):
         self._command = Commands.LowLevelInitAck
         self._result_error = ResultAndError.NO_ERROR
 
-        if data:
+        if not data is None:
             self._result_error = ResultAndError(data[0])
 
 

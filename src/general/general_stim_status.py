@@ -31,7 +31,7 @@ class PacketGeneralGetStimStatusAck(PacketAck):
         self._stim_status = StimStatus.NO_LEVEL_INITIALIZED
         self._high_voltage_on: bool = False
 
-        if data:
+        if not data is None:
             self._successful = data[0] == 0
             self._stim_status = StimStatus(data[1])
             self._high_voltage_on = data[2] == 6
