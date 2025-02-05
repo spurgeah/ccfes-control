@@ -4,11 +4,11 @@ import sys
 import asyncio
 
 from examples.example_utils import ExampleUtils, KeyboardInputThread
-from src.device_p24 import DeviceP24
-from src.mid_level.mid_level_types import MidLevelChannelConfiguration
-from src.types.channel_point import ChannelPoint
-from src.utils.null_connection import NullConnection
-from src.utils.serial_port_connection import SerialPortConnection
+from ScienceMode4_Python.device_p24 import DeviceP24
+from ScienceMode4_Python.mid_level.mid_level_types import MidLevelChannelConfiguration
+from ScienceMode4_Python.types.channel_point import ChannelPoint
+from ScienceMode4_Python.utils.null_connection import NullConnection
+from ScienceMode4_Python.utils.serial_port_connection import SerialPortConnection
 
 
 async def main() -> int:
