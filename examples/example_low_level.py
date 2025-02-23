@@ -5,7 +5,6 @@ import sys
 
 from example_utils import ExampleUtils, KeyboardInputThread
 from science_mode_4 import DeviceP24
-from science_mode_4 import MidLevelChannelConfiguration
 from science_mode_4 import ChannelPoint
 from science_mode_4 import SerialPortConnection
 from science_mode_4 import LayerLowLevel
@@ -65,7 +64,7 @@ async def main() -> int:
     await low_level_layer.init(LowLevelMode.NO_MEASUREMENT, LowLevelHighVoltageSource.STANDARD)
 
     # now we can start stimulation
-    while keyboard_input_thread.is_alive:
+    while keyboard_input_thread.is_alive():
         # get new data from connection
         # both append_bytes_to_buffer and get_packet_from_buffer should be called regulary
         new_buffer_data = device.connection.read()
