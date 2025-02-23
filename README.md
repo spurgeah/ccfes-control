@@ -14,11 +14,18 @@ Coming soon
 
 ## Dependencies
 
-PySerial (https://pypi.org/project/pyserial/) (pip install pyserial)
-Keyboard (https://pypi.org/project/keyboard/) (pip install keyboard) only for examples
+- PySerial
+  - https://pypi.org/project/pyserial/
+  - `pip install pyserial`
+- Keyboard (only for examples)
+  - https://pypi.org/project/keyboard/
+  - `pip install keyboard`
 
 ## Build library
 
-python -m pip install --upgrade build
-python -m build
-pip install .\dist\science_mode_4-0.0.0-py3-none-any.whl --force-reinstall
+- Install dependencies
+  - `python -m pip install --upgrade build`
+- Build project
+  - `python -m build`
+- Install local library
+  - `pip install .\dist\science_mode_4-0.0.0-py3-none-any.whl --force-reinstall`
