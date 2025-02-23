@@ -3,7 +3,7 @@
 from typing import NamedTuple
 from ..protocol.commands import Commands
 from ..protocol.packet import Packet, PacketAck
-from ..protocol.types import StimStatus
+from ..types.stim_status import StimStatus
 
 class GetStimStatusResult(NamedTuple):
     """Helper class for stim result"""

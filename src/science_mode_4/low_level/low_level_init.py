@@ -2,7 +2,7 @@
 
 from ..protocol.commands import Commands
 from .low_level_types import LowLevelHighVoltageSource, LowLevelMode
-from ..protocol.types import ResultAndError
+from ..types.result_and_error import ResultAndError
 from ..utils.byte_builder import ByteBuilder
 from ..protocol.packet import Packet, PacketAck
 

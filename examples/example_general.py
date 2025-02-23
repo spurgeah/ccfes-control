@@ -4,9 +4,10 @@ import sys
 import asyncio
 
 from example_utils import ExampleUtils
-from .device_p24 import DeviceP24
-from ScienceMode4_Python.utils.null_connection import NullConnection
-from ScienceMode4_Python.utils.serial_port_connection import SerialPortConnection
+from science_mode_4 import NullConnection
+from science_mode_4 import SerialPortConnection
+from science_mode_4 import DeviceP24
+# from DeviceP24 import science
 
 
 async def main() -> int:
@@ -16,7 +17,7 @@ async def main() -> int:
     com_port = ExampleUtils.get_comport_from_commandline_argument()
     # create serial port connection
     connection = SerialPortConnection(com_port)
-    connection = NullConnection()
+    # connection = NullConnection()
     # open connection, now we can read and write data
     connection.open()
 

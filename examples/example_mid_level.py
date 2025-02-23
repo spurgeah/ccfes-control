@@ -3,12 +3,12 @@
 import sys
 import asyncio
 
-from examples.example_utils import ExampleUtils, KeyboardInputThread
-from ScienceMode4_Python.device_p24 import DeviceP24
-from ScienceMode4_Python.mid_level.mid_level_types import MidLevelChannelConfiguration
-from ScienceMode4_Python.types.channel_point import ChannelPoint
-from ScienceMode4_Python.utils.null_connection import NullConnection
-from ScienceMode4_Python.utils.serial_port_connection import SerialPortConnection
+from example_utils import ExampleUtils, KeyboardInputThread
+from science_mode_4 import DeviceP24
+from science_mode_4 import MidLevelChannelConfiguration
+from science_mode_4 import ChannelPoint
+from science_mode_4 import NullConnection
+from science_mode_4 import SerialPortConnection
 
 
 async def main() -> int:
@@ -18,7 +18,7 @@ async def main() -> int:
     com_port = ExampleUtils.get_comport_from_commandline_argument()
     # create serial port connection
     connection = SerialPortConnection(com_port)
-    connection = NullConnection()
+    # connection = NullConnection()
     # open connection, now we can read and write data
     connection.open()
 
@@ -47,12 +47,12 @@ async def main() -> int:
     c1p1: ChannelPoint = ChannelPoint(200, 20)
     c1p2: ChannelPoint = ChannelPoint(100, 0)
     c1p3: ChannelPoint = ChannelPoint(200, -20)
-    cc1: MidLevelChannelConfiguration = MidLevelChannelConfiguration(True, 3, 20, [c1p1, c1p2, c1p3])
+    cc1 = MidLevelChannelConfiguration(True, 3, 20, [c1p1, c1p2, c1p3])
 
     c2p1: ChannelPoint = ChannelPoint(100, 10)
     c2p2: ChannelPoint = ChannelPoint(100, 0)
     c2p3: ChannelPoint = ChannelPoint(100, -10)
-    cc2: MidLevelChannelConfiguration = MidLevelChannelConfiguration(True, 3, 10, [c2p1, c2p2, c2p3])
+    cc2 = MidLevelChannelConfiguration(True, 3, 10, [c2p1, c2p2, c2p3])
 
     # get mid level layer to call mid level commands
     mid_level = device.get_layer_mid_level()
