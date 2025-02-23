@@ -4,10 +4,8 @@ import sys
 import asyncio
 
 from example_utils import ExampleUtils
-from science_mode_4 import NullConnection
 from science_mode_4 import SerialPortConnection
 from science_mode_4 import DeviceP24
-# from DeviceP24 import science
 
 
 async def main() -> int:
