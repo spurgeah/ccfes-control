@@ -8,7 +8,9 @@
       "name": "Python Debugger: Current File",
       "type": "debugpy",
       "request": "launch",
-      "program": "main.py",
+      // "program": "__main__.py",
+      "program": "examples/example_low_level.py",
+      "args": ["COM3"],
       "console": "integratedTerminal"
     }
   ]
