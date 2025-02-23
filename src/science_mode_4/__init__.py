@@ -2,6 +2,8 @@
 
 from importlib.metadata import version
 
+from .device import Device
+from .layer import Layer
 from .device_p24 import DeviceP24
 
 from .general.general_device_id import PacketGeneralGetDeviceId, PacketGeneralGetDeviceIdAck
@@ -31,9 +33,7 @@ from .protocol.packet import Packet, PacketAck
 from .protocol.packet_number_generator import PacketNumberGenerator
 from .protocol.protocol import Protocol
 from .protocol.channel_point import ChannelPoint
-from .protocol.types import ResultAndError
-from .protocol.types import StimStatus
-from .protocol.types import Channel, Connector
+from .protocol.types import ResultAndError, StimStatus, Channel, Connector
 
 from .utils.bit_vector import BitVector
 from .utils.byte_builder import ByteBuilder
@@ -42,4 +42,4 @@ from .utils.null_connection import NullConnection
 from .utils.serial_port_connection import SerialPortConnection
 from .utils.packet_buffer import PacketBuffer
 
-# __version__ = version("science_mode_4")
+__version__ = version("science_mode_4")
