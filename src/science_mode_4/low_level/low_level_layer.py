@@ -4,8 +4,8 @@ from .low_level_channel_config import PacketLowLevelChannelConfig
 from .low_level_init import PacketLowLevelInit, PacketLowLevelInitAck
 from .low_level_stop import PacketLowLevelStop, PacketLowLevelStopAck
 from .low_level_types import LowLevelHighVoltageSource, LowLevelMode
-from ..types.channel_point import ChannelPoint
-from ..types.types import Channel, Connector
+from ..protocol.channel_point import ChannelPoint
+from ..protocol.types import Channel, Connector
 from ..utils.packet_buffer import PacketBuffer
 from ..protocol.packet_number_generator import PacketNumberGenerator
 from ..protocol.packet_factory import PacketFactory
@@ -56,7 +56,7 @@ class LayerLowLevel(Layer):
         p.mode = mode
         p.high_voltage_source = high_voltage_source
         Protocol.send_packet(p, self._packet_number_generator.get_next_number(),
-                             self._connection, self._packet_factory)
+                             self._connection,)
         self._packet_buffer.add_open_acknowledge(p)
 
 
@@ -69,7 +69,7 @@ class LayerLowLevel(Layer):
         p.connector = connector
         p.points = points
         Protocol.send_packet(p, self._packet_number_generator.get_next_number(),
-                             self._connection, self._packet_factory)
+                             self._connection)
         self._packet_buffer.add_open_acknowledge(p)
 
 
@@ -77,5 +77,5 @@ class LayerLowLevel(Layer):
         """Send low level stop command"""
         p = PacketLowLevelStop()
         Protocol.send_packet(p, self._packet_number_generator.get_next_number(),
-                             self._connection, self._packet_factory)
+                             self._connection)
         self._packet_buffer.add_open_acknowledge(p)

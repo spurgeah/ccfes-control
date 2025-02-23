@@ -2,7 +2,7 @@
 
 from ..protocol.commands import Commands
 from ..protocol.packet import Packet, PacketAck
-from ..types.result_and_error import ResultAndError
+from ..protocol.types import ResultAndError
 from ..utils.byte_builder import ByteBuilder
 from .mid_level_types import MidLevelChannelConfiguration
 

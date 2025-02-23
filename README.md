@@ -14,7 +14,8 @@ Coming soon
 
 ## Dependencies
 
-PySerial (https://pypi.org/project/pyserial/) (py -m pip install pyserial)
+PySerial (https://pypi.org/project/pyserial/) (pip install pyserial)
+Keyboard (https://pypi.org/project/keyboard/) (pip install keyboard) only for examples
 
 ## Build library
 

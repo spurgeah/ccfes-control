@@ -1,6 +1,6 @@
 """Provides classes for general GetDeviceId"""
 
-from ..types.result_and_error import ResultAndError
+from ..protocol.types import ResultAndError
 from ..protocol.commands import Commands
 from ..protocol.packet import Packet, PacketAck
 

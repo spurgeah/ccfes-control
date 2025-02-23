@@ -16,7 +16,7 @@ from .low_level.low_level_channel_config import PacketLowLevelChannelConfig, Pac
 from .low_level.low_level_init import PacketLowLevelInit, PacketLowLevelInitAck
 from .low_level.low_level_layer import LayerLowLevel
 from .low_level.low_level_stop import PacketLowLevelStop, PacketLowLevelStopAck
-from .low_level.low_level_types import LowLevelHighVoltageSource
+from .low_level.low_level_types import LowLevelHighVoltageSource, LowLevelMode, LowLevelResult
 
 from .mid_level.mid_level_current_data import PacketMidLevelGetCurrentData, PacketMidLevelGetCurrentDataAck
 from .mid_level.mid_level_init import PacketMidLevelInit, PacketMidLevelInitAck
@@ -30,11 +30,10 @@ from .protocol.packet_factory import PacketFactory
 from .protocol.packet import Packet, PacketAck
 from .protocol.packet_number_generator import PacketNumberGenerator
 from .protocol.protocol import Protocol
-
-from .types.channel_point import ChannelPoint
-from .types.result_and_error import ResultAndError
-from .types.stim_status import StimStatus
-from .types.types import Channel, Connector
+from .protocol.channel_point import ChannelPoint
+from .protocol.types import ResultAndError
+from .protocol.types import StimStatus
+from .protocol.types import Channel, Connector
 
 from .utils.bit_vector import BitVector
 from .utils.byte_builder import ByteBuilder
@@ -43,4 +42,4 @@ from .utils.null_connection import NullConnection
 from .utils.serial_port_connection import SerialPortConnection
 from .utils.packet_buffer import PacketBuffer
 
-__version__ = version("science_mode_4")
+# __version__ = version("science_mode_4")

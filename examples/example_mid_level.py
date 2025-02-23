@@ -7,31 +7,16 @@ from example_utils import ExampleUtils, KeyboardInputThread
 from science_mode_4 import DeviceP24
 from science_mode_4 import MidLevelChannelConfiguration
 from science_mode_4 import ChannelPoint
-from science_mode_4 import NullConnection
 from science_mode_4 import SerialPortConnection
 
 
 async def main() -> int:
     """Main function"""
 
-    # get comport from command line argument
-    com_port = ExampleUtils.get_comport_from_commandline_argument()
-    # create serial port connection
-    connection = SerialPortConnection(com_port)
-    # connection = NullConnection()
-    # open connection, now we can read and write data
-    connection.open()
-
-    # create science mode device
-    device = DeviceP24(connection)
-    # call initialize to get basic information (serial, versions) and stop any active stimulation/measurement
-    # to have a defined state
-    await device.initialize()
-
     # keyboard is our trigger to start specific stimulation
     def input_callback(input_value: str) -> bool:
         """Callback call from keyboard input thread"""
-        print(f"Input value {input_value}")
+        # print(f"Input value {input_value}")
 
         if input_value == "q":
             # end keyboard input thread
@@ -42,6 +27,19 @@ async def main() -> int:
     print("Usage: stimulation is running, press q to quit")
     # create keyboard input thread for non blocking console input
     keyboard_input_thread = KeyboardInputThread(input_callback)
+
+    # get comport from command line argument
+    com_port = ExampleUtils.get_comport_from_commandline_argument()
+    # create serial port connection
+    connection = SerialPortConnection(com_port)
+    # open connection, now we can read and write data
+    connection.open()
+
+    # create science mode device
+    device = DeviceP24(connection)
+    # call initialize to get basic information (serial, versions) and stop any active stimulation/measurement
+    # to have a defined state
+    await device.initialize()
 
     # simple stimulation pattern
     c1p1: ChannelPoint = ChannelPoint(200, 20)
@@ -60,10 +58,11 @@ async def main() -> int:
     await mid_level.init(True)
     # set stimulation pattern, P24 device will now stimulate according this pattern
     await mid_level.update([cc1, cc2])
-    while keyboard_input_thread.is_alive:
+
+    while keyboard_input_thread.is_alive():
         # we have to call get_current_data() every 1.5s to keep stimulation ongoing
         update = await mid_level.get_current_data()
-        print(update)
+        # print(update)
 
         await asyncio.sleep(1)
 

@@ -2,7 +2,7 @@
 
 from typing import Sequence
 from ..utils.byte_builder import ByteBuilder
-from ..types.channel_point import ChannelPoint
+from ..protocol.channel_point import ChannelPoint
 
 
 class MidLevelChannelConfiguration():

@@ -1,10 +1,10 @@
 """Provides device class representing a science mode device"""
 
-from enum import Enum
+from enum import IntEnum
 from typing import Type
 from .low_level.low_level_layer import LayerLowLevel
 from .mid_level.mid_level_layer import LayerMidLevel
-from .types.stim_status import StimStatus
+from .protocol.types import StimStatus
 from .layer import Layer
 from .general.general_layer import LayerGeneral
 from .protocol.packet_factory import PacketFactory
@@ -12,7 +12,7 @@ from .protocol.packet_number_generator import PacketNumberGenerator
 from .utils.connection import Connection
 
 
-class DeviceCapability(Enum):
+class DeviceCapability(IntEnum):
     """Represent device capabilities"""
     GENERAL = 0
     LOW_LEVEL = 1

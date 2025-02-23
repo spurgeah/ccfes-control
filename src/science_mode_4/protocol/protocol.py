@@ -24,6 +24,7 @@ class Protocol:
     def send_packet(packet: Packet, packet_number: int, connection: Connection) -> PacketAck:
         """Send a packet and returns immediately"""
         packet.number = packet_number
+        # print(packet)
         connection.write(Protocol.packet_to_bytes(packet))
 
 
@@ -91,7 +92,7 @@ class Protocol:
         # stop byte
         bb.append_byte(Protocol.STOP_BYTE)
 
-        print(f"Outgoing {bb}")
+        # print(f"Outgoing {bb}")
         result = bb.get_bytes()
         return bytes(result)
 
@@ -120,10 +121,10 @@ class Protocol:
         while True:
             # Find start of packet
             # (0xF0 does not always indicate a packet start, so check additionally for stuffing byte)
-            start = buffer.find([Protocol.START_BYTE, Protocol.STUFFING_BYTE], start)
+            start = buffer.find(bytes([Protocol.START_BYTE, Protocol.STUFFING_BYTE]), start)
             if start != -1:
                 # we found a start, so use minimal packet length as starting index to find stop
-                stop = buffer.find([Protocol.STOP_BYTE], start + 12)
+                stop = buffer.find(bytes([Protocol.STOP_BYTE]), start + 12)
                 if stop != -1:
                     # we found a packet end, lets check if its valid
                     if Protocol.is_valid_packet_data(buffer[start:stop+1]):

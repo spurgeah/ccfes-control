@@ -13,13 +13,13 @@ class PacketFactory():
             # we will not register subclasses of PacketAck here, it will be done in following loop
             # if (type(x) is PacketAck) or (x not in PacketAck.__subclasses__()):
             if not isinstance(x, type(PacketAck)):
-                print(f"Register type {x.__name__}")
+                # print(f"Register type {x.__name__}")
                 # disable linter warning, that a parameter is missing, which seems to be wrong
                 # pylint: disable = no-value-for-parameter
                 self.register_packet(x())
 
         for x in PacketAck.__subclasses__():
-            print(f"Register type {x.__name__}")
+            # print(f"Register type {x.__name__}")
             self.register_packet(x(None))
 
 

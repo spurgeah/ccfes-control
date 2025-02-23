@@ -32,5 +32,5 @@ class SerialPortConnection(Connection):
         result = []
         if self._ser.in_waiting > 0:
             result = self._ser.read_all()
-            print(f"Incoming {len(result)} - {result.hex(' ').upper()}")
+            # print(f"Incoming {len(result)} - {result.hex(' ').upper()}")
         return bytes(result)

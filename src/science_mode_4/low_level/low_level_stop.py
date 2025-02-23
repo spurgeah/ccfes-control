@@ -2,7 +2,7 @@
 
 from ..protocol.commands import Commands
 from ..protocol.packet import Packet, PacketAck
-from ..types.result_and_error import ResultAndError
+from ..protocol.types import ResultAndError
 
 class PacketLowLevelStop(Packet):
     """Packet for low level stop"""

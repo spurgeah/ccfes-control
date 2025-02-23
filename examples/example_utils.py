@@ -4,6 +4,8 @@ import sys
 import threading
 from typing import Callable
 
+import keyboard
+
 
 class KeyboardInputThread(threading.Thread):
     """Thread for non blocking keyboard input"""
@@ -16,9 +18,11 @@ class KeyboardInputThread(threading.Thread):
 
     def run(self):
         while True:
-            if self._input_cbk(input()):
-                # callback returned True, so end thread
-                break
+            event = keyboard.read_event()
+            if event.event_type == keyboard.KEY_DOWN:
+                if self._input_cbk(event.name):
+                    # callback returned True, so end thread
+                    break
 
 
 class ExampleUtils():

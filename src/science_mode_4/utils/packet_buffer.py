@@ -8,7 +8,7 @@ class PacketBuffer():
     """Class for handling a buffer and provides methods to take care of arriving acknowledges"""
 
     def __init__(self, packet_factory: PacketFactory):
-        self._buffer: bytes = []
+        self._buffer: bytes = b''
         self._open_acknowledges: dict[tuple[int, int], int] = {}
         self._packet_factory = packet_factory
 
@@ -20,7 +20,11 @@ class PacketBuffer():
 
     def add_open_acknowledge(self, packet: Packet):
         """Adds packet to list of packets, that are waiting for a acknowledge"""
-        self._open_acknowledges[packet.command, packet.number] += 1
+        key = packet.command + 1, packet.number
+        if key in self._open_acknowledges:
+            self._open_acknowledges[key] += 1
+        else:
+            self._open_acknowledges[key] = 1
 
 
     def get_packet_from_buffer(self) -> Packet | None:
@@ -35,7 +39,8 @@ class PacketBuffer():
         packet_data = self._buffer[start_stop[0]: start_stop[1] + 1]
         ack_data = Protocol.extract_packet_data(packet_data)
         # check if we wait for this acknowledge
-        wait_ack = self._open_acknowledges.get([ack_data[0], ack_data[1]])
+        key = ack_data[0], ack_data[1]
+        wait_ack = self._open_acknowledges.get(key)
         if wait_ack is None:
             print(f"Unexpected acknowledge command {wait_ack[0]}, number {wait_ack[1]}")
         else:

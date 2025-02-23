@@ -2,7 +2,7 @@
 
 from ..protocol.commands import Commands
 from ..protocol.packet import PacketAck
-from ..types.result_and_error import ResultAndError
+from ..protocol.types import ResultAndError
 
 
 class PacketGeneralUnknownCommand(PacketAck):
