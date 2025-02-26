@@ -19,6 +19,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 dependencies = [
   "pyserial>=3.5",
+  "keyboard>=0.13.5",
 ]
 
 [project.urls]
