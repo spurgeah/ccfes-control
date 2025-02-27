@@ -23,9 +23,10 @@ Coming soon
 
 ## Build library
 
+- Create Python environment (e.g. with venv or conda)
 - Install dependencies
   - `python -m pip install --upgrade build`
 - Build project
   - `python -m build`
 - Install local library
-  - `pip install .\dist\science_mode_4-0.0.0-py3-none-any.whl --force-reinstall`
+  - `pip install .\dist\science_mode_4-0.0.1-py3-none-any.whl` (adjust path accordingly)
