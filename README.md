@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Python implementation of ScienceMode 4 protocol (https://github.com/ScienceMode/ScienceMode4_P24) for HasomedScience P24 devices. To use this library see section [Installation](#h2-installation).
+Python implementation of ScienceMode 4 protocol (https://github.com/ScienceMode/ScienceMode4_P24) for HasomedScience P24 devices. To use this library see section [Installation](#installation).
 
 ## Requirements
 
