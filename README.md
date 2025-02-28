@@ -1,4 +1,4 @@
-# ScienceModePython
+# ScienceMode4 Python
 
 ## Introduction
 
@@ -10,7 +10,9 @@ Python 3.11 or higher
 
 ## Installation
 
-Coming soon
+- Install science-mode-4 library inclusive dependencies via pip
+  - `pip install science-mode-4`
+  - https://pypi.org/project/science-mode-4/
 
 ## Dependencies
 
@@ -23,7 +25,6 @@ Coming soon
 
 ## Build library
 
-- Create Python environment (e.g. with venv or conda)
 - Install dependencies
   - `python -m pip install --upgrade build`
 - Build project
