@@ -3,13 +3,14 @@
 import asyncio
 import sys
 
-from example_utils import ExampleUtils, KeyboardInputThread
 from science_mode_4 import DeviceP24
 from science_mode_4 import ChannelPoint
 from science_mode_4 import SerialPortConnection
 from science_mode_4 import LayerLowLevel
 from science_mode_4 import Connector, Channel
 from science_mode_4 import LowLevelHighVoltageSource, LowLevelMode
+
+from example_utils import ExampleUtils, KeyboardInputThread
 
 
 def send_channel_config(low_level_layer: LayerLowLevel, connector: Connector):
