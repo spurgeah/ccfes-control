@@ -1,8 +1,28 @@
-[tool.poetry]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
 name = "science_mode_4"
-version = "0.1"
+version = "0.0.7"
+authors = [
+  { name="Marc Hofmann", email="marc-hofmann@gmx.de" },
+]
 description = "Native ScienceMode4 protocol implementation"
-authors = ["Marc Hofmann"]
-license = "MIT"
 readme = "README.md"
-include = ["examples/*"]
+requires-python = ">=3.11"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = [
+  "LICENSE"
+]
+dependencies = [
+  "pyserial >= 3.5",
+  "keyboard >= 0.13.5",
+]
+
+[project.urls]
+Homepage = "https://github.com/nextroundwinner/ScienceModePython"

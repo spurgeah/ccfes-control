@@ -1,4 +1,4 @@
-"""Simple example how to use library"""
+"""Test program how to use library without installing the library"""
 
 import sys
 import asyncio
