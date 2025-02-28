@@ -21,6 +21,8 @@ async def main() -> int:
         if input_value == "q":
             # end keyboard input thread
             return True
+        else:
+            print("Invalid command")
 
         return False
 
