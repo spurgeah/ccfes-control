@@ -94,8 +94,8 @@ class PacketLowLevelChannelConfigAck(PacketAck):
         self._channel = 0
         self._mode = LowLevelMode.NO_MEASUREMENT
         # only present when measurement is active
-        self._sampling_time_in_microseconds = 0
-        self._measurement_samples: list[int] = None
+        self._sampling_time_in_microseconds: int = 0
+        self._measurement_samples: list[float] = None
 
         if not data is None:
             bb = ByteBuilder()
@@ -106,10 +106,12 @@ class PacketLowLevelChannelConfigAck(PacketAck):
             self._mode = LowLevelMode(data[2])
             # only present when measurement is active
             if self._mode != LowLevelMode.NO_MEASUREMENT:
-                self._sampling_time_in_microseconds = bb.get_bit_from_position(16, 16)
+                bb.swap(3, 2)
+                self._sampling_time_in_microseconds = bb.get_bit_from_position(24, 16)
                 self._measurement_samples = [0] * 128
                 for index, _ in enumerate(self._measurement_samples):
-                    self._measurement_samples[index] = bb.get_bit_from_position(32 + index * 16, 16)
+                    bb.swap(5 + index * 2, 2)
+                    self._measurement_samples[index] = bb.get_bit_from_position(40 + index * 16, 16) / 100.0
 
 
 
@@ -135,3 +137,17 @@ class PacketLowLevelChannelConfigAck(PacketAck):
     def mode(self) -> LowLevelMode:
         """Getter for mode"""
         return self._mode
+
+
+    @property
+    def sampling_time_in_microseconds(self) -> int:
+        """Getter for measurement samples"""
+        return self._sampling_time_in_microseconds
+
+
+    @property
+    def measurement_samples(self) -> list[float]:
+        """Getter for measurement samples,
+        by design negative values are measured as positive values,
+        unit depends on choosen measurement mode"""
+        return self._measurement_samples
