@@ -1,4 +1,5 @@
 """Test program how to use library without installing the library"""
+"""DO NOT USE THIS FILE, USE EXAMPLES INSTEAD"""
 
 import sys
 import asyncio
@@ -22,7 +23,7 @@ def send_channel_config(low_level_layer: LayerLowLevel, connector: Connector):
         low_level_layer.send_channel_config(True, channel, connector,
                                             [ChannelPoint(4000, 20), ChannelPoint(4000, -20),
                                             ChannelPoint(4000, 0)])
-        
+
 async def main() -> int:
     """Main function"""
 
@@ -76,16 +77,18 @@ async def main() -> int:
             packet_ack = low_level_layer.packet_buffer.get_packet_from_buffer()
             # do something with packet ack
             # here we print that an acknowledge arrived
-            # print(packet_ack)
+            # print(f"I {packet_ack}")
 
         if counter % 10 == 0:
             send_channel_config(low_level_layer, Connector.GREEN)
         elif counter % 10 == 5:
             send_channel_config(low_level_layer, Connector.YELLOW)
 
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0.01)
         counter += 1
 
+    # wait until all acknowledges are received
+    await asyncio.sleep(0.5)
     # call stop low level
     await low_level_layer.stop()
 

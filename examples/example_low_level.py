@@ -81,6 +81,8 @@ async def main() -> int:
 
         await asyncio.sleep(0.1)
 
+    # wait until all acknowledges are received
+    await asyncio.sleep(0.5)
     # call stop low level
     await low_level_layer.stop()
 
