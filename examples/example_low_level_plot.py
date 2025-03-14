@@ -1,4 +1,4 @@
-"""Provides an example how to use low level layer to measure current and plot value"""
+"""Provides an example how to use low level layer to measure current and plot values"""
 
 import asyncio
 import sys
