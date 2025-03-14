@@ -35,9 +35,8 @@ async def main() -> int:
     # get low level layer to call low level commands
     low_level_layer = device.get_layer_low_level()
 
-    # call init low level
+    # call init low level and enable measurement
     await low_level_layer.init(LowLevelMode.STIM_CURRENT, LowLevelHighVoltageSource.STANDARD)
-
 
     # send one channel config so we get only one acknowledge
     low_level_layer.send_channel_config(True, Channel.RED, Connector.GREEN,

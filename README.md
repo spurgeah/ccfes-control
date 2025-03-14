@@ -23,7 +23,7 @@ Python 3.11 or higher
   - `pip install pyserial`
 
 ## Build library
-
+- Only necessary, if you made changes to the library
 - Install dependencies
   - `python -m pip install --upgrade build`
 - Build project
@@ -42,7 +42,7 @@ Python 3.11 or higher
 - `example_low_level.py`
   - Demonstrates how to use low level layer, where host has trigger stimulation manually, in this case by pressing a key 
 - `example_low_level_plot.py`
-  - Demonstrates how to use lew level layer to measure current and plot a graph
+  - Demonstrates how to use low level layer to measure current and plot a graph
 
 ## Dependencies for examples
 
