@@ -34,15 +34,15 @@ Python 3.11 or higher
 # Examples
 
 ## Description
-- Placed in folder `examples`
+- Located in folder `examples`
 - `example_general.py`
   - Demonstrates how to use general layer to get serial number and firmware version
 - `example_mid_level.py`
-  - Demonstrates how to use mid level layer, where the stimulator stimulates by itself until stopped
+  - Demonstrates how to use mid level layer, where a stimulation pattern is send to the stimulator and the device automatically executes the pattern by itself until stopped
 - `example_low_level.py`
-  - Demonstrates how to use low level layer, where host has trigger stimulation manually, in this case by pressing a key 
+  - Demonstrates how to use low level layer, where host has to trigger stimulation manually, in this case by pressing a key 
 - `example_low_level_plot.py`
-  - Demonstrates how to use low level layer to measure current and plot a graph
+  - Demonstrates how to use low level layer to measure current and plot it in a graph
 
 ## Dependencies for examples
 
