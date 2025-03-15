@@ -18,7 +18,7 @@ class KeyboardInputThread(threading.Thread):
 
     def run(self):
         while True:
-            event = keyboard.read_event()
+            event = keyboard.read_event(suppress=True)
             if event.event_type == keyboard.KEY_DOWN:
                 if self._input_cbk(event.name):
                     # callback returned True, so end thread

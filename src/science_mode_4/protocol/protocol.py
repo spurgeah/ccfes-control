@@ -24,7 +24,7 @@ class Protocol:
     def send_packet(packet: Packet, packet_number: int, connection: Connection) -> PacketAck:
         """Send a packet and returns immediately"""
         packet.number = packet_number
-        # print(packet)
+        # print(f"O {packet}")
         connection.write(Protocol.packet_to_bytes(packet))
 
 

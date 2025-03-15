@@ -38,11 +38,11 @@ class Packet():
     
 
     def __repr__(self) -> str:
-        return f"command {self._command} - nr {self._number})"
+        return f"command {self._command} - nr {self._number}"
 
 
     def __str__(self) -> str:
-        return f"command {self._command} - nr {self._number})"
+        return f"command {self._command} - nr {self._number}"
 
 
 class PacketAck(Packet):

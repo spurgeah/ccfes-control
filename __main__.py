@@ -1,8 +1,14 @@
-"""Test program how to use library without installing the library"""
+"""Test program how to use library without installing the library,
+DO NOT USE THIS FILE, USE EXAMPLES INSTEAD"""
 
 import sys
 import asyncio
 
+import matplotlib.pyplot as plt
+import numpy as np
+
+from science_mode_4.low_level.low_level_channel_config import PacketLowLevelChannelConfigAck
+from science_mode_4.protocol.commands import Commands
 from src.science_mode_4.device_p24 import DeviceP24
 from src.science_mode_4.low_level.low_level_layer import LayerLowLevel
 from src.science_mode_4.low_level.low_level_types import LowLevelHighVoltageSource, LowLevelMode
@@ -22,7 +28,7 @@ def send_channel_config(low_level_layer: LayerLowLevel, connector: Connector):
         low_level_layer.send_channel_config(True, channel, connector,
                                             [ChannelPoint(4000, 20), ChannelPoint(4000, -20),
                                             ChannelPoint(4000, 0)])
-        
+
 async def main() -> int:
     """Main function"""
 
@@ -62,11 +68,13 @@ async def main() -> int:
     low_level_layer = device.get_layer_low_level()
 
     # call init low level
-    await low_level_layer.init(LowLevelMode.NO_MEASUREMENT, LowLevelHighVoltageSource.STANDARD)
+    await low_level_layer.init(LowLevelMode.STIM_CURRENT, LowLevelHighVoltageSource.STANDARD)
 
     # now we can start stimulation
     counter = 0
-    while counter < 100:
+    ms: list[float] = []
+    sample_time = 0
+    while counter < 10:
         # get new data from connection
         # both append_bytes_to_buffer and get_packet_from_buffer should be called regulary
         new_buffer_data = device.connection.read()
@@ -76,20 +84,43 @@ async def main() -> int:
             packet_ack = low_level_layer.packet_buffer.get_packet_from_buffer()
             # do something with packet ack
             # here we print that an acknowledge arrived
-            # print(packet_ack)
+            # print(f"I {packet_ack}")
+            if packet_ack.command == Commands.LowLevelChannelConfigAck:
+                ll_config_ack: PacketLowLevelChannelConfigAck = packet_ack
+                ms.extend(ll_config_ack.measurement_samples)
+                sample_time = ll_config_ack.sampling_time_in_microseconds
+                print(f"sample time {ll_config_ack.sampling_time_in_microseconds}")
+                print(ms)
+
+        # if counter % 10 == 0:
+        #     send_channel_config(low_level_layer, Connector.GREEN)
+        # elif counter % 10 == 5:
+        #     send_channel_config(low_level_layer, Connector.YELLOW)
 
         if counter % 10 == 0:
-            send_channel_config(low_level_layer, Connector.GREEN)
-        elif counter % 10 == 5:
-            send_channel_config(low_level_layer, Connector.YELLOW)
-
-        await asyncio.sleep(0.1)
+            low_level_layer.send_channel_config(True, Channel.RED, Connector.GREEN,
+                                                [ChannelPoint(2000, 40), ChannelPoint(1000, 0),
+                                                ChannelPoint(1000, -20)])
+        await asyncio.sleep(0.01)
         counter += 1
 
+    # wait until all acknowledges are received
+    await asyncio.sleep(0.5)
     # call stop low level
     await low_level_layer.stop()
 
     connection.close()
+
+    fig, ax = plt.subplots()
+    ax.plot(np.linspace(0, sample_time, len(ms)), ms)
+
+    ax.set(xlabel='Sample Time (µs)', ylabel='Current (mA)',
+        title='Current measurement')
+    ax.grid()
+
+    # fig.savefig("test.png")
+    plt.show()
+
     return 0
 
 
