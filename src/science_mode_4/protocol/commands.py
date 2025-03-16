@@ -31,4 +31,20 @@ class Commands:
     MidLevelGetCurrentData: int = 36
     MidLevelGetCurrentDataAck: int = 37
 
+    DlInit: int = 100
+    DlInitAck: int = 101
+    DlStart: int = 102
+    DlStartAck: int = 103
+    DlStop: int = 104
+    DlStopAck: int = 105
+    DlGet: int = 109
+    DlGetAck: int = 110
+    DlPowerModule: int = 111
+    DlPowerModuleAck: int = 112
+    DlSys: int = 114
+    DlSysAck: int = 115
 
+    DlSendLiveData: int = 106
+    DlSendFile: int = 107
+    DlSendFileAck: int = 113
+    DlMmi: int = 108

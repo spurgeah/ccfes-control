@@ -5,6 +5,7 @@ from importlib.metadata import version
 from .device import Device
 from .layer import Layer
 from .device_p24 import DeviceP24
+from .device_i24 import DeviceI24
 
 from .general.general_device_id import PacketGeneralGetDeviceId, PacketGeneralGetDeviceIdAck
 from .general.general_error import PacketGeneralError

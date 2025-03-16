@@ -7,14 +7,14 @@ class ByteBuilder():
     """ByteBuilder class"""
 
 
-    def __init__(self, data: int = 0, byte_length: int = 0):
-        self.data = BitVector.init_from_int(data, byte_length * 8)
+    def __init__(self, data: int = 0, byte_count: int = 0):
+        self.data = BitVector.init_from_int(data, byte_count * 8)
 
 
-    def get_bit_from_position(self, bit_position: int, bit_length: int) -> int:
-        """Returns bits starting with bit_position and a count of bit_length"""
+    def get_bit_from_position(self, bit_position: int, bit_count: int) -> int:
+        """Returns bits starting with bit_position and a count of bit_count"""
         result = 0
-        for x in range(bit_length):
+        for x in range(bit_count):
             result |= (self.data[bit_position + x] << x)
         return result
 
@@ -41,15 +41,24 @@ class ByteBuilder():
         self.data.extend(value.get_bytes())
 
 
-    def set_bit_to_position(self, value: int, bit_position: int, bit_length: int):
+    def set_bit_to_position(self, value: int, bit_position: int, bit_count: int):
         """
-        Set bits starting with bit_position and a count of bit_length to value
+        Set bits starting with bit_position and a count of bit_count to value
         This method extends data to make room for value
         """
-        new_length = max(len(self.data), bit_position + bit_length)
+        new_length = max(len(self.data), bit_position + bit_count)
         self.data.set_length(new_length)
-        for x in range(bit_length):
+        for x in range(bit_count):
             self.data[bit_position + x] = (value >> x) & 0x1
+
+
+    def set_bytes_to_position(self, value: bytes, byte_position: int, byte_count: int):
+        """
+        Set bytes starting with byte_position and a count of byte_count to value
+        This method extends data to make room for value
+        """
+        for x in range(byte_count):
+            self.set_bit_to_position(value[x], (byte_position + x) * 8, 8)
 
 
     def swap(self, start: int, count: int):

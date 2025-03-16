@@ -4,6 +4,7 @@ from enum import IntEnum
 from typing import Type
 from .low_level.low_level_layer import LayerLowLevel
 from .mid_level.mid_level_layer import LayerMidLevel
+from .dyscom.dyscom_layer import LayerDyscom
 from .protocol.types import StimStatus
 from .layer import Layer
 from .general.general_layer import LayerGeneral
@@ -34,6 +35,7 @@ class Device():
         self._add_layer(DeviceCapability.GENERAL, capabilities, LayerGeneral)
         self._add_layer(DeviceCapability.LOW_LEVEL, capabilities, LayerLowLevel)
         self._add_layer(DeviceCapability.MID_LEVEL, capabilities, LayerMidLevel)
+        self._add_layer(DeviceCapability.DYSCOM, capabilities, LayerDyscom)
 
 
     @property
@@ -84,6 +86,11 @@ class Device():
     def get_layer_low_level(self) -> LayerLowLevel:
         """Helper function to access low level layer"""
         return self._layer[DeviceCapability.LOW_LEVEL]
+
+
+    def get_layer_dyscom(self) -> LayerDyscom:
+        """Helper function to access dyscom layer"""
+        return self._layer[DeviceCapability.DYSCOM]
 
 
     def add_layer(self, capability: DeviceCapability, layer: Layer):

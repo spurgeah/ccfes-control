@@ -10,12 +10,14 @@ import numpy as np
 from science_mode_4.low_level.low_level_channel_config import PacketLowLevelChannelConfigAck
 from science_mode_4.protocol.commands import Commands
 from src.science_mode_4.device_p24 import DeviceP24
+from src.science_mode_4.device_i24 import DeviceI24
 from src.science_mode_4.low_level.low_level_layer import LayerLowLevel
 from src.science_mode_4.low_level.low_level_types import LowLevelHighVoltageSource, LowLevelMode
 from src.science_mode_4.mid_level.mid_level_types import MidLevelChannelConfiguration
 from src.science_mode_4.protocol.channel_point import ChannelPoint
 from src.science_mode_4.protocol.types import Channel, Connector
 from src.science_mode_4.utils.serial_port_connection import SerialPortConnection
+from src.science_mode_4.utils.null_connection import NullConnection
 
 
 # print(science_mode_4.__version__)
@@ -33,15 +35,18 @@ async def main() -> int:
     """Main function"""
 
     connection = SerialPortConnection('COM3')
-    # connection = NullConnection()
+    connection = NullConnection()
     connection.open()
 
-    device = DeviceP24(connection)
-    await device.initialize()
-    general = device.get_layer_general()
-    print(f"device id: {general.device_id}")
-    print(f"firmware version: {general.firmware_version}")
-    print(f"science mode version: {general.science_mode_version}")
+    device = DeviceI24(connection)
+    # await device.initialize()
+    # general = device.get_layer_general()
+    # print(f"device id: {general.device_id}")
+    # print(f"firmware version: {general.firmware_version}")
+    # print(f"science mode version: {general.science_mode_version}")
+
+    dyscom = device.get_layer_dyscom()
+    await dyscom.init()
 
     # c1p1: ChannelPoint = ChannelPoint(200, 20)
     # c1p2: ChannelPoint = ChannelPoint(100, 0)
