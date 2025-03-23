@@ -53,10 +53,10 @@ class DyscomFilterType(IntEnum):
 
 class DyscomInitFlag(IntEnum):
     """Represent dyscom type for init flag"""
-    ENABLE_LIVE_DATA_MODE = 1 << 0
-    ENABLE_SD_STORAGE_MODE = 1 << 1
-    ENABLE_TIMED_START = 1 << 2
-    SET_SYSTEM_TIME_WITH_SENDED_SYSTEM_TIME_STAMP = 1 << 3
+    ENABLE_LIVE_DATA_MODE = 0
+    ENABLE_SD_STORAGE_MODE = 1
+    ENABLE_TIMED_START = 2
+    SET_SYSTEM_TIME_WITH_SENDED_SYSTEM_TIME_STAMP = 4
 
 
 class DyscomGetType(IntEnum):
@@ -69,3 +69,27 @@ class DyscomGetType(IntEnum):
     DEVICE_ID = 5
     FIRMWARE_VERSION = 6
     FILE_INFO = 7
+
+
+class DyscomGetOperationModeType(IntEnum):
+    """Represents dyscom get operation mode type"""
+    UNDEFINED = 0
+    IDLE = 1
+    LIVE_MEASURING_PRE = 2
+    LIVE_MEASURING = 3
+    RECORD_PRE = 4
+    RECORD = 5
+    DATATRANSFER_PRE = 6
+    DATATRANSFER = 7
+
+
+class DyscomPowerModuleType(IntEnum):
+    """Represents dyscom power module type"""
+    MEMORY_CARD = 2
+    MEASUREMENT = 3
+
+
+class DyscomPowerModulePowerType(IntEnum):
+    """Represents dyscom power module power type"""
+    SWITCH_OFF = 0
+    SWITCH_ON = 1

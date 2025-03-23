@@ -14,7 +14,6 @@ class PacketDyscomGet(Packet):
     def __init__(self):
         super().__init__()
         self._command = Commands.DlGet
-        self._kind = 0
         self._type = DyscomGetType.UNUSED
 
 
@@ -25,7 +24,7 @@ class PacketDyscomGet(Packet):
 
 
 class PacketDyscomGetAck(PacketAck):
-    """Packet for dyscom get, use descendants of this class"""
+    """Packet for dyscom get acknowledge, use descendants of this class"""
 
 
     def __init__(self, data: bytes):

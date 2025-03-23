@@ -8,11 +8,15 @@ from ..protocol.packet_factory import PacketFactory
 from ..utils.connection import Connection
 from ..layer import Layer
 from ..protocol.protocol import Protocol
+from .dyscom_types import DyscomGetOperationModeType, DyscomPowerModuleType, DyscomPowerModulePowerType
 from .dyscom_init import PacketDyscomInit, PacketDyscomInitAck, DyscomInitParams
 from .dyscom_get_file_system_status import PacketDyscomGetFileSystemStatus, PacketDyscomGetAckFileSystemStatus, DyscomGetFileSystemStatusResult
 from .dyscom_get_file_by_name import PacketDyscomGetFileByName, PacketDyscomGetAckFileByName, DyscomGetFileByNameResult
 from .dyscom_get_firmware_version import PacketDyscomGetFirmwareVersion, PacketDyscomGetAckFirmwareVersion
-
+from .dyscom_get_operation_mode import PacketDyscomGetOperationMode, PacketDyscomGetAckOperationMode
+from .dyscom_start import PacketDyscomStart, PacketDyscomStartAck
+from .dyscom_stop import PacketDyscomStop, PacketDyscomStopAck
+from .dyscom_power_module import PacketDyscomPowerModule, PacketDyscomPowerModuleAck, DyscomPowerModuleResult
 
 class LayerDyscom(Layer):
     """
@@ -64,6 +68,41 @@ class LayerDyscom(Layer):
                                                         self._connection, self._packet_factory)
         self.check_result_error(ack.result_error, "DyscomGetFirmwareVersion")
         return ack.firmware_version
+
+
+    async def get_operation_mode(self) -> DyscomGetOperationModeType:
+        """Sends get dyscom get type operation mode and waits for response, returns operation mode"""
+        p = PacketDyscomGetOperationMode()
+        ack: PacketDyscomGetAckOperationMode = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
+                                                        self._connection, self._packet_factory)
+        self.check_result_error(ack.result_error, "DyscomGetFirmwareVersion")
+        return ack.operation_mode
+
+
+    async def power_module(self, module: DyscomPowerModuleType, power: DyscomPowerModulePowerType) -> DyscomPowerModuleResult:
+        """Sends get dyscom start and waits for response"""
+        p = PacketDyscomPowerModule(module, power)
+        ack: PacketDyscomPowerModuleAck = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
+                                                        self._connection, self._packet_factory)
+        self.check_result_error(ack.result_error, "DyscomStart")
+        return DyscomPowerModuleResult(ack.module, ack.power)
+
+
+    async def start(self):
+        """Sends get dyscom start and waits for response"""
+        p = PacketDyscomStart()
+        ack: PacketDyscomStartAck = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
+                                                        self._connection, self._packet_factory)
+        self.check_result_error(ack.result_error, "DyscomStart")
+
+
+    async def stop(self):
+        """Sends get dyscom stop and waits for response"""
+        p = PacketDyscomStop()
+        ack: PacketDyscomStopAck = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
+                                                        self._connection, self._packet_factory)
+        self.check_result_error(ack.result_error, "DyscomStop")
+
 
     # async def stop(self):
     #     """Send low level stop command and waits for response"""
