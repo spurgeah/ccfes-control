@@ -9,6 +9,9 @@ from ..utils.connection import Connection
 from ..layer import Layer
 from ..protocol.protocol import Protocol
 from .dyscom_init import PacketDyscomInit, PacketDyscomInitAck, DyscomInitParams
+from .dyscom_get_file_system_status import PacketDyscomGetFileSystemStatus, PacketDyscomGetAckFileSystemStatus, DyscomGetFileSystemStatusResult
+from .dyscom_get_file_by_name import PacketDyscomGetFileByName, PacketDyscomGetAckFileByName, DyscomGetFileByNameResult
+from .dyscom_get_firmware_version import PacketDyscomGetFirmwareVersion, PacketDyscomGetAckFirmwareVersion
 
 
 class LayerDyscom(Layer):
@@ -35,6 +38,32 @@ class LayerDyscom(Layer):
                                                                          self._connection, self._packet_factory)
         self.check_result_error(ack.result_error, "DyscomInit")
 
+
+    async def get_file_system_status(self) -> DyscomGetFileSystemStatusResult:
+        """Sends get dyscom get type file system status and waits for response, returns file system ready, used size and free size"""
+        p = PacketDyscomGetFileSystemStatus()
+        ack: PacketDyscomGetAckFileSystemStatus = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
+                                                        self._connection, self._packet_factory)
+        self.check_result_error(ack.result_error, "DyscomGetFileSystemStatus")
+        return DyscomGetFileSystemStatusResult(ack.file_system_ready, ack.used_size, ack.free_size)
+
+
+    async def get_file_by_name(self) -> DyscomGetFileByNameResult:
+        """Sends get dyscom get type file by name and waits for response, returns filename, block offset, filesize and number of blocks"""
+        p = PacketDyscomGetFileByName()
+        ack: PacketDyscomGetAckFileByName = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
+                                                        self._connection, self._packet_factory)
+        self.check_result_error(ack.result_error, "DyscomGetFileByName")
+        return DyscomGetFileByNameResult(ack.filename, ack.block_offset, ack.filesize, ack.number_of_blocks)
+
+
+    async def get_firmware_version(self) -> str:
+        """Sends get dyscom get type firmware version and waits for response, returns firmware version"""
+        p = PacketDyscomGetFirmwareVersion()
+        ack: PacketDyscomGetAckFirmwareVersion = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
+                                                        self._connection, self._packet_factory)
+        self.check_result_error(ack.result_error, "DyscomGetFirmwareVersion")
+        return ack.firmware_version
 
     # async def stop(self):
     #     """Send low level stop command and waits for response"""

@@ -19,6 +19,15 @@ class ByteBuilder():
         return result
 
 
+    def append_value(self, value: int, byte_count: int, do_swap: bool):
+        """Extends current data with byte_count bytes from values"""
+        temp = range(byte_count)
+        if do_swap:
+            temp = reversed(temp)
+        for x in temp:
+            self._append_byte(value >> (x * 8))
+
+
     def append_byte(self, value: int):
         """Append a byte"""
         self._append_byte(value)

@@ -17,14 +17,16 @@ class Ads129x:
     device_id = 0
 
     # config register
-    config_register_1 = Ads129xConfigRegister1()
-    config_register_2 = Ads129xConfigRegister2()
-    config_register_3 = Ads129xConfigRegister3()
+    config_register_1 = Ads129xConfigRegister1() # CONFIG1
+    config_register_2 = Ads129xConfigRegister2() # CONFIG2
+    config_register_3 = Ads129xConfigRegister3() # CONFIG3
 
-    positive_signal_derivation_register = 0x02
-    negative_signal_derivation_register = 0x02
+    # signal derivation register
+    positive_signal_derivation_register = 0x02 # RLD_SENSP
+    negative_signal_derivation_register = 0x02 # RLD_SENSN
 
-    respiration_control_register = Ads129xRespirationControlRegister()
+    # respiration register
+    respiration_control_register = Ads129xRespirationControlRegister() # RESP
 
 
     def set_data(self, data: bytes):
@@ -33,27 +35,27 @@ class Ads129x:
         control_register = data[0]
         self.device_id = control_register
 
-        self.config_register_1.set_data(data[1])
-        self.config_register_2.set_data(data[2])
-        self.config_register_3.set_data(data[3])
+        self.config_register_1.set_data([data[8]])
+        self.config_register_2.set_data([data[9]])
+        self.config_register_3.set_data([data[10]])
 
-        self.positive_signal_derivation_register = data[13]
-        self.negative_signal_derivation_register = data[14]
+        self.positive_signal_derivation_register = data[23]
+        self.negative_signal_derivation_register = data[22]
 
-        self.respiration_control_register.set_data(data[22])
+        self.respiration_control_register.set_data([data[21]])
 
 
     def get_data(self) -> bytes:
         """Convert information to bytes"""
 
-        bb = ByteBuilder()
-        bb.set_bytes_to_position(self.config_register_1.get_data(), 1, 1)
-        bb.set_bytes_to_position(self.config_register_2.get_data(), 2, 1)
-        bb.set_bytes_to_position(self.config_register_3.get_data(), 3, 1)
+        bb = ByteBuilder(0, 26)
+        bb.set_bytes_to_position(self.config_register_1.get_data(), 8, 1)
+        bb.set_bytes_to_position(self.config_register_2.get_data(), 9, 1)
+        bb.set_bytes_to_position(self.config_register_3.get_data(), 10, 1)
 
-        bb.set_bytes_to_position([self.positive_signal_derivation_register], 13, 1)
-        bb.set_bytes_to_position([self.negative_signal_derivation_register], 14, 1)
+        bb.set_bytes_to_position([self.positive_signal_derivation_register], 23, 1)
+        bb.set_bytes_to_position([self.negative_signal_derivation_register], 22, 1)
 
-        bb.set_bytes_to_position(self.respiration_control_register.get_data(), 22, 1)
+        bb.set_bytes_to_position(self.respiration_control_register.get_data(), 21, 1)
 
         return bb.get_bytes()

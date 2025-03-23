@@ -1,7 +1,15 @@
 """Provides classes for general GetVersion"""
 
+from typing import NamedTuple
 from ..protocol.commands import Commands
 from ..protocol.packet import Packet, PacketAck
+
+
+class GetExtendedVersionResult(NamedTuple):
+    """Helper class for dyscom get with type file system status"""
+    firmware_version: str
+    science_mode_version: str
+
 
 class PacketGeneralGetExtendedVersion(Packet):
     """Packet for general GetExtendetVersion"""

@@ -65,12 +65,16 @@ class Device():
     async def initialize(self):
         """Initialize device to get basic information (serial, versions) and stop any active stimulation/measurement"""
         await self.get_layer_general().initialize()
-        # get stim status to see if low/mid level is initialized or running
-        stim_status = await self.get_layer_general().get_stim_status()
-        if stim_status.stim_status == StimStatus.LOW_LEVEL_INITIALIZED:
-            await self.get_layer_low_level().stop()
-        elif stim_status.stim_status in [StimStatus.MID_LEVEL_INITIALIZED, StimStatus.MID_LEVEL_RUNNING]:
-            await self.get_layer_mid_level().stop()
+        if self._capabilities in [DeviceCapability.LOW_LEVEL, DeviceCapability.MID_LEVEL]:
+            # get stim status to see if low/mid level is initialized or running
+            stim_status = await self.get_layer_general().get_stim_status()
+            if stim_status.stim_status == StimStatus.LOW_LEVEL_INITIALIZED:
+                await self.get_layer_low_level().stop()
+            elif stim_status.stim_status in [StimStatus.MID_LEVEL_INITIALIZED, StimStatus.MID_LEVEL_RUNNING]:
+                await self.get_layer_mid_level().stop()
+        if self._capabilities in [DeviceCapability.DYSCOM]:
+            # ToDo: stop dyscom measurement
+            pass
 
 
     def get_layer_general(self) -> LayerGeneral:

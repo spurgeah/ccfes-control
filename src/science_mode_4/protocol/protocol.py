@@ -30,7 +30,7 @@ class Protocol:
 
     @staticmethod
     async def send_packet_and_wait(packet: Packet, packet_number: int, connection: Connection, factory: PacketFactory) -> PacketAck:
-        """Send a packet and wait for response"""
+        """Send a packet and wait for response, if no response arrives raise an exception"""
 
         Protocol.send_packet(packet, packet_number, connection)
 
