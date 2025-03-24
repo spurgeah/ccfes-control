@@ -1,5 +1,6 @@
 """Provides dyscom types"""
 
+from dataclasses import dataclass, field
 from enum import IntEnum
 
 class DyscomFrequencyOut(IntEnum):
@@ -93,3 +94,18 @@ class DyscomPowerModulePowerType(IntEnum):
     """Represents dyscom power module power type"""
     SWITCH_OFF = 0
     SWITCH_ON = 1
+
+
+class DyscomPowerLiveDataStatusFlag(IntEnum):
+    """Represents dyscom live data status type"""
+    POSITIVE_ELECTRODE_ADHESIVE = 1
+    NEGATIVE_ELECTRODE_ADHESIVE = 2
+    BOTH_ELECTRODES_ADHESIVE = 3
+
+
+@dataclass
+class DyscomElectrodeSample:
+    """Represent an electrode sample send by live data packet"""
+    value: float = 0.0
+    signal_type: DyscomSignalType = DyscomSignalType.UNUSED
+    status: set[DyscomPowerLiveDataStatusFlag] = field(default_factory=lambda: {})

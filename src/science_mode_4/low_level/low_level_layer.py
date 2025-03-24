@@ -37,17 +37,15 @@ class LayerLowLevel(Layer):
         p = PacketLowLevelInit()
         p.mode = mode
         p.high_voltage_source = high_voltage_source
-        ack: PacketLowLevelInitAck = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
-                                                                         self._connection, self._packet_factory)
-        self.check_result_error(ack.result_error, "LowLevelInit")
+        ack: PacketLowLevelInitAck = await self._send_packet_and_wait(p)
+        self._check_result_error(ack.result_error, "LowLevelInit")
 
 
     async def stop(self):
         """Send low level stop command and waits for response"""
         p = PacketLowLevelStop()
-        ack: PacketLowLevelStopAck = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
-                                                                        self._connection, self._packet_factory)
-        self.check_result_error(ack.result_error, "LowLevelStop")
+        ack: PacketLowLevelStopAck = await self._send_packet_and_wait(p)
+        self._check_result_error(ack.result_error, "LowLevelStop")
 
 
     def send_init(self, mode: LowLevelMode, high_voltage_source: LowLevelHighVoltageSource):
@@ -55,8 +53,7 @@ class LayerLowLevel(Layer):
         p = PacketLowLevelInit()
         p.mode = mode
         p.high_voltage_source = high_voltage_source
-        Protocol.send_packet(p, self._packet_number_generator.get_next_number(),
-                             self._connection,)
+        self._send_packet(p)
         self._packet_buffer.add_open_acknowledge(p)
 
 
@@ -68,14 +65,12 @@ class LayerLowLevel(Layer):
         p.channel = channel
         p.connector = connector
         p.points = points
-        Protocol.send_packet(p, self._packet_number_generator.get_next_number(),
-                             self._connection)
+        self._send_packet(p)
         self._packet_buffer.add_open_acknowledge(p)
 
 
     def send_stop(self):
         """Send low level stop command"""
         p = PacketLowLevelStop()
-        Protocol.send_packet(p, self._packet_number_generator.get_next_number(),
-                             self._connection)
+        self._send_packet(p)
         self._packet_buffer.add_open_acknowledge(p)

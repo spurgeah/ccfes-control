@@ -22,8 +22,7 @@ class DyscomInitParams():
     proband_name = ""
     investigator_name = ""
     proband_number = ""
-    # number_of_channels: int = 2
-    duration = datetime.timedelta(seconds=10)
+    duration = datetime.timedelta()
     signal_type: list[DyscomSignalType] = field(default_factory=lambda: [DyscomSignalType.BI,  DyscomSignalType.EMG_1])
     sync_signal: bool = False
     filter = DyscomFilterType.FILTER_OFF

@@ -49,9 +49,8 @@ class LayerGeneral(Layer):
     async def get_device_id(self) -> str:
         """Send get device id command and waits for response"""
         p = PacketGeneralGetDeviceId()
-        ack: PacketGeneralGetDeviceIdAck = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
-                                                  self._connection, self._packet_factory)
-        self.check_result_error(ack.result_error, "GetDeviceId")
+        ack: PacketGeneralGetDeviceIdAck = await self._send_packet_and_wait(p)
+        self._check_result_error(ack.result_error, "GetDeviceId")
         self._device_id = ack.device_id
         return self._device_id
 
@@ -60,16 +59,14 @@ class LayerGeneral(Layer):
         """Sends reset command and waits for response"""
         p = PacketGeneralReset()
         # maybe we get no ack because the device resets before sending ack
-        ack: PacketGeneralResetAck = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
-                                                  self._connection, self._packet_factory)
-        self.check_result_error(ack.result_error, "Reset")
+        ack: PacketGeneralResetAck = await self._send_packet_and_wait(p)
+        self._check_result_error(ack.result_error, "Reset")
 
 
     async def get_stim_status(self) -> GetStimStatusResult:
         """Sends get stim status and waits for response"""
         p = PacketGeneralGetStimStatus()
-        ack: PacketGeneralGetStimStatusAck = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
-                                                  self._connection, self._packet_factory)
+        ack: PacketGeneralGetStimStatusAck = await self._send_packet_and_wait(p)
         if not ack.successful:
             raise ValueError("Error get stim status")
         return GetStimStatusResult(ack.stim_status, ack.high_voltage_on)
@@ -78,8 +75,7 @@ class LayerGeneral(Layer):
     async def get_version(self) -> GetExtendedVersionResult:
         """Sends get extended version and waits for response, returns firmware and science mode version"""      
         p = PacketGeneralGetExtendedVersion()
-        ack: PacketGeneralGetExtendedVersionAck = await Protocol.send_packet_and_wait(p, self._packet_number_generator.get_next_number(),
-                                                        self._connection, self._packet_factory)
+        ack: PacketGeneralGetExtendedVersionAck = await self._send_packet_and_wait(p)
         if not ack.successful:
             raise ValueError("Error get extended version")
         self._firmware_version = ack.firmware_version

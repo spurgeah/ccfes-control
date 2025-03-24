@@ -1,64 +1,24 @@
 """Provides helper class for ScienceMode protocol"""
 
 import asyncio
+
 from .commands import Commands
 from ..general.general_error import PacketGeneralError
 from ..general.general_unknown_command import PacketGeneralUnknownCommand
 from .packet_factory import PacketFactory
+from ..protocol.packet import Packet, PacketAck
 from ..utils.byte_builder import ByteBuilder
 from ..utils.crc16 import Crc16
-from ..protocol.packet import Packet, PacketAck
 from ..utils.connection import Connection
 
 
 class Protocol:
-    """Helper class for ScienceMode protocol"""
+    """Class for handling ScienceMode protocol packet"""
 
     START_BYTE = 0xF0
     STOP_BYTE = 0x0F
     STUFFING_BYTE = 0x81
     STUFFING_KEY = 0x55
-
-
-    @staticmethod
-    def send_packet(packet: Packet, packet_number: int, connection: Connection) -> PacketAck:
-        """Send a packet and returns immediately"""
-        packet.number = packet_number
-        # print(f"O {packet}")
-        connection.write(Protocol.packet_to_bytes(packet))
-
-
-    @staticmethod
-    async def send_packet_and_wait(packet: Packet, packet_number: int, connection: Connection, factory: PacketFactory) -> PacketAck:
-        """Send a packet and wait for response, if no response arrives raise an exception,
-        this function assumes that the response has the same packet number and ack command must be command+1"""
-
-        Protocol.send_packet(packet, packet_number, connection)
-
-        counter = 1000
-        while counter > 0:
-            incoming_data = connection.read()
-            if Protocol.is_valid_packet_data(incoming_data):
-                ack_data = Protocol.extract_packet_data(incoming_data)
-                if packet_number != ack_data[1]:
-                    raise ValueError(f"Packet number mismatch {packet_number} - {ack_data[1]}")
-
-                ack = factory.create_packet_with_data(ack_data[0], ack_data[1], ack_data[2])
-                if ack.command == Commands.GeneralError:
-                    ge: PacketGeneralError = ack
-                    raise ValueError(f"General error packet {ge.error}")
-                elif ack.command == Commands.UnkownCommand:
-                    uc: PacketGeneralUnknownCommand = ack
-                    raise ValueError(f"Unknown command packet {uc.error}")
-                elif ack.command != packet.command + 1:
-                    raise ValueError(f"Wrong answer command packet {ack.command}")
-
-                return ack
-
-            await asyncio.sleep(0.01)
-            counter -= 1
-
-        raise ValueError(f"No answer for packet {packet.command}")
 
 
     @staticmethod
@@ -145,12 +105,20 @@ class Protocol:
     def extract_packet_data(buffer: bytes) -> tuple[int, int, bytes]:
         """Extract command, packet number and payload from buffer and returns these as tuple, buffer must contain valid packet data"""
         bb = ByteBuilder()
-        bb.append_bytes(Protocol.unstuff(buffer[9:11]))
+        # command prefix with command and packet number may be stuffed and can be from 2 to 4 bytes long
+        command_prefix_count = 0
+        for _ in range(2):
+            if buffer[9+command_prefix_count] == Protocol.STUFFING_BYTE:
+                command_prefix_count += 2
+            else:
+                command_prefix_count += 1
+
+        bb.append_bytes(Protocol.unstuff(buffer[9:9+command_prefix_count]))
         bb.swap(0, 2)
 
         command = bb.get_bit_from_position(0, 10)
         nr = bb.get_bit_from_position(10, 6)
-        payload = Protocol.unstuff(buffer[11:-1])
+        payload = Protocol.unstuff(buffer[9+command_prefix_count:-1])
 
         return command, nr, payload
 
