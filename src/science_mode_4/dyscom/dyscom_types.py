@@ -62,7 +62,7 @@ class DyscomInitFlag(IntEnum):
 
 class DyscomGetType(IntEnum):
     """Represent dyscom type for get"""
-    UNUSED = 0
+    BATTERY = 0
     FILESYSTEM_STATUS = 1
     LIST_OF_MEASUREMENT_META_INFO = 2
     OPERATION_MODE = 3
@@ -104,7 +104,14 @@ class DyscomPowerLiveDataStatusFlag(IntEnum):
 
 
 class DyscomFileByNameMode(IntEnum):
-    """Represents dyscom live data status type"""
+    """Represents dyscom file by name mode type"""
+    UNDEFINED = 0
+    MULTIBLOCK = 1
+    SINGLEBLOCK = 2
+
+
+class DyscomEnergyFlag(IntEnum):
+    """Represents dyscom energy flag type"""
     UNDEFINED = 0
     MULTIBLOCK = 1
     SINGLEBLOCK = 2
@@ -115,4 +122,4 @@ class DyscomElectrodeSample:
     """Represent an electrode sample send by live data packet"""
     value: float = 0.0
     signal_type: DyscomSignalType = DyscomSignalType.UNUSED
-    status: set[DyscomPowerLiveDataStatusFlag] = field(default_factory=lambda: {})
+    status: set[DyscomPowerLiveDataStatusFlag] = field(default_factory=lambda: set())

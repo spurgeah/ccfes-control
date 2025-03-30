@@ -20,6 +20,7 @@ from .dyscom_power_module import PacketDyscomPowerModule, PacketDyscomPowerModul
 from .dyscom_get_list_of_measurement_meta_info import PacketDyscomGetAckListOfMeasurementMetaInfo, PacketDyscomGetListOfMeasurementMetaInfo
 from .dyscom_get_device_id import PacketDyscomGetAckDeviceId, PacketDyscomGetDeviceId
 from .dyscom_get_file_info import DyscomGetFileInfoResult, PacketDyscomGetAckFileInfo, PacketDyscomGetFileInfo
+from .dyscom_get_battery_status import DyscomGetBatteryResult, PacketDyscomGetAckBatteryStatus, PacketDyscomGetBatteryStatus
 
 
 class LayerDyscom(Layer):
@@ -85,6 +86,14 @@ class LayerDyscom(Layer):
         ack: PacketDyscomGetAckFileInfo = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomGetFileInfo")
         return DyscomGetFileInfoResult(ack.filename, ack.filesize, ack.checksum)
+
+
+    async def get_battery(self) -> DyscomGetBatteryResult:
+        """Sends get dyscom get type batter and waits for response, returns voltage, current, percentage, temperature and energy state"""
+        p = PacketDyscomGetBatteryStatus()
+        ack: PacketDyscomGetAckBatteryStatus = await self._send_packet_and_wait(p)
+        self._check_result_error(ack.result_error, "DyscomGetBatteryStatus")
+        return DyscomGetBatteryResult(ack.voltage, ack.current, ack.percentage, ack.temperature, ack.energy_state)
 
 
     async def get_operation_mode(self) -> DyscomGetOperationModeType:

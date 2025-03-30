@@ -43,6 +43,9 @@ class ProtocolHelper:
             while True:
                 ack = packet_buffer.get_packet_from_buffer()
                 if ack:
+                    if (ack.command == packet.command + 1) and (ack.number == packet.number):
+                        return ack
+
                     # check if we got an error
                     if ack.command == Commands.GeneralError:
                         ge: PacketGeneralError = ack
@@ -50,9 +53,6 @@ class ProtocolHelper:
                     if ack.command == Commands.UnkownCommand:
                         uc: PacketGeneralUnknownCommand = ack
                         raise ValueError(f"Unknown command packet {uc.error}")
-
-                    if (ack.command == packet.command + 1) and (ack.number == packet.number):
-                        return ack
 
                     # discard ackowledge and continue
 

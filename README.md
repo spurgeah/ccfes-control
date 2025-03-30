@@ -27,6 +27,7 @@ Python 3.11 or higher
   - On Windows
     - Download libusb from https://libusb.info/
     - Copy libusb-XX.dll into venv root folder (besides python.exe)
+    - Under Windows it there are driver issues
 
 ## Build library
 - Only necessary, if you made changes to the library

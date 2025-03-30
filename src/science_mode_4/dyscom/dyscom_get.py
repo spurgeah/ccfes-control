@@ -14,7 +14,7 @@ class PacketDyscomGet(Packet):
     def __init__(self):
         super().__init__()
         self._command = Commands.DlGet
-        self._type = DyscomGetType.UNUSED
+        self._type = DyscomGetType.BATTERY
 
 
     def get_data(self) -> bytes:
@@ -31,7 +31,7 @@ class PacketDyscomGetAck(PacketAck):
         super().__init__(data)
         self._command = Commands.DlGetAck
         self._result_error = ResultAndError.NO_ERROR
-        self._type = DyscomGetType.UNUSED
+        self._type = DyscomGetType.BATTERY
 
         if not data is None:
             self._result_error = ResultAndError(data[0])

@@ -6,7 +6,7 @@ class Packet():
 
     def __init__(self):
         self._command = -1
-        self._kind = 0
+        self._kind = -1
         self._number = 0
 
 
@@ -42,7 +42,7 @@ class Packet():
     def create_copy(self) -> 'Packet':
         """Returns a copy"""
         return type(self)()
-    
+
 
     def __repr__(self) -> str:
         return f"command {self._command} - nr {self._number}"
@@ -64,7 +64,7 @@ class PacketAck(Packet):
     def get_kind(self, data: bytes) -> int:
         """Get kind from data, override in subclasses"""
         _ = data
-        return 0
+        return -1
 
 
     def create_copy_with_data(self, data: bytes) -> 'PacketAck':

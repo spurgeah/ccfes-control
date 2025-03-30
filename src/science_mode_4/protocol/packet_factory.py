@@ -38,18 +38,18 @@ class PacketFactory():
 
     def create_packet(self, command: int) -> Packet:
         """Create a packet based on command number"""
-        copy = self.data[command, 0].create_copy()
+        copy = self.data[command, -1].create_copy()
         return copy
 
 
     def create_packet_with_data(self, command: int, number: int, data: bytes) -> PacketAck:
         """Create a acknowledge packet based on command number with data"""
-        # we use default kind of 0 to have a packet class who is able to read kind from data
-        proto: PacketAck = self.data[command, 0]
+        # we use default kind of -1 to have a packet class who is able to read kind from data
+        proto: PacketAck = self.data[command, -1]
         copy = proto.create_copy_with_data(data)
-        # check if we have a different kind
+        # check if we have a specialized kind
         kind = copy.get_kind(data)
-        if kind != 0:
+        if kind != -1:
             proto = self.data[command, kind]
             copy = proto.create_copy_with_data(data)
         copy.number = number
