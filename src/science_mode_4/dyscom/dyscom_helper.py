@@ -1,10 +1,13 @@
 """Helper class for dyscom"""
 
+import struct
 import datetime
 from ..utils.byte_builder import ByteBuilder
 
 class DyscomHelper:
     """Provides some helper functions"""
+
+    _unpack_func = struct.Struct("<BBBBBBBHh").unpack
 
     @staticmethod
     def datetime_to_bytes(dt: datetime.datetime) -> bytes:
@@ -22,6 +25,17 @@ class DyscomHelper:
         bb.append_value(dt.year - 1900, 2, True)
 
         return bb.get_bytes()
+
+
+    @staticmethod
+    def bytes_to_datetime(data: bytes) -> datetime.datetime:
+        """Converts dyscom datetime bytes to a datetime"""
+        hour, dst, day, minute, month, second, _, _, year_since_1900 = \
+            DyscomHelper._unpack_func(data)
+
+        # ToDo: check dst
+        result = datetime.datetime(1900 + year_since_1900, month, day, hour, minute, second)
+        return result
 
 
     @staticmethod

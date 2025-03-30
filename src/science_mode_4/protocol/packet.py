@@ -39,7 +39,7 @@ class Packet():
         return []
 
 
-    def create_copy(self) -> 'Packet':
+    def create_copy(self) -> "Packet":
         """Returns a copy"""
         return type(self)()
 
@@ -67,6 +67,6 @@ class PacketAck(Packet):
         return -1
 
 
-    def create_copy_with_data(self, data: bytes) -> 'PacketAck':
+    def create_copy_with_data(self, data: bytes) -> "PacketAck":
         """Returns a copy with data"""
         return type(self)(data)

@@ -10,7 +10,7 @@ class PacketBuffer():
     """Class for handling a buffer and provides methods to take care of arriving acknowledges"""
 
     def __init__(self, conn: Connection, packet_factory: PacketFactory):
-        self._buffer: bytes = b''
+        self._buffer: bytes = b""
         self._open_acknowledges: dict[tuple[int, int], int] = {}
         self._connection = conn
         self._packet_factory = packet_factory
@@ -88,4 +88,4 @@ class PacketBuffer():
     def clear_buffer(self):
         """Clear internal buffer and buffer from connection"""
         self._connection.clear_buffer()
-        self._buffer = b''
+        self._buffer = b""

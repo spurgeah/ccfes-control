@@ -43,7 +43,7 @@ class PacketDyscomGetAckBatteryStatus(PacketDyscomGetAck):
 
         if not data is None:
             energy_state, self._percentage, self._temperature, self._current, \
-                self._voltage = struct.unpack('<BBbiI', data[2:13])
+                self._voltage = struct.unpack("<BBbiI", data[2:13])
 
             for f in DyscomEnergyFlag:
                 if energy_state & (1 << f) == 1:
@@ -76,5 +76,5 @@ class PacketDyscomGetAckBatteryStatus(PacketDyscomGetAck):
 
     @property
     def energy_state(self) -> set[DyscomEnergyFlag]:
-        """Getter for energy_ state"""
+        """Getter for energy state"""
         return self._energy_state

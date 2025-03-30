@@ -45,7 +45,7 @@ class ByteBuilder():
             self._append_byte(x)
 
 
-    def extend_byte_builder(self, value: 'ByteBuilder'):
+    def extend_byte_builder(self, value: "ByteBuilder"):
         """Extends current data with value"""
         self.data.extend(value.get_bytes())
 
@@ -89,12 +89,12 @@ class ByteBuilder():
 
     def __repr__(self) -> str:
         b = self.get_bytes()
-        return f"{len(b)} - {b.hex(' ').upper()}"
+        return f"{len(b)} - {b.hex(" ").upper()}"
 
 
     def __str__(self) -> str:
         b = self.get_bytes()
-        return f"{len(b)} - {b.hex(' ').upper()}"
+        return f"{len(b)} - {b.hex(" ").upper()}"
 
 
     def _append_byte(self, value: int):

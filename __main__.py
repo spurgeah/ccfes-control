@@ -1,31 +1,21 @@
 """Test program how to use library without installing the library,
 DO NOT USE THIS FILE, USE EXAMPLES INSTEAD"""
 
+from imaplib import Commands
 import sys
 import asyncio
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.science_mode_4.utils.usb_connection import UsbConnection
-from src.science_mode_4.dyscom.ads129x.ads129x_config_register_1 import Ads129xOutputDataRate, Ads129xPowerMode
-from src.science_mode_4.dyscom.dyscom_init import DyscomInitParams
-from src.science_mode_4.dyscom.dyscom_get_file_by_name import DyscomGetFileByNameResult
-from src.science_mode_4.dyscom.dyscom_get_file_system_status import DyscomGetFileSystemStatusResult
-from src.science_mode_4.dyscom.dyscom_get_operation_mode import PacketDyscomGetAckOperationMode
-from src.science_mode_4.dyscom.dyscom_send_live_data import PacketDyscomSendLifeData
-from src.science_mode_4.dyscom.dyscom_types import DyscomGetOperationModeType, DyscomPowerModuleType, DyscomPowerModulePowerType, DyscomSignalType
-from src.science_mode_4.low_level.low_level_channel_config import PacketLowLevelChannelConfigAck
-from src.science_mode_4.protocol.commands import Commands
-from src.science_mode_4.device_p24 import DeviceP24
-from src.science_mode_4.device_i24 import DeviceI24
-from src.science_mode_4.low_level.low_level_layer import LayerLowLevel
-from src.science_mode_4.low_level.low_level_types import LowLevelHighVoltageSource, LowLevelMode
-from src.science_mode_4.mid_level.mid_level_types import MidLevelChannelConfiguration
-from src.science_mode_4.protocol.channel_point import ChannelPoint
-from src.science_mode_4.protocol.types import Channel, Connector
-from src.science_mode_4.utils.serial_port_connection import SerialPortConnection
-from src.science_mode_4.utils.null_connection import NullConnection
+from src.science_mode_4 import LayerDyscom, LayerLowLevel, LayerMidLevel,\
+    Commands, Connector, Channel, ChannelPoint,\
+    SerialPortConnection,\
+    DeviceI24,\
+    Ads129xOutputDataRate, Ads129xPowerMode,\
+    PacketDyscomGetAckOperationMode, PacketDyscomSendLiveData,\
+    DyscomInitParams, DyscomPowerModulePowerType, DyscomPowerModuleType, DyscomSignalType
+
 
 
 # print(science_mode_4.__version__)
@@ -42,7 +32,7 @@ def send_channel_config(low_level_layer: LayerLowLevel, connector: Connector):
 async def main() -> int:
     """Main function"""
 
-    connection = SerialPortConnection('COM6')
+    connection = SerialPortConnection("COM6")
     # devices = UsbConnection.list_science_mode_devices()
     # connection = UsbConnection(devices[0])
     # connection = NullConnection()
@@ -55,7 +45,7 @@ async def main() -> int:
     # print(f"firmware version: {general.firmware_version}")
     # print(f"science mode version: {general.science_mode_version}")
 
-    dyscom = device.get_layer_dyscom()
+    dyscom: LayerDyscom = device.get_layer_dyscom()
     # fss: DyscomGetFileSystemStatusResult = await dyscom.get_file_system_status()
     # print(f"Ready {fss.file_system_ready}, used size {fss.used_size}, free size {fss.free_size}")
     # fbn: DyscomGetFileByNameResult = await dyscom.get_file_by_name()
@@ -68,8 +58,11 @@ async def main() -> int:
     # print(f"Device ID {did}")
     # fi = await dyscom.get_file_info()
     # print(f"File info {fi.filename} {fi.filesize} {fi.checksum}")
-    b = await dyscom.get_battery()
-    print(f"Battery {b.voltage} {b.current} {b.percentage} {b.temperature} {b.energy_state}")
+    # b = await dyscom.get_battery()
+    # print(f"Battery {b.voltage} {b.current} {b.percentage} {b.temperature} {b.energy_state}")
+
+    # sys_ack: DyscomSysResult = await dyscom.sys(DyscomSysType.DEVICE_STORAGE)
+    # print(f"Sys {sys_ack.sys_type} {sys_ack.state} {sys_ack.filename}")
 
     await dyscom.power_module(DyscomPowerModuleType.MEASUREMENT, DyscomPowerModulePowerType.SWITCH_ON)
     init_params = DyscomInitParams()
@@ -78,8 +71,8 @@ async def main() -> int:
     await dyscom.init(init_params)
 
     fig, ax = plt.subplots()
-    ax.set(xlabel='Sample Time (µs)', ylabel='Current (mA)',
-        title='Current measurement')
+    ax.set(xlabel="Sample Time (µs)", ylabel="Current (mA)",
+        title="Current measurement")
     ax.grid()
     plt.ion()
     plt.show()
@@ -116,7 +109,7 @@ async def main() -> int:
                     om_ack: PacketDyscomGetAckOperationMode = ack
                     print(f"Operation mode {om_ack.operation_mode}")
                 elif ack.command == Commands.DlSendLiveData:
-                    sld: PacketDyscomSendLifeData = ack
+                    sld: PacketDyscomSendLiveData = ack
                     if sld.status_error:
                         print(f"SendLiveData status error {sld.samples}")
                         break
@@ -218,6 +211,6 @@ async def main() -> int:
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     res = asyncio.run(main())
     sys.exit(res)

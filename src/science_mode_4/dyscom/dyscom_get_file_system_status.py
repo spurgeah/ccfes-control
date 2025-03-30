@@ -89,8 +89,8 @@ class PacketDyscomGetAckFileSystemStatus(PacketDyscomGetAck):
 
         if not data is None:
             self._file_system_ready = bool(data[2])
-            self._used_size = int.from_bytes(data[3:11], 'little')
-            self._free_size = int.from_bytes(data[11:19], 'little')
+            self._used_size = int.from_bytes(data[3:11], "little")
+            self._free_size = int.from_bytes(data[11:19], "little")
 
 
     @property

@@ -23,13 +23,13 @@ class PacketDyscomGetAckListOfMeasurementMetaInfo(PacketDyscomGetAck):
     def __init__(self, data: bytes):
         super().__init__(data)
         self._kind = int(DyscomGetType.LIST_OF_MEASUREMENT_META_INFO)
-        self._nr_of_measurements = 0
+        self._number_of_measurements = 0
 
         if not data is None:
-            self._nr_of_measurements = int.from_bytes(data[2:4], 'little')
+            self._number_of_measurements = int.from_bytes(data[2:4], "little")
 
 
     @property
-    def nr_of_measurements(self) -> int:
-        """Getter for nr of measurements"""
-        return self._nr_of_measurements
+    def number_of_measurements(self) -> int:
+        """Getter for number of measurements"""
+        return self._number_of_measurements

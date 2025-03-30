@@ -83,6 +83,6 @@ async def main() -> int:
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     res = asyncio.run(main())
     sys.exit(res)

@@ -1,5 +1,5 @@
 # Introduction
-This site discribes implementation hints.
+This page describes implementation hints.
 
 # Deviation from Instruction for Use
 
@@ -7,6 +7,7 @@ This site discribes implementation hints.
 
 ### Common
 - Strings are 1 byte less long (null termination is not an extra byte) in acknowledge packets
+- Datetime parameters have a different order
 
 ### DL_get_ack for type file by name
 - Addition parameter mode (1 byte)
@@ -24,3 +25,9 @@ This site discribes implementation hints.
 - temperature, 1 byte, [-128, 127] in degrees
 - current, 4 bytes, [-327675, 327675] in milli ampere
 - voltage, 4 bytes, [0, 65535] in milli volt
+
+### DL_send_file_ack
+- block number, 4 byte, block number of DL_send_file
+
+### DL_send_live_data
+- parameters are big endian?

@@ -38,8 +38,8 @@ class PacketDyscomGetAckFileInfo(PacketDyscomGetAck):
 
         if not data is None:
             self._filename = DyscomHelper.bytes_to_str(data[2:130], 128)
-            self._filesize = int.from_bytes(data[130:134], 'little')
-            self._checksum = int.from_bytes(data[134:136], 'little')
+            self._filesize = int.from_bytes(data[130:134], "little")
+            self._checksum = int.from_bytes(data[134:136], "little")
 
 
     @property

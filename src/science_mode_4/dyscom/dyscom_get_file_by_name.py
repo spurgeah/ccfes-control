@@ -91,9 +91,9 @@ class PacketDyscomGetAckFileByName(PacketDyscomGetAck):
 
         if not data is None:
             self._filename = DyscomHelper.bytes_to_str(data[2:130], 128)
-            self._block_offset = int.from_bytes(data[130:134], 'little')
-            self._filesize = int.from_bytes(data[134:142], 'little')
-            self._number_of_blocks = int.from_bytes(data[142:146], 'little')
+            self._block_offset = int.from_bytes(data[130:134], "little")
+            self._filesize = int.from_bytes(data[134:142], "little")
+            self._number_of_blocks = int.from_bytes(data[142:146], "little")
             self._mode = DyscomFileByNameMode(data[146])
 
 

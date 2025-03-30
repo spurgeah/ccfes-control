@@ -6,7 +6,7 @@ from ..protocol.packet import PacketAck
 from .dyscom_types import DyscomElectrodeSample, DyscomSignalType, DyscomPowerLiveDataStatusFlag
 
 
-class PacketDyscomSendLifeData(PacketAck):
+class PacketDyscomSendLiveData(PacketAck):
     """Packet for dyscom send live data (this is technically not an acknowledge, but it is handled as such,
     because it is send automatically from device)"""
 
@@ -20,13 +20,13 @@ class PacketDyscomSendLifeData(PacketAck):
 
         if not data is None:
             self._number_of_channels = data[0]
-            self._time_offset = int.from_bytes(data[1:5], 'big')
+            self._time_offset = int.from_bytes(data[1:5], "big")
 
             for x in range(self._number_of_channels):
                 start_index = 5 + x * 6
 
                 sample = DyscomElectrodeSample()
-                sample.value = struct.unpack_from('>f', data[start_index:start_index+4])[0]
+                sample.value = struct.unpack_from(">f", data[start_index:start_index+4])[0]
                 sample.signal_type = DyscomSignalType(data[start_index+4])
                 status = data[start_index+5]
                 for f in DyscomPowerLiveDataStatusFlag:

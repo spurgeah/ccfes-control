@@ -8,7 +8,7 @@ from ..protocol.packet_factory import PacketFactory
 from ..utils.connection import Connection
 from ..layer import Layer
 from ..protocol.protocol import Protocol
-from .dyscom_types import DyscomGetOperationModeType, DyscomPowerModuleType, DyscomPowerModulePowerType
+from .dyscom_types import DyscomGetOperationModeType, DyscomPowerModuleType, DyscomPowerModulePowerType, DyscomSysType
 from .dyscom_init import PacketDyscomInit, PacketDyscomInitAck, DyscomInitParams
 from .dyscom_get_file_system_status import PacketDyscomGetFileSystemStatus, PacketDyscomGetAckFileSystemStatus, DyscomGetFileSystemStatusResult
 from .dyscom_get_file_by_name import PacketDyscomGetFileByName, PacketDyscomGetAckFileByName, DyscomGetFileByNameResult
@@ -21,6 +21,8 @@ from .dyscom_get_list_of_measurement_meta_info import PacketDyscomGetAckListOfMe
 from .dyscom_get_device_id import PacketDyscomGetAckDeviceId, PacketDyscomGetDeviceId
 from .dyscom_get_file_info import DyscomGetFileInfoResult, PacketDyscomGetAckFileInfo, PacketDyscomGetFileInfo
 from .dyscom_get_battery_status import DyscomGetBatteryResult, PacketDyscomGetAckBatteryStatus, PacketDyscomGetBatteryStatus
+from .dyscom_sys import DyscomSysResult, PacketDyscomSys, PacketDyscomSysAck
+from .dyscom_send_file import PacketDyscomSendFileAck
 
 
 class LayerDyscom(Layer):
@@ -53,7 +55,7 @@ class LayerDyscom(Layer):
         p = PacketDyscomGetListOfMeasurementMetaInfo()
         ack: PacketDyscomGetAckListOfMeasurementMetaInfo = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomGetListOfMeasurementMetaInfo")
-        return ack.nr_of_measurements
+        return ack.number_of_measurements
 
 
     async def get_file_by_name(self) -> DyscomGetFileByNameResult:
@@ -111,11 +113,25 @@ class LayerDyscom(Layer):
 
 
     async def power_module(self, module: DyscomPowerModuleType, power: DyscomPowerModulePowerType) -> DyscomPowerModuleResult:
-        """Sends get dyscom start and waits for response"""
+        """Sends get dyscom power module and waits for response, returns module and power"""
         p = PacketDyscomPowerModule(module, power)
         ack: PacketDyscomPowerModuleAck = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomStart")
         return DyscomPowerModuleResult(ack.module, ack.power)
+
+
+    async def sys(self, sys_type: DyscomSysType, filename: str = "") -> DyscomSysResult:
+        """Sends get dyscom sys and waits for response, returns type, state and filename"""
+        p = PacketDyscomSys(sys_type, filename)
+        ack: PacketDyscomSysAck = await self._send_packet_and_wait(p)
+        self._check_result_error(ack.result_error, "DyscomSys")
+        return DyscomSysResult(ack.sys_type, ack.state, ack.filename)
+
+
+    def send_send_file_ack(self, block_number: int):
+        """Sends get dyscom send file ack and returns immediately without waiting for response"""
+        p = PacketDyscomSendFileAck(block_number)
+        self._send_packet(p)
 
 
     async def start(self):

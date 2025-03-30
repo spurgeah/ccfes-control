@@ -32,7 +32,7 @@ class ProtocolHelper:
         
         Clears all incoming data from connection and packet buffer"""
 
-        # discard all packets because we don't need them anymore
+        # discard all packets because we don"t need them anymore
         packet_buffer.clear_buffer()
         ProtocolHelper.send_packet(packet, packet_number, packet_buffer)
 
