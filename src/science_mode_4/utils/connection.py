@@ -29,3 +29,8 @@ class Connection(ABC):
     @abstractmethod
     def read(self) -> bytes:
         """Read all data from connection"""
+
+
+    @abstractmethod
+    def clear_buffer(self):
+        """Clear buffer from connection"""

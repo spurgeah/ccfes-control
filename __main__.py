@@ -7,6 +7,7 @@ import asyncio
 import matplotlib.pyplot as plt
 import numpy as np
 
+from src.science_mode_4.utils.usb_connection import UsbConnection
 from src.science_mode_4.dyscom.ads129x.ads129x_config_register_1 import Ads129xOutputDataRate, Ads129xPowerMode
 from src.science_mode_4.dyscom.dyscom_init import DyscomInitParams
 from src.science_mode_4.dyscom.dyscom_get_file_by_name import DyscomGetFileByNameResult
@@ -42,6 +43,8 @@ async def main() -> int:
     """Main function"""
 
     connection = SerialPortConnection('COM6')
+    # devices = UsbConnection.list_science_mode_devices()
+    # connection = UsbConnection(devices[0])
     # connection = NullConnection()
     connection.open()
 
@@ -53,12 +56,18 @@ async def main() -> int:
     # print(f"science mode version: {general.science_mode_version}")
 
     dyscom = device.get_layer_dyscom()
-    # fss: DyscomGetFileSystemStatusResult = await dyscom.get_file_system_status()
-    # print(f"Ready {fss.file_system_ready}, used size {fss.used_size}, free size {fss.free_size}")
-    # fbn: DyscomGetFileByNameResult = await dyscom.get_file_by_name()
-    # print(f"Filename {fbn.filename}, block offset {fbn.block_offset}, filesize {fbn.filesize}, nr of blocks {fbn.number_of_blocks}")
-    # fv: str = await dyscom.get_firmware_version()
-    # print(f"Firmware version {fv}")
+    fss: DyscomGetFileSystemStatusResult = await dyscom.get_file_system_status()
+    print(f"Ready {fss.file_system_ready}, used size {fss.used_size}, free size {fss.free_size}")
+    fbn: DyscomGetFileByNameResult = await dyscom.get_file_by_name()
+    print(f"Filename {fbn.filename}, block offset {fbn.block_offset}, filesize {fbn.filesize}, nr of blocks {fbn.number_of_blocks}")
+    fv: str = await dyscom.get_firmware_version()
+    print(f"Firmware version {fv}")
+    nrof = await dyscom.get_list_of_measurement_meta_info()
+    print(f"Number of measurement meta info {nrof}")
+    did = await dyscom.get_device_id()
+    print(f"Device ID {did}")
+    fi = await dyscom.get_file_info()
+    print(f"File info {fi.filename} {fi.filesize} {fi.checksum}")
 
     await dyscom.power_module(DyscomPowerModuleType.MEASUREMENT, DyscomPowerModulePowerType.SWITCH_ON)
     init_params = DyscomInitParams()

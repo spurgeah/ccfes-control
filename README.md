@@ -21,6 +21,12 @@ Python 3.11 or higher
 - PySerial
   - https://pypi.org/project/pyserial/
   - `pip install pyserial`
+- PyUSB
+  - https://pypi.org/project/pyusb/
+  - `pip install pyusb`
+  - On Windows
+    - Download libusb from https://libusb.info/
+    - Copy libusb-XX.dll into venv root folder (besides python.exe)
 
 ## Build library
 - Only necessary, if you made changes to the library

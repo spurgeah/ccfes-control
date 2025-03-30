@@ -8,7 +8,6 @@ from ..general.general_error import PacketGeneralError
 from ..general.general_unknown_command import PacketGeneralUnknownCommand
 from ..protocol.packet import Packet, PacketAck
 from ..utils.connection import Connection
-# rename import to avoid circular import problem with protocol
 from ..utils.packet_buffer import PacketBuffer
 
 
@@ -29,9 +28,11 @@ class ProtocolHelper:
     @staticmethod
     async def send_packet_and_wait(packet: Packet, packet_number: int, packet_buffer: PacketBuffer, timeout_in_seconds = 5) -> PacketAck:
         """Send a packet and wait for response, if no response arrives raise an exception,
-        this function assumes that the response has the same packet number and ack command must be command+1"""
+        this function assumes that the response has the same packet number and ack command must be command+1
+        
+        Clears all incoming data from connection and packet buffer"""
 
-        # discard all packet because we don't need them anymore
+        # discard all packets because we don't need them anymore
         packet_buffer.clear_buffer()
         ProtocolHelper.send_packet(packet, packet_number, packet_buffer)
 
@@ -46,7 +47,7 @@ class ProtocolHelper:
                     if ack.command == Commands.GeneralError:
                         ge: PacketGeneralError = ack
                         raise ValueError(f"General error packet {ge.error}")
-                    elif ack.command == Commands.UnkownCommand:
+                    if ack.command == Commands.UnkownCommand:
                         uc: PacketGeneralUnknownCommand = ack
                         raise ValueError(f"Unknown command packet {uc.error}")
 

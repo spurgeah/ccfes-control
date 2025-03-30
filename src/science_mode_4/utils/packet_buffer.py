@@ -58,8 +58,7 @@ class PacketBuffer():
 
 
     def get_packet_from_buffer(self, do_update_buffer = True) -> Packet | None:
-        """
-        Search for a valid packet in buffer and returns found packet. Does adjust internal buffer accordingly.
+        """Search for a valid packet in buffer and returns found packet. Does adjust internal buffer accordingly.
         Returns None if no valid packet was found
         """
         if do_update_buffer:
@@ -87,5 +86,6 @@ class PacketBuffer():
 
 
     def clear_buffer(self):
-        """Clear internal buffer"""
+        """Clear internal buffer and buffer from connection"""
+        self._connection.clear_buffer()
         self._buffer = b''

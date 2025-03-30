@@ -21,6 +21,7 @@ class PacketGeneralGetDeviceIdAck(PacketAck):
         super().__init__(data)
         self._command = Commands.GetDeviceIdAck
         self._result_error = ResultAndError.NO_ERROR
+        self._device_id = ""
 
         if not data is None:
             self._result_error = ResultAndError(data[0])

@@ -31,7 +31,7 @@ class PacketDyscomGetAckFirmwareVersion(PacketDyscomGetAck):
         self._firmware_version = ""
 
         if not data is None:
-            self._firmware_version = data[2:131].decode()
+            self._firmware_version = DyscomHelper.bytes_to_str(data[2:130], 128)
 
 
     @property

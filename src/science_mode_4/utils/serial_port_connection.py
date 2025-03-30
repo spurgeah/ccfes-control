@@ -1,10 +1,28 @@
 """Provides a class for a serial connection"""
 
 import serial
+import serial.tools.list_ports
+import serial.tools.list_ports_common
 from .connection import Connection
 
 class SerialPortConnection(Connection):
     """Serial connection class"""
+
+
+    @staticmethod
+    def list_ports() -> list[serial.tools.list_ports_common.ListPortInfo]:
+        """Returns a list of all serial ports"""
+        return serial.tools.list_ports.comports()
+
+
+    @staticmethod
+    def list_science_mode_device_ports() -> list[serial.tools.list_ports_common.ListPortInfo]:
+        """Returns a list of all serial ports with a science mode device"""
+        ports = SerialPortConnection.list_ports()
+        # science mode devices (P24/I24) have an STM32 mcu and these are
+        # default values for USB CDC devices
+        filtered_ports = list(filter(lambda x: x.vid == 0x0483 and x.pid == 0x5740, ports))
+        return filtered_ports
 
 
     def __init__(self, port: str):
@@ -34,3 +52,7 @@ class SerialPortConnection(Connection):
             result = self._ser.read_all()
             # print(f"Incoming {len(result)} - {result.hex(' ').upper()}")
         return bytes(result)
+
+
+    def clear_buffer(self):
+        self._ser.reset_input_buffer()

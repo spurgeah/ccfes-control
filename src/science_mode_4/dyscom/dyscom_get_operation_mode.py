@@ -32,6 +32,6 @@ class PacketDyscomGetAckOperationMode(PacketDyscomGetAck):
 
 
     @property
-    def operation_mode(self) -> str:
+    def operation_mode(self) -> DyscomGetOperationModeType:
         """Getter for operation mode"""
         return self._operation_mode

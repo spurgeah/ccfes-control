@@ -103,6 +103,13 @@ class DyscomPowerLiveDataStatusFlag(IntEnum):
     BOTH_ELECTRODES_ADHESIVE = 3
 
 
+class DyscomFileByNameMode(IntEnum):
+    """Represents dyscom live data status type"""
+    UNDEFINED = 0
+    MULTIBLOCK = 1
+    SINGLEBLOCK = 2
+
+
 @dataclass
 class DyscomElectrodeSample:
     """Represent an electrode sample send by live data packet"""

@@ -17,6 +17,10 @@ from .dyscom_get_operation_mode import PacketDyscomGetOperationMode, PacketDysco
 from .dyscom_start import PacketDyscomStart, PacketDyscomStartAck
 from .dyscom_stop import PacketDyscomStop, PacketDyscomStopAck
 from .dyscom_power_module import PacketDyscomPowerModule, PacketDyscomPowerModuleAck, DyscomPowerModuleResult
+from .dyscom_get_list_of_measurement_meta_info import PacketDyscomGetAckListOfMeasurementMetaInfo, PacketDyscomGetListOfMeasurementMetaInfo
+from .dyscom_get_device_id import PacketDyscomGetAckDeviceId, PacketDyscomGetDeviceId
+from .dyscom_get_file_info import DyscomGetFileInfoResult, PacketDyscomGetAckFileInfo, PacketDyscomGetFileInfo
+
 
 class LayerDyscom(Layer):
     """
@@ -43,12 +47,28 @@ class LayerDyscom(Layer):
         return DyscomGetFileSystemStatusResult(ack.file_system_ready, ack.used_size, ack.free_size)
 
 
+    async def get_list_of_measurement_meta_info(self) -> int:
+        """Sends get dyscom get type list of measurement meta info and waits for response, returns number of measurements"""
+        p = PacketDyscomGetListOfMeasurementMetaInfo()
+        ack: PacketDyscomGetAckListOfMeasurementMetaInfo = await self._send_packet_and_wait(p)
+        self._check_result_error(ack.result_error, "DyscomGetListOfMeasurementMetaInfo")
+        return ack.nr_of_measurements
+
+
     async def get_file_by_name(self) -> DyscomGetFileByNameResult:
-        """Sends get dyscom get type file by name and waits for response, returns filename, block offset, filesize and number of blocks"""
+        """Sends get dyscom get type file by name and waits for response, returns filename, block offset, filesize, number of blocks and mode"""
         p = PacketDyscomGetFileByName()
         ack: PacketDyscomGetAckFileByName = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomGetFileByName")
-        return DyscomGetFileByNameResult(ack.filename, ack.block_offset, ack.filesize, ack.number_of_blocks)
+        return DyscomGetFileByNameResult(ack.filename, ack.block_offset, ack.filesize, ack.number_of_blocks, ack.mode)
+
+
+    async def get_device_id(self) -> str:
+        """Sends get dyscom get type device id and waits for response, returns device id"""
+        p = PacketDyscomGetDeviceId()
+        ack: PacketDyscomGetAckDeviceId = await self._send_packet_and_wait(p)
+        self._check_result_error(ack.result_error, "DyscomGetDeviceId")
+        return ack.device_id
 
 
     async def get_firmware_version(self) -> str:
@@ -57,6 +77,14 @@ class LayerDyscom(Layer):
         ack: PacketDyscomGetAckFirmwareVersion = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomGetFirmwareVersion")
         return ack.firmware_version
+
+
+    async def get_file_info(self) -> DyscomGetFileInfoResult:
+        """Sends get dyscom get type file by name and waits for response, returns filename, block offset, filesize and number of blocks"""
+        p = PacketDyscomGetFileInfo()
+        ack: PacketDyscomGetAckFileInfo = await self._send_packet_and_wait(p)
+        self._check_result_error(ack.result_error, "DyscomGetFileInfo")
+        return DyscomGetFileInfoResult(ack.filename, ack.filesize, ack.checksum)
 
 
     async def get_operation_mode(self) -> DyscomGetOperationModeType:

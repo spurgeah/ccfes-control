@@ -6,7 +6,7 @@ from ..protocol.commands import Commands
 from ..protocol.types import ResultAndError
 from ..utils.byte_builder import ByteBuilder
 from ..protocol.packet import Packet, PacketAck
-from .dyscom_types import DyscomGetType
+from .dyscom_types import DyscomFileByNameMode, DyscomGetType
 from .dyscom_helper import DyscomHelper
 from .dyscom_get import PacketDyscomGet, PacketDyscomGetAck
 
@@ -63,6 +63,7 @@ class DyscomGetFileByNameResult(NamedTuple):
     block_offset: int
     filesize: int
     number_of_blocks: int
+    mode: DyscomFileByNameMode
 
 
 class PacketDyscomGetFileByName(PacketDyscomGet):
@@ -86,12 +87,15 @@ class PacketDyscomGetAckFileByName(PacketDyscomGetAck):
         self._block_offset = 0
         self._filesize = 0
         self._number_of_blocks = 0
+        self._mode: DyscomFileByNameMode.UNDEFINED
 
         if not data is None:
-            self._filename = data[2:131].decode()
-            self._block_offset = int.from_bytes(data[131:135], 'little')
-            self._filesize = int.from_bytes(data[135:143], 'little')
-            self._number_of_blocks = int.from_bytes(data[143:147], 'little')
+            self._filename = DyscomHelper.bytes_to_str(data[2:130], 128)
+            self._block_offset = int.from_bytes(data[130:134], 'little')
+            self._filesize = int.from_bytes(data[134:142], 'little')
+            self._number_of_blocks = int.from_bytes(data[142:146], 'little')
+            self._mode = DyscomFileByNameMode(data[146])
+
 
 
     @property
@@ -116,3 +120,9 @@ class PacketDyscomGetAckFileByName(PacketDyscomGetAck):
     def number_of_blocks(self) -> int:
         """Getter for number of blocks"""
         return self._number_of_blocks
+
+
+    @property
+    def mode(self) -> DyscomFileByNameMode:
+        """Getter for mode"""
+        return self._mode
