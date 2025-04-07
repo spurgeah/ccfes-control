@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 
 
-from ...utils.byte_builder import ByteBuilder
+from science_mode_4.utils.byte_builder import ByteBuilder
 from .ads129x_config_register_1 import Ads129xConfigRegister1
 from .ads129x_config_register_2 import Ads129xConfigRegister2
 from .ads129x_config_register_3 import Ads129xConfigRegister3
@@ -41,7 +41,7 @@ class Ads129x:
         self.config_register_1.set_data([data[8]])
         self.config_register_2.set_data([data[9]])
         self.config_register_3.set_data([data[10]])
-        self.config_register_4 = data[11]
+        self.config_register_4.set_data([data[11]])
 
         self.positive_signal_derivation_register = data[23]
         self.negative_signal_derivation_register = data[22]

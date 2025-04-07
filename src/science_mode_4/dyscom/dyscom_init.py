@@ -1,10 +1,18 @@
 """Provides packet classes for dyscom init"""
 
+from typing import NamedTuple
 from ..protocol.commands import Commands
 from ..protocol.types import ResultAndError
 from ..protocol.packet import Packet, PacketAck
 from .dyscom_types import DyscomFrequencyOut, DyscomInitParams, DyscomInitState
 from .ads129x.ads129x import Ads129x
+
+
+class DyscomInitResult(NamedTuple):
+    """Helper class for dyscom get with type file system status"""
+    register_map_ads129x: Ads129x
+    init_state: DyscomInitState
+    frequency_out: DyscomFrequencyOut
 
 
 class PacketDyscomInit(Packet):

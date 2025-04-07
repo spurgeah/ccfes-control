@@ -1,15 +1,8 @@
 """Provides helper class for ScienceMode protocol"""
 
-import asyncio
-
-from .commands import Commands
-from ..general.general_error import PacketGeneralError
-from ..general.general_unknown_command import PacketGeneralUnknownCommand
-from .packet_factory import PacketFactory
-from ..protocol.packet import Packet, PacketAck
-from ..utils.byte_builder import ByteBuilder
-from ..utils.crc16 import Crc16
-from ..utils.connection import Connection
+from science_mode_4.utils.byte_builder import ByteBuilder
+from science_mode_4.utils.crc16 import Crc16
+from .packet import Packet
 
 
 class Protocol:

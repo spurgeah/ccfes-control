@@ -9,9 +9,9 @@ from .low_level import *
 from .mid_level import *
 from .dyscom import *
 
-from .device import Device
-from .layer import Layer
-from .device_p24 import DeviceP24
-from .device_i24 import DeviceI24
+from .device import *
+from .layer import *
+from .device_p24 import *
+from .device_i24 import *
 
 __version__ = version("science_mode_4")

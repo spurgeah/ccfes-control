@@ -1,6 +1,6 @@
 """Provides packet classes for dyscom get with type device id"""
 
-from ..protocol.commands import Commands
+from science_mode_4.protocol.commands import Commands
 from .dyscom_types import DyscomGetType
 from .dyscom_helper import DyscomHelper
 from .dyscom_get import PacketDyscomGet, PacketDyscomGetAck

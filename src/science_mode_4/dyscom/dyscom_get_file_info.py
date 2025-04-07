@@ -1,8 +1,9 @@
 """Provides packet classes for dyscom get with type file info"""
 
 from typing import NamedTuple
-from ..protocol.commands import Commands
-from .dyscom_types import DyscomGetType, DyscomGetOperationModeType
+
+from science_mode_4.protocol.commands import Commands
+from .dyscom_types import DyscomGetType
 from .dyscom_helper import DyscomHelper
 from .dyscom_get import PacketDyscomGet, PacketDyscomGetAck
 

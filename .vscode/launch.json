@@ -8,9 +8,10 @@
       "name": "Python Debugger: Current File",
       "type": "debugpy",
       "request": "launch",
-      "program": "__main__.py",
-      // "program": "examples/example_low_level_plot.py",
-      "args": ["COM3"],
+      // "program": "__main__.py",
+      "program": "examples/example_dyscom_fast_plot.py",
+      "justMyCode": false,
+      // "args": ["COM3"],
       "console": "integratedTerminal"
     }
   ]

@@ -3,60 +3,10 @@
 # from dataclasses import dataclass
 
 from typing import NamedTuple
-from ..protocol.commands import Commands
-from ..protocol.types import ResultAndError
-from ..utils.byte_builder import ByteBuilder
-from ..protocol.packet import Packet, PacketAck
+from science_mode_4.protocol.commands import Commands
 from .dyscom_types import DyscomGetType
-from .dyscom_helper import DyscomHelper
 from .dyscom_get import PacketDyscomGet, PacketDyscomGetAck
 
-
-# @dataclass
-# class DyscomGetFileParams():
-#     """Dyscom get packet file related parameters"""
-
-#     filename = ""
-#     block_offset = 0
-#     filesize = 0
-#     number_of_blocks = 0
-
-
-#     def set_data(self, data: bytes):
-#         """Convert data to information"""
-
-#         # ToDo
-#         control_register = data[0]
-#         self.device_id = control_register
-
-#         self.config_register_1.set_data([data[8]])
-#         self.config_register_2.set_data([data[9]])
-#         self.config_register_3.set_data([data[10]])
-
-#         self.positive_signal_derivation_register = data[23]
-#         self.negative_signal_derivation_register = data[22]
-
-#         self.respiration_control_register.set_data([data[21]])
-
-
-#     def get_data(self) -> bytes:
-#         """Convert information to bytes"""
-
-#         if len(self.filename) > 128:
-#             raise ValueError(f"Filename name must be shorter than 129 {self.filename}")
-#         if self.block_offset < 0 or self.block_offset > 2**32 - 1:
-#             raise ValueError(f"block_offset name must be between 0 and 2^32-1 {self.block_offset}")
-#         if self.filesize < 0 or self.filesize > 2**32 - 1:
-#             raise ValueError(f"filesize name must be between 0 and 2^64-1 {self.filesize}")
-#         if self.number_of_blocks < 0 or self.number_of_blocks > 2**32 - 1:
-#             raise ValueError(f"number_of_blocks name must be between 0 and 2^32-1 {self.number_of_blocks}")
-
-#         bb = ByteBuilder()
-#         bb.append_bytes(DyscomHelper.str_to_bytes(self.filename, 129))
-#         bb.append_value(self.block_offset, 4, True)
-#         bb.append_value(self.filesize, 8, True)
-#         bb.append_value(self.number_of_blocks, 4, True)
-#         return bb.get_bytes()
 
 class DyscomGetFileSystemStatusResult(NamedTuple):
     """Helper class for dyscom get with type file system status"""

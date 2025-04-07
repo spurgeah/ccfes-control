@@ -15,7 +15,6 @@ async def main() -> int:
     com_port = ExampleUtils.get_comport_from_commandline_argument()
     # create serial port connection
     connection = SerialPortConnection(com_port)
-    # connection = NullConnection()
     # open connection, now we can read and write data
     connection.open()
 

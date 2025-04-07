@@ -31,3 +31,4 @@ This page describes implementation hints.
 
 ### DL_send_live_data
 - parameters are big endian?
+- SignalType for each sample is always 0

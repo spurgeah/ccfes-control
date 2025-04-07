@@ -62,4 +62,7 @@ Python 3.11 or higher
 - Matplotlib
   - https://pypi.org/project/matplotlib/
   - `pip install matplotlib`
+- Fastplotlib
+  - `pip install -U fastplotlib`
+  - `pip install -U glfw`
 

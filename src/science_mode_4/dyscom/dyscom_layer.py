@@ -9,7 +9,7 @@ from ..utils.connection import Connection
 from ..layer import Layer
 from ..protocol.protocol import Protocol
 from .dyscom_types import DyscomGetOperationModeType, DyscomPowerModuleType, DyscomPowerModulePowerType, DyscomSysType
-from .dyscom_init import PacketDyscomInit, PacketDyscomInitAck, DyscomInitParams
+from .dyscom_init import DyscomInitResult, PacketDyscomInit, PacketDyscomInitAck, DyscomInitParams
 from .dyscom_get_file_system_status import PacketDyscomGetFileSystemStatus, PacketDyscomGetAckFileSystemStatus, DyscomGetFileSystemStatusResult
 from .dyscom_get_file_by_name import PacketDyscomGetFileByName, PacketDyscomGetAckFileByName, DyscomGetFileByNameResult
 from .dyscom_get_firmware_version import PacketDyscomGetFirmwareVersion, PacketDyscomGetAckFirmwareVersion
@@ -35,11 +35,12 @@ class LayerDyscom(Layer):
         super().__init__(conn, packet_factory, packet_number_generator)
 
 
-    async def init(self, params = DyscomInitParams()):
+    async def init(self, params = DyscomInitParams()) -> DyscomInitResult:
         """Send dyscom init command and waits for response"""
         p = PacketDyscomInit(params)
         ack: PacketDyscomInitAck = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomInit")
+        return DyscomInitResult(ack.register_map_ads129x, ack.init_state, ack.frequency_out)
 
 
     async def get_file_system_status(self) -> DyscomGetFileSystemStatusResult:

@@ -2,9 +2,9 @@
 
 from typing import NamedTuple
 import struct
-from ..protocol.commands import Commands
-from .dyscom_types import DyscomEnergyFlag, DyscomGetType, DyscomGetOperationModeType
-from .dyscom_helper import DyscomHelper
+
+from science_mode_4.protocol.commands import Commands
+from .dyscom_types import DyscomEnergyFlag, DyscomGetType
 from .dyscom_get import PacketDyscomGet, PacketDyscomGetAck
 
 

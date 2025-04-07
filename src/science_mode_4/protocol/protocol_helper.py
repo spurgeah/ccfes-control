@@ -2,13 +2,12 @@
 
 import asyncio
 
+from science_mode_4.general.general_error import PacketGeneralError
+from science_mode_4.general.general_unknown_command import PacketGeneralUnknownCommand
+from science_mode_4.utils.packet_buffer import PacketBuffer
 from .protocol import Protocol
 from .commands import Commands
-from ..general.general_error import PacketGeneralError
-from ..general.general_unknown_command import PacketGeneralUnknownCommand
-from ..protocol.packet import Packet, PacketAck
-from ..utils.connection import Connection
-from ..utils.packet_buffer import PacketBuffer
+from .packet import Packet, PacketAck
 
 
 class ProtocolHelper:
@@ -21,7 +20,7 @@ class ProtocolHelper:
         packet.number = packet_number
         packet_buffer.add_open_acknowledge(packet)
 
-        print(f"O {packet}")
+        # print(f"O {packet}")
         packet_buffer.connection.write(Protocol.packet_to_bytes(packet))
 
 
