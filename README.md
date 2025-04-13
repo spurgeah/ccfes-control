@@ -71,7 +71,7 @@ Python 3.11 or higher
 - NumPy
   - https://pypi.org/project/numpy/
   - `pip install numpy`
-- Matplotlib
+- Matplotlib / PyPlot
   - https://pypi.org/project/matplotlib/
   - `pip install matplotlib`
 - Fastplotlib with glfw backend

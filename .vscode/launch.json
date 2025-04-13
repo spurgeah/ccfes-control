@@ -9,7 +9,7 @@
       "type": "debugpy",
       "request": "launch",
       // "program": "__main__.py",
-      "module": "examples.dyscom.example_dyscom_pyplot",
+      "module": "examples.dyscom.example_dyscom_write_csv",
       "justMyCode": false,
       // "args": ["COM3"],
       "console": "integratedTerminal"

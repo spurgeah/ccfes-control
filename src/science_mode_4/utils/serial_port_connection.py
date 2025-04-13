@@ -32,6 +32,7 @@ class SerialPortConnection(Connection):
 
     def open(self):
         self._ser.open()
+        self._ser.set_buffer_size(4096*128)
 
 
     def close(self):
