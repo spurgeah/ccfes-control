@@ -1,8 +1,8 @@
 """Provides science mode mid level types"""
 
 from typing import Sequence
-from ..utils.byte_builder import ByteBuilder
-from ..protocol.channel_point import ChannelPoint
+from science_mode_4.protocol.channel_point import ChannelPoint
+from science_mode_4.utils.byte_builder import ByteBuilder
 
 
 class MidLevelChannelConfiguration():

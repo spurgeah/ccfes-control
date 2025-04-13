@@ -4,9 +4,9 @@ from dataclasses import dataclass, field
 from enum import IntEnum
 import datetime
 
+from science_mode_4.utils.byte_builder import ByteBuilder
 from .ads129x.ads129x import Ads129x
 from .dyscom_helper import DyscomHelper
-from ..utils.byte_builder import ByteBuilder
 
 class DyscomFrequencyOut(IntEnum):
     """Represent dyscom type for frequency out"""
@@ -144,7 +144,7 @@ class DyscomElectrodeSample:
     """Represent an electrode sample send by live data packet"""
     value: float = 0.0
     signal_type: DyscomSignalType = DyscomSignalType.UNUSED
-    status: set[DyscomPowerLiveDataStatusFlag] = field(default_factory=lambda: set())
+    status: set[DyscomPowerLiveDataStatusFlag] = field(default_factory=lambda: set()) # pylint:disable=unnecessary-lambda
 
 
 @dataclass

@@ -2,15 +2,15 @@
 
 from enum import IntEnum
 from typing import Type
+from .layer import Layer
+from .protocol.types import StimStatus
+from .protocol.packet_factory import PacketFactory
+from .protocol.packet_number_generator import PacketNumberGenerator
+from .general.general_layer import LayerGeneral
 from .low_level.low_level_layer import LayerLowLevel
 from .mid_level.mid_level_layer import LayerMidLevel
 from .dyscom.dyscom_layer import LayerDyscom
 from .dyscom.dyscom_types import DyscomGetOperationModeType
-from .protocol.types import StimStatus
-from .layer import Layer
-from .general.general_layer import LayerGeneral
-from .protocol.packet_factory import PacketFactory
-from .protocol.packet_number_generator import PacketNumberGenerator
 from .utils.connection import Connection
 
 

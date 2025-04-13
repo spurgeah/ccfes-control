@@ -1,14 +1,13 @@
 """Provices general layer"""
 
-from ..protocol.packet_number_generator import PacketNumberGenerator
+from science_mode_4.protocol.packet_number_generator import PacketNumberGenerator
+from science_mode_4.protocol.packet_factory import PacketFactory
+from science_mode_4.layer import Layer
+from science_mode_4.utils.connection import Connection
 from .general_reset import PacketGeneralReset, PacketGeneralResetAck
 from .general_stim_status import GetStimStatusResult, PacketGeneralGetStimStatus, PacketGeneralGetStimStatusAck
 from .general_device_id import PacketGeneralGetDeviceId, PacketGeneralGetDeviceIdAck
 from .general_version import PacketGeneralGetExtendedVersion, PacketGeneralGetExtendedVersionAck, GetExtendedVersionResult
-from ..protocol.packet_factory import PacketFactory
-from ..utils.connection import Connection
-from ..layer import Layer
-from ..protocol.protocol import Protocol
 
 
 class LayerGeneral(Layer):

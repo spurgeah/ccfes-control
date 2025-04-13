@@ -1,5 +1,6 @@
 """Provides base class for packets"""
 
+
 class Packet():
     """Base class for all packets"""
 

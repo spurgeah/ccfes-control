@@ -2,7 +2,8 @@
 
 import struct
 import datetime
-from ..utils.byte_builder import ByteBuilder
+from science_mode_4.utils.byte_builder import ByteBuilder
+
 
 class DyscomHelper:
     """Provides some helper functions"""
@@ -30,6 +31,7 @@ class DyscomHelper:
     @staticmethod
     def bytes_to_datetime(data: bytes) -> datetime.datetime:
         """Converts dyscom datetime bytes to a datetime"""
+        # pylint:disable=unused-variable
         hour, dst, day, minute, month, second, _, _, year_since_1900 = \
             DyscomHelper._unpack_func(data)
 

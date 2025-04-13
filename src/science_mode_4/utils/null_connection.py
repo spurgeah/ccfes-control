@@ -1,6 +1,8 @@
 """Provides a class for a null connection"""
 
+
 from .connection import Connection
+
 
 class NullConnection(Connection):
     """Null connection class (only for testing)"""

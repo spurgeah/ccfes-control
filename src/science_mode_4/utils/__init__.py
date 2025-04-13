@@ -1,8 +1,10 @@
 """Init file for utils"""
 
-from .bit_vector import BitVector
-from .byte_builder import ByteBuilder
-from .crc16 import Crc16
-from .null_connection import NullConnection
-from .serial_port_connection import SerialPortConnection
-from .packet_buffer import PacketBuffer
+from .bit_vector import *
+from .byte_builder import *
+from .connection import *
+from .crc16 import *
+from .null_connection import *
+from .packet_buffer import *
+from .serial_port_connection import *
+from .usb_connection import *

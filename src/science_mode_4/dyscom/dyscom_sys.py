@@ -2,11 +2,11 @@
 
 from typing import NamedTuple
 
-from ..protocol.commands import Commands
-from ..protocol.types import ResultAndError
-from ..utils.byte_builder import ByteBuilder
-from ..protocol.packet import Packet, PacketAck
-from .dyscom_types import DyscomPowerModuleType, DyscomPowerModulePowerType, DyscomSysState, DyscomSysType
+from science_mode_4.protocol.commands import Commands
+from science_mode_4.protocol.types import ResultAndError
+from science_mode_4.protocol.packet import Packet, PacketAck
+from science_mode_4.utils.byte_builder import ByteBuilder
+from .dyscom_types import DyscomSysState, DyscomSysType
 from .dyscom_helper import DyscomHelper
 
 

@@ -1,12 +1,9 @@
 """Provides packet classes for dyscom send measurement meta info"""
 
-import struct
 import datetime
-from typing import NamedTuple
-from science_mode_4.dyscom.dyscom_helper import DyscomHelper
-from ..protocol.commands import Commands
-from ..protocol.packet import Packet, PacketAck
-from ..utils.byte_builder import ByteBuilder
+from science_mode_4.protocol.commands import Commands
+from science_mode_4.protocol.packet import PacketAck
+from .dyscom_helper import DyscomHelper
 from .dyscom_types import DyscomInitParams
 
 

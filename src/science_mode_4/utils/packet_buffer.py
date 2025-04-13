@@ -1,10 +1,11 @@
 """Provides a packet buffer functionality for more async handling of packets and acknowledges"""
 
-from ..protocol.packet import Packet
-from ..protocol.packet_factory import PacketFactory
-from ..protocol.protocol import Protocol
-from ..protocol.commands import Commands
-from ..utils.connection import Connection
+from science_mode_4.protocol.packet import Packet
+from science_mode_4.protocol.packet_factory import PacketFactory
+from science_mode_4.protocol.protocol import Protocol
+from science_mode_4.protocol.commands import Commands
+from .connection import Connection
+
 
 class PacketBuffer():
     """Class for handling a buffer and provides methods to take care of arriving acknowledges"""

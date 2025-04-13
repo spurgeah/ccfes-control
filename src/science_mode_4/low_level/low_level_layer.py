@@ -1,17 +1,16 @@
 """Provices low level layer"""
 
+from science_mode_4.protocol.channel_point import ChannelPoint
+from science_mode_4.protocol.types import Channel, Connector
+from science_mode_4.protocol.packet_number_generator import PacketNumberGenerator
+from science_mode_4.protocol.packet_factory import PacketFactory
+from science_mode_4.utils.connection import Connection
+from science_mode_4.utils.packet_buffer import PacketBuffer
+from science_mode_4.layer import Layer
 from .low_level_channel_config import PacketLowLevelChannelConfig
 from .low_level_init import PacketLowLevelInit, PacketLowLevelInitAck
 from .low_level_stop import PacketLowLevelStop, PacketLowLevelStopAck
 from .low_level_types import LowLevelHighVoltageSource, LowLevelMode
-from ..protocol.channel_point import ChannelPoint
-from ..protocol.types import Channel, Connector
-from ..utils.packet_buffer import PacketBuffer
-from ..protocol.packet_number_generator import PacketNumberGenerator
-from ..protocol.packet_factory import PacketFactory
-from ..utils.connection import Connection
-from ..layer import Layer
-from ..protocol.protocol import Protocol
 
 
 class LayerLowLevel(Layer):
@@ -23,7 +22,7 @@ class LayerLowLevel(Layer):
 
     def __init__(self, conn: Connection, packet_factory: PacketFactory, packet_number_generator: PacketNumberGenerator):
         super().__init__(conn, packet_factory, packet_number_generator)
-        self._packet_buffer = PacketBuffer(packet_factory)
+        self._packet_buffer = PacketBuffer(conn, packet_factory)
 
 
     @property

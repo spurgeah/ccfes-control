@@ -1,16 +1,10 @@
 """Provices low level layer"""
 
-from ..protocol.channel_point import ChannelPoint
-from ..protocol.types import Channel, Connector
-from ..utils.packet_buffer import PacketBuffer
-from ..protocol.packet_number_generator import PacketNumberGenerator
-from ..protocol.packet_factory import PacketFactory
-from ..utils.connection import Connection
-from ..layer import Layer
-from ..protocol.protocol import Protocol
+from science_mode_4.layer import Layer
 from .dyscom_types import DyscomGetOperationModeType, DyscomPowerModuleType, DyscomPowerModulePowerType, DyscomSysType
 from .dyscom_init import DyscomInitResult, PacketDyscomInit, PacketDyscomInitAck, DyscomInitParams
-from .dyscom_get_file_system_status import PacketDyscomGetFileSystemStatus, PacketDyscomGetAckFileSystemStatus, DyscomGetFileSystemStatusResult
+from .dyscom_get_file_system_status import PacketDyscomGetFileSystemStatus, PacketDyscomGetAckFileSystemStatus,\
+    DyscomGetFileSystemStatusResult
 from .dyscom_get_file_by_name import PacketDyscomGetFileByName, PacketDyscomGetAckFileByName, DyscomGetFileByNameResult
 from .dyscom_get_firmware_version import PacketDyscomGetFirmwareVersion, PacketDyscomGetAckFirmwareVersion
 from .dyscom_get_operation_mode import PacketDyscomGetOperationMode, PacketDyscomGetAckOperationMode
@@ -29,10 +23,6 @@ class LayerDyscom(Layer):
     """
     Class for dyscom layer
     """
-
-
-    def __init__(self, conn: Connection, packet_factory: PacketFactory, packet_number_generator: PacketNumberGenerator):
-        super().__init__(conn, packet_factory, packet_number_generator)
 
 
     async def init(self, params = DyscomInitParams()) -> DyscomInitResult:
@@ -60,7 +50,8 @@ class LayerDyscom(Layer):
 
 
     async def get_file_by_name(self) -> DyscomGetFileByNameResult:
-        """Sends get dyscom get type file by name and waits for response, returns filename, block offset, filesize, number of blocks and mode"""
+        """Sends get dyscom get type file by name and waits for response, returns filename, block offset,
+        filesize, number of blocks and mode"""
         p = PacketDyscomGetFileByName()
         ack: PacketDyscomGetAckFileByName = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomGetFileByName")

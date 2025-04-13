@@ -2,10 +2,9 @@
 
 import struct
 
-from ..protocol.commands import Commands
-from ..protocol.packet import Packet, PacketAck
-from ..utils.byte_builder import ByteBuilder
-from .dyscom_types import DyscomElectrodeSample, DyscomSignalType, DyscomPowerLiveDataStatusFlag
+from science_mode_4.protocol.commands import Commands
+from science_mode_4.protocol.packet import Packet, PacketAck
+from science_mode_4.utils.byte_builder import ByteBuilder
 
 
 class PacketDyscomSendFile(PacketAck):

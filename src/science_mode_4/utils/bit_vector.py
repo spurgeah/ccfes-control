@@ -1,7 +1,9 @@
 """Provices a simple BitVector class"""
 
+
 class BitVector():
     """Simple bitvector class"""
+
 
     @staticmethod
     def init_from_int(value: int = 0, bit_length: int = 0) -> "BitVector":

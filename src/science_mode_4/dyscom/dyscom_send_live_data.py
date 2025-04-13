@@ -1,8 +1,8 @@
 """Provides packet classes for dyscom send live data"""
 
 import struct
-from ..protocol.commands import Commands
-from ..protocol.packet import PacketAck
+from science_mode_4.protocol.commands import Commands
+from science_mode_4.protocol.packet import PacketAck
 from .dyscom_types import DyscomElectrodeSample, DyscomSignalType, DyscomPowerLiveDataStatusFlag
 
 

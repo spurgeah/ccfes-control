@@ -5,11 +5,11 @@ from queue import Empty, Full, Queue
 import numpy as np
 import fastplotlib as fpl
 
-from example_plot_utils import PlotHelper, PlotValueChannel
+from examples.utils.plot_base import PlotHelper, PlotValueChannel
 
 
-class FastPlotValueChannel(PlotValueChannel):
-    """Class for holding a specific number of values specific for fastplotlib"""
+class FastPlotLibValueChannel(PlotValueChannel):
+    """Class for holding a specific number of values specific for FastPlotLib"""
 
 
     def __init__(self, sub_plot, max_value_count: int, color: str):
@@ -22,7 +22,7 @@ class FastPlotValueChannel(PlotValueChannel):
         y_data = np.array([0] * max_value_count)
         self._line = sub_plot.add_line(y_data, name="values", colors=color)
 
-        # this queue is used to synchronize data between background and main thread 
+        # this queue is used to synchronize data between background and main thread
         self._data_queue = Queue(maxsize=1)
 
 
@@ -31,7 +31,8 @@ class FastPlotValueChannel(PlotValueChannel):
         This function is call in context of background thread"""
         super().append_value(value)
 
-        # because it is not possible to change value count during animation
+        # because it is not possible to change value count during animation,
+        # we fill arrays with "dummy" values
         # for x axis we use values between 0 and 1
         # for y axis we use first real value to fill arrays with that value
         if len(self._x_data) < self._max_value_count:
@@ -60,31 +61,30 @@ class FastPlotValueChannel(PlotValueChannel):
             pass
 
 
-class FastPlotHelper(PlotHelper):
-    """Class to handle plots and values for plotting specific for fastplotlib"""
+class FastPlotLibHelper(PlotHelper):
+    """Class to handle plots and values for plotting specific for FastPlotLib"""
 
 
     def __init__(self, channels: dict[int, tuple[str, str]], max_value_count: int):
-        super().__init__(channels, max_value_count)
+        super().__init__()
 
         # calc layout for sub plots
-        shape_count = len(channels) + 1
-        x_shape = shape_count // 2
-        y_shape = shape_count // x_shape
+        x_dimension, y_dimension = self._calc_layout_dimension(len(channels))
 
         # length of names must match number of sub plots
         names = [x[0] for x in channels.values()]
-        names.extend([""] * ((x_shape * y_shape) - len(channels)))
+        names.extend([""] * ((x_dimension * y_dimension) - len(channels)))
 
         # create figure
-        self._figure = fpl.Figure(size=(1024, 768), shape=(x_shape, y_shape), names=names)
+        self._figure = fpl.Figure(size=(1024, 768), shape=(x_dimension, y_dimension), names=names, )
 
         sub_plot_counter = 0
         for key, value in channels.items():
-            sub_plot = self._figure[sub_plot_counter % x_shape, sub_plot_counter // x_shape]
+            x_pos, y_pos = self._calc_layout_pos(sub_plot_counter)
+            sub_plot = self._figure[x_pos, y_pos]
             # setting name here does not work
             # sub_plot.name = value[0]
-            self._data[key] = FastPlotValueChannel(sub_plot, max_value_count, value[1])
+            self._data[key] = FastPlotLibValueChannel(sub_plot, max_value_count, value[1])
 
             sub_plot_counter += 1
 
@@ -104,5 +104,6 @@ class FastPlotHelper(PlotHelper):
         for x in self._data.values():
             x.update_plot()
 
+        # this keeps the plot in camera view, but prevents any mouse control
         for graph in figure:
             graph.auto_scale()

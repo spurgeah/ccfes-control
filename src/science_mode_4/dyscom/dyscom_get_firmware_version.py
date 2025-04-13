@@ -1,10 +1,6 @@
 """Provides packet classes for dyscom get with type firmware version"""
 
-from typing import NamedTuple
-from ..protocol.commands import Commands
-from ..protocol.types import ResultAndError
-from ..utils.byte_builder import ByteBuilder
-from ..protocol.packet import Packet, PacketAck
+from science_mode_4.protocol.commands import Commands
 from .dyscom_types import DyscomGetType
 from .dyscom_helper import DyscomHelper
 from .dyscom_get import PacketDyscomGet, PacketDyscomGetAck

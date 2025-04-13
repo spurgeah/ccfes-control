@@ -7,8 +7,8 @@ from science_mode_4 import DeviceP24
 from science_mode_4 import MidLevelChannelConfiguration
 from science_mode_4 import ChannelPoint
 from science_mode_4 import SerialPortConnection
+from examples.utils.example_utils import ExampleUtils, KeyboardInputThread
 
-from example_utils import ExampleUtils, KeyboardInputThread
 
 async def main() -> int:
     """Main function"""
@@ -63,7 +63,7 @@ async def main() -> int:
 
     while keyboard_input_thread.is_alive():
         # we have to call get_current_data() every 1.5s to keep stimulation ongoing
-        update = await mid_level.get_current_data()
+        update = await mid_level.get_current_data() # pylint:disable=unused-variable
         # print(update)
 
         await asyncio.sleep(1)

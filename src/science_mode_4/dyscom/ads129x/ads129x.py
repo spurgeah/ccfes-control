@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass
 
-
 from science_mode_4.utils.byte_builder import ByteBuilder
 from .ads129x_config_register_1 import Ads129xConfigRegister1
 from .ads129x_config_register_2 import Ads129xConfigRegister2

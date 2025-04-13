@@ -1,10 +1,11 @@
 """Provides packet classes for mid level GetCurrentData"""
 
-from ..protocol.commands import Commands
-from ..protocol.packet import Packet, PacketAck
-from ..protocol.types import ResultAndError
-from ..utils.bit_vector import BitVector
-from ..utils.byte_builder import ByteBuilder
+from science_mode_4.protocol.commands import Commands
+from science_mode_4.protocol.packet import Packet, PacketAck
+from science_mode_4.protocol.types import ResultAndError
+from science_mode_4.utils.bit_vector import BitVector
+from science_mode_4.utils.byte_builder import ByteBuilder
+
 
 class PacketMidLevelGetCurrentData(Packet):
     """Packet for mid level GetCurrentData"""

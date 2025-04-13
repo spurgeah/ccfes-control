@@ -1,6 +1,6 @@
 """Provides packet classes for dyscom get with type list of measurement meta info"""
 
-from ..protocol.commands import Commands
+from science_mode_4.protocol.commands import Commands
 from .dyscom_types import DyscomGetType
 from .dyscom_get import PacketDyscomGet, PacketDyscomGetAck
 

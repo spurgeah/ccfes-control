@@ -1,6 +1,7 @@
 """Provides a paket factory class"""
 
-from ..protocol.packet import Packet, PacketAck
+from .packet import Packet, PacketAck
+
 
 class PacketFactory():
     """Packet factory class, it is possible to register multiple packet classes

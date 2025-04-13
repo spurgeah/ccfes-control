@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod
 
+
 class Connection(ABC):
     """Abstract base class for connection"""
 

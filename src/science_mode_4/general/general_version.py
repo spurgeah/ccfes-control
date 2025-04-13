@@ -1,8 +1,8 @@
 """Provides classes for general GetVersion"""
 
 from typing import NamedTuple
-from ..protocol.commands import Commands
-from ..protocol.packet import Packet, PacketAck
+from science_mode_4.protocol.commands import Commands
+from science_mode_4.protocol.packet import Packet, PacketAck
 
 
 class GetExtendedVersionResult(NamedTuple):

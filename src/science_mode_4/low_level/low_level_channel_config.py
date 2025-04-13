@@ -1,11 +1,12 @@
 """Provides packet classes for low level channel config"""
 
-from ..protocol.commands import Commands
+from science_mode_4.protocol.commands import Commands
+from science_mode_4.protocol.types import Connector, Channel
+from science_mode_4.protocol.packet import Packet, PacketAck
+from science_mode_4.protocol.channel_point import ChannelPoint
+from science_mode_4.utils.byte_builder import ByteBuilder
 from .low_level_types import LowLevelMode, LowLevelResult
-from ..protocol.types import Connector, Channel
-from ..utils.byte_builder import ByteBuilder
-from ..protocol.packet import Packet, PacketAck
-from ..protocol.channel_point import ChannelPoint
+
 
 class PacketLowLevelChannelConfig(Packet):
     """Packet for low level channel config"""

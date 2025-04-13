@@ -2,6 +2,7 @@
 
 from enum import IntEnum
 
+
 class Channel(IntEnum):
     """Representa a channel"""
     RED = 0
@@ -33,4 +34,3 @@ class StimStatus(IntEnum):
     LOW_LEVEL_INITIALIZED = 1
     MID_LEVEL_INITIALIZED = 2
     MID_LEVEL_RUNNING = 3
-    

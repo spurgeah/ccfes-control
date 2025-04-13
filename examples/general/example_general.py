@@ -5,8 +5,7 @@ import asyncio
 
 from science_mode_4 import SerialPortConnection
 from science_mode_4 import DeviceP24
-
-from example_utils import ExampleUtils
+from examples.utils.example_utils import ExampleUtils
 
 async def main() -> int:
     """Main function"""
