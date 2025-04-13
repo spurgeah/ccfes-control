@@ -1,8 +1,9 @@
 """Provides classes for general Reset"""
 
-from ..protocol.commands import Commands
-from ..protocol.packet import Packet, PacketAck
-from ..protocol.types import ResultAndError
+from science_mode_4.protocol.commands import Commands
+from science_mode_4.protocol.packet import Packet, PacketAck
+from science_mode_4.protocol.types import ResultAndError
+
 
 class PacketGeneralReset(Packet):
     """Packet for general Reset"""

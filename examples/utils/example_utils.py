@@ -3,8 +3,9 @@
 import sys
 import threading
 from typing import Callable
-
 import keyboard
+
+from science_mode_4 import SerialPortConnection
 
 
 class KeyboardInputThread(threading.Thread):
@@ -30,8 +31,16 @@ class ExampleUtils():
 
     @staticmethod
     def get_comport_from_commandline_argument() -> str:
-        """Get com port from command line argument, if no argument provided end program with exit code 1"""
+        """Get com port from command line argument, if no argument provided,
+        look for the first matching device,
+        if nothing found, end program with exit code 1"""
         if len(sys.argv) != 2:
+            # check for available science mode device ports
+            ports = SerialPortConnection.list_science_mode_device_ports()
+            if len(ports) > 0:
+                return ports[0].device
+
+            # nothing found -> exit
             print("Serial port command line argument missing (e.g. python -m example_xxx.py COM3)")
             sys.exit(1)
 

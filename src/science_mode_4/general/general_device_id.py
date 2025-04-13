@@ -1,8 +1,8 @@
 """Provides classes for general GetDeviceId"""
 
-from ..protocol.types import ResultAndError
-from ..protocol.commands import Commands
-from ..protocol.packet import Packet, PacketAck
+from science_mode_4.protocol.types import ResultAndError
+from science_mode_4.protocol.commands import Commands
+from science_mode_4.protocol.packet import Packet, PacketAck
 
 class PacketGeneralGetDeviceId(Packet):
     """Packet for general GetDeviceId"""
@@ -21,6 +21,7 @@ class PacketGeneralGetDeviceIdAck(PacketAck):
         super().__init__(data)
         self._command = Commands.GetDeviceIdAck
         self._result_error = ResultAndError.NO_ERROR
+        self._device_id = ""
 
         if not data is None:
             self._result_error = ResultAndError(data[0])

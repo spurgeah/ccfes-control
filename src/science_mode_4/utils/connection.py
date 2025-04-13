@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod
 
+
 class Connection(ABC):
     """Abstract base class for connection"""
 
@@ -29,3 +30,8 @@ class Connection(ABC):
     @abstractmethod
     def read(self) -> bytes:
         """Read all data from connection"""
+
+
+    @abstractmethod
+    def clear_buffer(self):
+        """Clear buffer from connection"""

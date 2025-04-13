@@ -1,10 +1,11 @@
 """Provides packet classes for low level init"""
 
-from ..protocol.commands import Commands
+from science_mode_4.protocol.commands import Commands
+from science_mode_4.protocol.types import ResultAndError
+from science_mode_4.protocol.packet import Packet, PacketAck
+from science_mode_4.utils.byte_builder import ByteBuilder
 from .low_level_types import LowLevelHighVoltageSource, LowLevelMode
-from ..protocol.types import ResultAndError
-from ..utils.byte_builder import ByteBuilder
-from ..protocol.packet import Packet, PacketAck
+
 
 class PacketLowLevelInit(Packet):
     """Packet for low level init"""

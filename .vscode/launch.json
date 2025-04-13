@@ -9,8 +9,9 @@
       "type": "debugpy",
       "request": "launch",
       // "program": "__main__.py",
-      "program": "examples/example_low_level_plot.py",
-      "args": ["COM3"],
+      "module": "examples.dyscom.example_dyscom_write_csv",
+      "justMyCode": false,
+      // "args": ["COM3"],
       "console": "integratedTerminal"
     }
   ]

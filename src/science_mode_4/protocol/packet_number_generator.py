@@ -1,5 +1,6 @@
 """Provides a packet number generator"""
 
+
 class PacketNumberGenerator():
     """Packet number generator class that increases number for each packet by 1"""
 

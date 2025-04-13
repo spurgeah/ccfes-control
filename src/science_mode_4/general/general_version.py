@@ -1,7 +1,15 @@
 """Provides classes for general GetVersion"""
 
-from ..protocol.commands import Commands
-from ..protocol.packet import Packet, PacketAck
+from typing import NamedTuple
+from science_mode_4.protocol.commands import Commands
+from science_mode_4.protocol.packet import Packet, PacketAck
+
+
+class GetExtendedVersionResult(NamedTuple):
+    """Helper class for dyscom get with type file system status"""
+    firmware_version: str
+    science_mode_version: str
+
 
 class PacketGeneralGetExtendedVersion(Packet):
     """Packet for general GetExtendetVersion"""
@@ -30,7 +38,7 @@ class PacketGeneralGetExtendedVersionAck(PacketAck):
             self._successful = data[0] == 0
             self._firmware_version = f"{data[1]}.{data[2]}.{data[3]}"
             self._science_mode_version = f"{data[4]}.{data[5]}.{data[6]}"
-            self._firmware_hash = int.from_bytes(data[7:10], 'little')
+            self._firmware_hash = int.from_bytes(data[7:10], "little")
             self._hash_type = data[11]
             self._is_valid_hash = data[12] == 1
 

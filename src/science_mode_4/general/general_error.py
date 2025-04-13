@@ -1,8 +1,8 @@
 """Provides classes for general Error"""
 
-from ..protocol.commands import Commands
-from ..protocol.packet import PacketAck
-from ..protocol.types import ResultAndError
+from science_mode_4.protocol.commands import Commands
+from science_mode_4.protocol.packet import PacketAck
+from science_mode_4.protocol.types import ResultAndError
 
 
 class PacketGeneralError(PacketAck):

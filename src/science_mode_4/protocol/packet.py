@@ -1,11 +1,13 @@
 """Provides base class for packets"""
 
+
 class Packet():
     """Base class for all packets"""
 
 
     def __init__(self):
         self._command = -1
+        self._kind = -1
         self._number = 0
 
 
@@ -13,6 +15,12 @@ class Packet():
     def command(self) -> int:
         """Getter for command"""
         return self._command
+
+
+    @property
+    def kind(self) -> int:
+        """Getter for kind (to differentiate between multiple packages per command)"""
+        return self._kind
 
 
     @property
@@ -32,10 +40,10 @@ class Packet():
         return []
 
 
-    def create_copy(self) -> 'Packet':
+    def create_copy(self) -> "Packet":
         """Returns a copy"""
         return type(self)()
-    
+
 
     def __repr__(self) -> str:
         return f"command {self._command} - nr {self._number}"
@@ -54,6 +62,12 @@ class PacketAck(Packet):
         super().__init__()
 
 
-    def create_copy_with_data(self, data: bytes) -> 'Packet':
+    def get_kind(self, data: bytes) -> int:
+        """Get kind from data, override in subclasses"""
+        _ = data
+        return -1
+
+
+    def create_copy_with_data(self, data: bytes) -> "PacketAck":
         """Returns a copy with data"""
         return type(self)(data)

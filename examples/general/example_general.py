@@ -5,8 +5,7 @@ import asyncio
 
 from science_mode_4 import SerialPortConnection
 from science_mode_4 import DeviceP24
-
-from example_utils import ExampleUtils
+from examples.utils.example_utils import ExampleUtils
 
 async def main() -> int:
     """Main function"""
@@ -15,7 +14,6 @@ async def main() -> int:
     com_port = ExampleUtils.get_comport_from_commandline_argument()
     # create serial port connection
     connection = SerialPortConnection(com_port)
-    # connection = NullConnection()
     # open connection, now we can read and write data
     connection.open()
 
@@ -36,6 +34,6 @@ async def main() -> int:
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     res = asyncio.run(main())
     sys.exit(res)

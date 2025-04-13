@@ -2,6 +2,7 @@
 
 from enum import IntEnum
 
+
 class LowLevelResult(IntEnum):
     """Represent low level type for result"""
     SUCCESSFUL = 0

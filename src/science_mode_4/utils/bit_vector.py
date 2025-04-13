@@ -1,10 +1,12 @@
 """Provices a simple BitVector class"""
 
+
 class BitVector():
     """Simple bitvector class"""
 
+
     @staticmethod
-    def init_from_int(value: int = 0, bit_length: int = 0) -> 'BitVector':
+    def init_from_int(value: int = 0, bit_length: int = 0) -> "BitVector":
         """Creates new BitVector instance from an integer value with bit_length"""
         result = BitVector()
         result.set_from_int(value, bit_length)
@@ -63,7 +65,7 @@ class BitVector():
             self._data = self._data[0:new_length]
 
 
-    def extend(self, value: 'BitVector'):
+    def extend(self, value: "BitVector"):
         """Extends current data with value"""
         if isinstance(value, BitVector):
             self._data += value._data
@@ -98,4 +100,4 @@ class BitVector():
 
 
     def __str__(self) -> str:
-        return '0b' + format(self._data, '_b')
+        return "0b" + format(self._data, "_b")

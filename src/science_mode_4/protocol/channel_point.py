@@ -1,6 +1,7 @@
 """Provides science mode type channel point"""
 
-from ..utils.byte_builder import ByteBuilder
+from science_mode_4.utils.byte_builder import ByteBuilder
+
 
 class ChannelPoint():
     """Class for channel point"""
