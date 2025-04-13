@@ -62,6 +62,8 @@ Python 3.11 or higher
     - Demonstrate how to use dyscom layer to measure EMG and BI and plotting values using fastplotlib
   - `example_dyscom_pyplot`
     - Demonstrate how to use dyscom layer to measure BI and plotting values using PyPlot
+  - `example_dyscom_write_csv`
+    - Demonstrate how to use dyscom layer to measure BI and EMG and writing measurement data to a .csv-file
 
 ## Dependencies for examples
 
