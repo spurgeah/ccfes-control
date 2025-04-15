@@ -1,6 +1,6 @@
 name: Publish library to TestPyPI
 
-on:
+on: workflow_dispatch
 
 jobs:
   build:
