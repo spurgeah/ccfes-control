@@ -44,17 +44,20 @@ Python 3.11 or higher
 - Located in folder `examples`
 - Run examples with `python -m examples.<layer>.<example>`
   - Example: `python -m examples.dyscom.example_dyscom_fastplotlib`
+- Examples have own dependencies, see [Dependencies for examples](#dependencies-for-examples)
 - General layer
   - `example_general.py`
     - Demonstrates how to use general layer to initialize device and get serial number and firmware version
 - Mid level layer
+  - `example_mid_level_simple`
+    - Demonstrates how to use mid level layer, where a stimulation pattern is send to the stimulator and the device automatically executes the pattern by itself for 15s
   - `example_mid_level.py`
-    - Demonstrates how to use mid level layer, where a stimulation pattern is send to the stimulator and the device automatically executes the pattern by itself until stopped
+    - Demonstrates how to use mid level layer, where a stimulation pattern is send to the stimulator and the device automatically executes the pattern by itself until user ends stimulation by keyboard
 - Low level layer
   - `example_low_level.py`
     - Demonstrates how to use low level layer, where host has to trigger stimulation manually, in this case by pressing a key 
   - `example_low_level_plot.py`
-    - Demonstrates how to use low level layer to measure current and plot it in a graph using PyPlot
+    - Demonstrates how to use low level layer to stimulate, measure current and plot it in a graph using PyPlot
 - Dyscom layer
   - `example_dyscom_get`
     - Demonstrate how to use different get commands from dyscom layer

@@ -7,27 +7,11 @@ from science_mode_4 import DeviceP24
 from science_mode_4 import MidLevelChannelConfiguration
 from science_mode_4 import ChannelPoint
 from science_mode_4 import SerialPortConnection
-from examples.utils.example_utils import ExampleUtils, KeyboardInputThread
+from examples.utils.example_utils import ExampleUtils
 
 
 async def main() -> int:
     """Main function"""
-
-    # keyboard is our trigger to start specific stimulation
-    def input_callback(input_value: str) -> bool:
-        """Callback call from keyboard input thread"""
-        # print(f"Input value {input_value}")
-
-        if input_value == "q":
-            # end keyboard input thread
-            return True
-
-        print("Invalid command")
-        return False
-
-    print("Usage: stimulation is running, press q to quit")
-    # create keyboard input thread for non blocking console input
-    keyboard_input_thread = KeyboardInputThread(input_callback)
 
     # get comport from command line argument
     com_port = ExampleUtils.get_comport_from_commandline_argument()
@@ -60,7 +44,8 @@ async def main() -> int:
     # set stimulation pattern, P24 device will now stimulate according this pattern
     await mid_level.update([cc1, cc2])
 
-    while keyboard_input_thread.is_alive():
+    # stimulate for 15s
+    for _ in range(15):
         # we have to call get_current_data() every 1.5s to keep stimulation ongoing
         update = await mid_level.get_current_data() # pylint:disable=unused-variable
         # print(update)

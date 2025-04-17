@@ -48,14 +48,10 @@ async def main() -> int:
     measurement_sample_time = 0
     measurement_samples: list[float] = []
     # get new data from connection
-    new_buffer_data = device.connection.read()
-    if len(new_buffer_data) > 0:
-        low_level_layer.packet_buffer.append_bytes_to_buffer(new_buffer_data)
-        # we added new data to buffer, so there may be new valid acknowledges
-        packet_ack = low_level_layer.packet_buffer.get_packet_from_buffer()
-        # do something with packet ack
-        if packet_ack.command == Commands.LowLevelChannelConfigAck:
-            ll_config_ack: PacketLowLevelChannelConfigAck = packet_ack
+    ack = low_level_layer.packet_buffer.get_packet_from_buffer()
+    if ack:
+        if ack.command == Commands.LowLevelChannelConfigAck:
+            ll_config_ack: PacketLowLevelChannelConfigAck = ack
             measurement_sample_time = ll_config_ack.sampling_time_in_microseconds
             measurement_samples.extend(ll_config_ack.measurement_samples)
 

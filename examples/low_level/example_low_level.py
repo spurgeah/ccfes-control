@@ -67,16 +67,12 @@ async def main() -> int:
 
     # now we can start stimulation
     while keyboard_input_thread.is_alive():
-        # get new data from connection
-        # both append_bytes_to_buffer and get_packet_from_buffer should be called regulary
-        new_buffer_data = device.connection.read()
-        if len(new_buffer_data) > 0:
-            low_level_layer.packet_buffer.append_bytes_to_buffer(new_buffer_data)
-            # we added new data to buffer, so there may be new valid acknowledges
-            packet_ack = low_level_layer.packet_buffer.get_packet_from_buffer()
+        # get new packets from connection
+        ack = low_level_layer.packet_buffer.get_packet_from_buffer()
+        if ack:
             # do something with packet ack
             # here we print that an acknowledge arrived
-            print(packet_ack)
+            print(ack)
 
         await asyncio.sleep(0.1)
 
