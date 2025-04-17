@@ -52,8 +52,7 @@ class BitVector():
 
 
     def __iter__(self):
-        for x in self._data:
-            yield x
+        yield from self._data
 
 
     def set_length(self, new_length: int):
@@ -68,7 +67,7 @@ class BitVector():
     def extend(self, value: "BitVector"):
         """Extends current data with value"""
         if isinstance(value, BitVector):
-            self._data += value._data
+            self._data += value._data # pylint: disable=protected-access
 
 
     def get_bytes(self) -> bytes:

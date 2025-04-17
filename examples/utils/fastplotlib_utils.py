@@ -94,11 +94,6 @@ class FastPlotLibHelper(PlotHelper):
         self._figure.show(maintain_aspect=False)
 
 
-    def append_value(self, channel: int, value: float) -> tuple[float, float]:
-        """This function is call in context of background thread"""
-        self._data[channel].append_value(value)
-
-
     def _animation(self, figure: fpl.Figure):
         """This function is call in context of main thread"""
         for x in self._data.values():

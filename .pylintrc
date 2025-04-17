@@ -1,2 +1,12 @@
 [MAIN]
 max-line-length=140
+max-attributes=11
+
+[DESIGN]
+max-statements=100
+
+[STRING]
+check-quote-consistency=yes
+
+[MESSAGES CONTROL]
+disable=too-few-public-methods

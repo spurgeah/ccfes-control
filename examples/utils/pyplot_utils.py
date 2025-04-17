@@ -90,10 +90,6 @@ class PyPlotHelper(PlotHelper):
         plt.show(block=False)
 
 
-    def append_value(self, channel: int, value: float) -> tuple[float, float]:
-        self._data[channel].append_value(value)
-
-
     def update(self):
         plt.pause(0.0001)
 
