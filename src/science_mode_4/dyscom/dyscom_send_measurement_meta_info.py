@@ -26,8 +26,8 @@ class PacketDyscomSendMeasurementMetaInfo(PacketAck):
         if not data is None:
             self._init_params.set_data(data[0:361])
             self._file_name = DyscomHelper.bytes_to_str(data[361:421], 60)
-            self._file_size = int.from_bytes(data[421:429], 'big')
-            self._file_number = int.from_bytes(data[429:431], 'big')
+            self._file_size = int.from_bytes(data[421:429], "big")
+            self._file_number = int.from_bytes(data[429:431], "big")
             self._proband_name = DyscomHelper.bytes_to_str(data[431:468], 37)
             self._start_time = DyscomHelper.bytes_to_datetime(data[468:479])
             self._duration = datetime.timedelta(seconds=int.from_bytes(data[479:483]))

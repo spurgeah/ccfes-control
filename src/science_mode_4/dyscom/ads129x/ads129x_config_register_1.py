@@ -53,6 +53,6 @@ class Ads129xConfigRegister1:
 
     def get_data(self) -> bytes:
         """Convert information to bytes"""
-        tmp = ((self.power_mode << 7) | (self.read_mode << 6) | 
+        tmp = ((self.power_mode << 7) | (self.read_mode << 6) |
                (self.clock_connection << 5) | (self.output_data_rate << 0))
         return [tmp]

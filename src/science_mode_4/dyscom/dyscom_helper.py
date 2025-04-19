@@ -35,7 +35,7 @@ class DyscomHelper:
         hour, dst, day, minute, month, second, _, _, year_since_1900 = \
             DyscomHelper._unpack_func(data)
 
-        # ToDo: check dst
+        # do we need to consider dst?
         result = datetime.datetime(1900 + year_since_1900, month, day, hour, minute, second)
         return result
 

@@ -1,9 +1,9 @@
-"""Provices general layer"""
+"""Provides general layer"""
 
 from science_mode_4.protocol.packet_number_generator import PacketNumberGenerator
 from science_mode_4.protocol.packet_factory import PacketFactory
 from science_mode_4.layer import Layer
-from science_mode_4.utils.connection import Connection
+from science_mode_4.utils.packet_buffer import PacketBuffer
 from .general_reset import PacketGeneralReset, PacketGeneralResetAck
 from .general_stim_status import GetStimStatusResult, PacketGeneralGetStimStatus, PacketGeneralGetStimStatusAck
 from .general_device_id import PacketGeneralGetDeviceId, PacketGeneralGetDeviceIdAck
@@ -14,8 +14,8 @@ class LayerGeneral(Layer):
     """Class for general layer"""
 
 
-    def __init__(self, conn: Connection, packet_factory: PacketFactory, packet_number_generator: PacketNumberGenerator):
-        super().__init__(conn, packet_factory, packet_number_generator)
+    def __init__(self, packet_buffer: PacketBuffer, packet_factory: PacketFactory, packet_number_generator: PacketNumberGenerator):
+        super().__init__(packet_buffer, packet_factory, packet_number_generator)
         self._device_id: str | None = None
         self._firmware_version: str | None = None
         self._science_mode_version: str | None = None

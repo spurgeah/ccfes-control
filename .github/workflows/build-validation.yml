@@ -1,0 +1,29 @@
+name: Build validation
+
+on: push
+
+jobs:
+  build:
+    name: Build distribution
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install pypa/build/pylint
+        run: >-
+          python3 -m
+          pip install
+          build
+          pyserial
+          pylint
+          --user
+      - name: Build a binary wheel and a source tarball
+        run: python3 -m build
+      - name: Run linter
+        run: pylint ./src/science_mode_4

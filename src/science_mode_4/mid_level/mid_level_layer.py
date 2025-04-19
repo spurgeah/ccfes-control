@@ -1,4 +1,4 @@
-"""Provices mid level layer"""
+"""Provides mid level layer"""
 
 from science_mode_4.layer import Layer
 from .mid_level_current_data import PacketMidLevelGetCurrentData, PacketMidLevelGetCurrentDataAck
