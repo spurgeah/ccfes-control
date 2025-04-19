@@ -2,6 +2,7 @@
 
 from enum import IntEnum
 from typing import Type
+
 from .layer import Layer
 from .protocol.types import StimStatus
 from .protocol.packet_factory import PacketFactory
@@ -12,6 +13,7 @@ from .mid_level.mid_level_layer import LayerMidLevel
 from .dyscom.dyscom_layer import LayerDyscom
 from .dyscom.dyscom_types import DyscomGetOperationModeType
 from .utils.connection import Connection
+from .utils.packet_buffer import PacketBuffer
 
 
 class DeviceCapability(IntEnum):
@@ -29,6 +31,7 @@ class Device():
     def __init__(self, conn: Connection, capabilities: set[DeviceCapability]):
         self._connection  = conn
         self._packet_factory = PacketFactory()
+        self._packet_buffer = PacketBuffer(self._connection, self._packet_factory)
         self._packet_number_generator = PacketNumberGenerator()
         self._capabilities = capabilities
         self._layer: dict[DeviceCapability, Layer] = {}
@@ -52,6 +55,12 @@ class Device():
 
 
     @property
+    def packet_buffer(self) -> PacketBuffer:
+        """Getter for packet buffer"""
+        return self._packet_buffer
+
+
+    @property
     def packet_number_generator(self) -> PacketNumberGenerator:
         """Getter for packet number generator"""
         return self._capabilities
@@ -59,7 +68,7 @@ class Device():
 
     @property
     def capabilities(self) -> set[DeviceCapability]:
-        """Getter for capabilites"""
+        """Getter for capabilities"""
         return self._capabilities
 
 
@@ -112,4 +121,4 @@ class Device():
     def _add_layer(self, capability: DeviceCapability, used_capabilities: set[DeviceCapability], layer_class: Type[Layer]):
         """Helper method that checks if capability is in used_capabilities and if yes add a layer_class instance"""
         if capability in used_capabilities:
-            self.add_layer(capability, layer_class(self._connection, self._packet_factory, self._packet_number_generator))
+            self.add_layer(capability, layer_class(self._packet_buffer, self._packet_factory, self._packet_number_generator))

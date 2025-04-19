@@ -1,10 +1,7 @@
-"""Provices low level layer"""
+"""Provides low level layer"""
 
 from science_mode_4.protocol.channel_point import ChannelPoint
 from science_mode_4.protocol.types import Channel, Connector
-from science_mode_4.protocol.packet_number_generator import PacketNumberGenerator
-from science_mode_4.protocol.packet_factory import PacketFactory
-from science_mode_4.utils.connection import Connection
 from science_mode_4.utils.packet_buffer import PacketBuffer
 from science_mode_4.layer import Layer
 from .low_level_channel_config import PacketLowLevelChannelConfig
@@ -18,11 +15,6 @@ class LayerLowLevel(Layer):
     Class for low level layer, uses internally a PacketBuffer to keep track of responses because
     no command waits for response
     """
-
-
-    def __init__(self, conn: Connection, packet_factory: PacketFactory, packet_number_generator: PacketNumberGenerator):
-        super().__init__(conn, packet_factory, packet_number_generator)
-        self._packet_buffer = PacketBuffer(conn, packet_factory)
 
 
     @property

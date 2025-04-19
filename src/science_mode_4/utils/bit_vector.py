@@ -1,4 +1,4 @@
-"""Provices a simple BitVector class"""
+"""Provides a simple BitVector class"""
 
 
 class BitVector():

@@ -1,5 +1,62 @@
 # Introduction
-This page describes implementation hints.
+This page describes implementation details.
+
+# General information
+
+## Basic information
+- Starting point is using a _Device_ object matching attached hardware: _DeviceP24_ or _DeviceI24_
+  - If you have multiple devices, create multiple _Device_ instances
+  - With _capabilities_ it is possible to query for available layer
+- To create a _Device_ object a _Connection_ object is required, use _SerialConnection_ to connect to a serial port
+  - _Connection_ must be opened and closed
+- Call _device.initialize()_ to get a defined state of the device (it stops any active stimulation/measurement)
+- _Device_ object has layers to access commands
+  - _Layer_ object has functions to send commands to the device and process acknowledges
+  - To access layer, use helper functions _get\_layer\_xxx_
+  - _DeviceP24_ has layer general, low level and mid level
+  - _DeviceI24_ has layer general and dyscom
+  - Do not mix usage of layers because device has a single internal state, e.g. calling low level _init()_ and afterwards mid level _update()_ will not work
+
+## Device communication
+- Most functions communicating with the device are async functions, because they wait for a matching acknowledge and return values from acknowledge
+  - If no matching acknowledge or no acknowledge arrives in time, an exception is raised
+- Additionally functions with naming schema _send_xxx_ are normal functions not waiting for acknowledge
+  - The acknowledge needs to handled manually by using _PacketBuffer_ object from device
+  - _PacketBuffer_ reads data from connection and separates packets from data stream
+
+## General layer
+- Contains functions to get common information like device serial or firmware version
+
+## Mid level layer
+- Contains functions for mid level stimulation
+- This mode is good to let the device stimulate a predefined pattern until _stop()_ is send
+- Usage
+  - Call _init()_ to set device in mid level mode
+  - Call _update()_ with stimulation pattern
+  - Call _get_current_data()_ every 1.5s to keep stimulation ongoing
+  - Call _stop()_ to end stimulation and leave mid level mode
+
+## Low level layer
+- Contains functions for low level stimulation
+- This mode is good to react to a external trigger to change stimulation pattern
+- Without _send_channel_config()_ the device will not stimulate
+- Usage
+  - Call _init()_ to set device in low level mode
+  - Update configuration with _send_channel_config()_ when external trigger occurs
+    - As soon as _send_channel_config()_ arrives at device, it stimulates according stimulation pattern
+    - It stops stimulation when stimulation pattern is over
+  - Call _stop()_ to leave low level mode
+
+## Dyscom layer
+- Contains functions for dyscom level
+- This mode is used by I24 to measure EMG or BI
+- Usage
+  - Call _power_module()_ to power on measurement module
+  - Call _init()_ with parameter for measurement
+  - Call _start()_ to start measurement
+    - Device sends now _DlSendLiveData_ packets with measurement data
+  - Call _stop()_ to end measurement
+  - Call _power_module()_ to power off measurement module
 
 # Deviation from Instruction for Use
 
@@ -20,15 +77,15 @@ This page describes implementation hints.
   - 0 -> Battery (was Unused)
 
 ### DL_get_ack for type battery
-- energy state, 1 byte, is a flag, bit 1: cable connected, bit 2: device is loading
-- percentage, 1 byte, [0, 100] in percent
-- temperature, 1 byte, [-128, 127] in degrees
-- current, 4 bytes, [-327675, 327675] in milli ampere
-- voltage, 4 bytes, [0, 65535] in milli volt
+- Energy state, 1 byte, is a flag, bit 1: cable connected, bit 2: device is loading
+- Percentage, 1 byte, [0, 100] in percent
+- Temperature, 1 byte, [-128, 127] in degrees
+- Current, 4 bytes, [-327675, 327675] in milliampere
+- Voltage, 4 bytes, [0, 65535] in millivolt
 
 ### DL_send_file_ack
-- block number, 4 byte, block number of DL_send_file
+- Block number, 4 byte, block number of DL_send_file
 
 ### DL_send_live_data
-- parameters are big endian?
+- Parameters are big endian?
 - SignalType for each sample is always 0

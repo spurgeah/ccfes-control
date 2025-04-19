@@ -3,7 +3,7 @@
 import sys
 import threading
 from typing import Callable
-import keyboard
+from getch import getch
 
 from science_mode_4 import SerialPortConnection
 
@@ -19,11 +19,16 @@ class KeyboardInputThread(threading.Thread):
 
     def run(self):
         while True:
-            event = keyboard.read_event(suppress=True)
-            if event.event_type == keyboard.KEY_DOWN:
-                if self._input_cbk(event.name):
-                    # callback returned True, so end thread
-                    break
+            # getch() returns a bytes object
+            key_raw = getch()
+            key = bytes.decode(key_raw)
+            # handle ctrl+C
+            if key == "\x03":
+                raise KeyboardInterrupt
+
+            if self._input_cbk(key):
+                # callback returned True, so end thread
+                break
 
 
 class ExampleUtils():
@@ -41,7 +46,8 @@ class ExampleUtils():
                 return ports[0].device
 
             # nothing found -> exit
-            print("Serial port command line argument missing (e.g. python -m example_xxx.py COM3)")
+            print("No science mode device found")
+            print("Serial port command line argument missing (e.g. python -m examples.<layer>.<example> COM3)")
             sys.exit(1)
 
         com_port = sys.argv[1]

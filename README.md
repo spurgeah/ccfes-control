@@ -21,18 +21,22 @@ Python 3.11 or higher
 - PySerial
   - https://pypi.org/project/pyserial/
   - `pip install pyserial`
-- PyUSB
+- PyUSB - currently not used
   - https://pypi.org/project/pyusb/
   - `pip install pyusb`
   - On Windows
     - Download libusb from https://libusb.info/
-    - Copy libusb-XX.dll into venv root folder (besides python.exe)
-    - Under Windows it there are driver issues
+    - Copy libusb-XX.dll into environment root folder (besides python.exe)
+    - Under Windows there are driver issues
+    - Code is currently commented out and not usable
 
 ## Build library
-- Only necessary, if you made changes to the library
+- Only necessary, if you made changes to the library or install a version from a branch
 - Install dependencies
   - `python -m pip install --upgrade build`
+- Optional run linter
+  - `pip install pylint`
+  - `pylint .\src\science_mode_4\`
 - Build project
   - `python -m build`
 - Install local library
@@ -69,10 +73,11 @@ Python 3.11 or higher
     - Demonstrate how to use dyscom layer to measure BI and EMG and writing measurement data to a .csv-file
 
 ## Dependencies for examples
-
-- Keyboard
-  - https://pypi.org/project/keyboard/
-  - `pip install keyboard`
+- Install all dependencies
+  - `pip install -r examples/requirements.txt`
+- Py-Getch
+  - https://pypi.org/project/py-getch/
+  - `pip install py-getch`
 - NumPy
   - https://pypi.org/project/numpy/
   - `pip install numpy`

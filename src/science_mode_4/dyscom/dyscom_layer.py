@@ -1,4 +1,4 @@
-"""Provices low level layer"""
+"""Provides low level layer"""
 
 from science_mode_4.layer import Layer
 from .dyscom_types import DyscomGetOperationModeType, DyscomPowerModuleType, DyscomPowerModulePowerType, DyscomSysType

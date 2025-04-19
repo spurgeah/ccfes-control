@@ -6,7 +6,7 @@ from .connection import Connection
 
 class UsbConnection(Connection):
     """USB connection class,
-    IMPORTANT: work in progress (there driver issues under windows)"""
+    IMPORTANT: work in progress (there are driver issues under windows)"""
 
 
     # @staticmethod
