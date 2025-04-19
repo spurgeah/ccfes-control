@@ -22,7 +22,7 @@ class KeyboardInputThread(threading.Thread):
             # getch() returns a bytes object
             key_raw = getch()
             key = bytes.decode(key_raw)
-            # handle ctrl+C
+            # handle ctrl+c
             if key == "\x03":
                 raise KeyboardInterrupt
 
