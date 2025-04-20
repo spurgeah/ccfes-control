@@ -50,7 +50,7 @@ async def main() -> int:
     # get new data from connection
     ack = low_level_layer.packet_buffer.get_packet_from_buffer()
     if ack:
-        if ack.command == Commands.LowLevelChannelConfigAck:
+        if ack.command == Commands.LOW_LEVEL_CHANNEL_CONFIG_ACK:
             ll_config_ack: PacketLowLevelChannelConfigAck = ack
             measurement_sample_time = ll_config_ack.sampling_time_in_microseconds
             measurement_samples.extend(ll_config_ack.measurement_samples)

@@ -23,7 +23,7 @@ class PacketDyscomGetBatteryStatus(PacketDyscomGet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.DlGet
+        self._command = Commands.DL_GET
         self._type = DyscomGetType.BATTERY
         self._kind = int(self._type)
 
@@ -52,13 +52,13 @@ class PacketDyscomGetAckBatteryStatus(PacketDyscomGetAck):
 
     @property
     def voltage(self) -> int:
-        """Getter for voltage, [0, 65535] in milli volt"""
+        """Getter for voltage, [0, 65535] in millivolt"""
         return self._voltage
 
 
     @property
     def current(self) -> int:
-        """Getter for current, [-327675, 327675] in milli ampere"""
+        """Getter for current, [-327675, 327675] in milliampere"""
         return self._current
 
 

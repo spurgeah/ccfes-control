@@ -1,6 +1,7 @@
 """Provides low level layer"""
 
 from science_mode_4.layer import Layer
+from science_mode_4.utils.logger import logger
 from .dyscom_types import DyscomGetOperationModeType, DyscomPowerModuleType, DyscomPowerModulePowerType, DyscomSysType
 from .dyscom_init import DyscomInitResult, PacketDyscomInit, PacketDyscomInitAck, DyscomInitParams
 from .dyscom_get_file_system_status import PacketDyscomGetFileSystemStatus, PacketDyscomGetAckFileSystemStatus,\
@@ -30,6 +31,7 @@ class LayerDyscom(Layer):
         p = PacketDyscomInit(params)
         ack: PacketDyscomInitAck = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomInit")
+        logger().info("Dyscom init, state: %s, frequency: %s", ack.init_state.name, ack.frequency_out.name)
         return DyscomInitResult(ack.register_map_ads129x, ack.init_state, ack.frequency_out)
 
 
@@ -38,6 +40,8 @@ class LayerDyscom(Layer):
         p = PacketDyscomGetFileSystemStatus()
         ack: PacketDyscomGetAckFileSystemStatus = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomGetFileSystemStatus")
+        logger().info("Dyscom get file system status, ready: %s, used size: %d, free size: %s",\
+                      ack.file_system_ready, ack.used_size, ack.free_size)
         return DyscomGetFileSystemStatusResult(ack.file_system_ready, ack.used_size, ack.free_size)
 
 
@@ -46,6 +50,7 @@ class LayerDyscom(Layer):
         p = PacketDyscomGetListOfMeasurementMetaInfo()
         ack: PacketDyscomGetAckListOfMeasurementMetaInfo = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomGetListOfMeasurementMetaInfo")
+        logger().info("Dyscom get list of mmi, number of measurements: %d", ack.number_of_measurements)
         return ack.number_of_measurements
 
 
@@ -55,6 +60,8 @@ class LayerDyscom(Layer):
         p = PacketDyscomGetFileByName()
         ack: PacketDyscomGetAckFileByName = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomGetFileByName")
+        logger().info("Dyscom get file by name, filename: %s, block offset: %d, filesize: %d, number of blocks: %d, mode: %s",\
+                      ack.filename, ack.block_offset, ack.filesize, ack.number_of_blocks, ack.mode.name)
         return DyscomGetFileByNameResult(ack.filename, ack.block_offset, ack.filesize, ack.number_of_blocks, ack.mode)
 
 
@@ -63,6 +70,7 @@ class LayerDyscom(Layer):
         p = PacketDyscomGetDeviceId()
         ack: PacketDyscomGetAckDeviceId = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomGetDeviceId")
+        logger().info("Dyscom get device id: %s", ack.device_id)
         return ack.device_id
 
 
@@ -71,6 +79,7 @@ class LayerDyscom(Layer):
         p = PacketDyscomGetFirmwareVersion()
         ack: PacketDyscomGetAckFirmwareVersion = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomGetFirmwareVersion")
+        logger().info("Dyscom get firmware version: %s", ack.firmware_version)
         return ack.firmware_version
 
 
@@ -79,6 +88,8 @@ class LayerDyscom(Layer):
         p = PacketDyscomGetFileInfo()
         ack: PacketDyscomGetAckFileInfo = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomGetFileInfo")
+        logger().info("Dyscom get file info, filename: %s, filesize: %d, checksum: %d",\
+                      ack.filename, ack.filesize, ack.checksum)
         return DyscomGetFileInfoResult(ack.filename, ack.filesize, ack.checksum)
 
 
@@ -87,6 +98,8 @@ class LayerDyscom(Layer):
         p = PacketDyscomGetBatteryStatus()
         ack: PacketDyscomGetAckBatteryStatus = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomGetBatteryStatus")
+        logger().info("Dyscom get battery, voltage: %d, current: %d, percentage: %d, temperature: %d, energy state: %s",\
+                      ack.voltage, ack.current, ack.percentage, ack.temperature, ack.energy_state)
         return DyscomGetBatteryResult(ack.voltage, ack.current, ack.percentage, ack.temperature, ack.energy_state)
 
 
@@ -95,12 +108,14 @@ class LayerDyscom(Layer):
         p = PacketDyscomGetOperationMode()
         ack: PacketDyscomGetAckOperationMode = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomGetFirmwareVersion")
+        logger().info("Dyscom get operation mode: %s", ack.operation_mode.name)
         return ack.operation_mode
 
 
     def send_get_operation_mode(self):
         """Sends get dyscom get type operation mode and returns immediately without waiting for response"""
         p = PacketDyscomGetOperationMode()
+        logger().info("Dyscom send get operation mode")
         self._send_packet(p)
 
 
@@ -109,6 +124,7 @@ class LayerDyscom(Layer):
         p = PacketDyscomPowerModule(module, power)
         ack: PacketDyscomPowerModuleAck = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomStart")
+        logger().info("Dyscom power module, module: %s, power: %s", ack.module.name, ack.power.name)
         return DyscomPowerModuleResult(ack.module, ack.power)
 
 
@@ -117,6 +133,7 @@ class LayerDyscom(Layer):
         p = PacketDyscomSys(sys_type, filename)
         ack: PacketDyscomSysAck = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomSys")
+        logger().info("Dyscom sys, type: %s, state: %s, filename: %s", ack.sys_type.name, ack.state.name, ack.filename)
         return DyscomSysResult(ack.sys_type, ack.state, ack.filename)
 
 
@@ -131,6 +148,7 @@ class LayerDyscom(Layer):
         p = PacketDyscomStart()
         ack: PacketDyscomStartAck = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomStart")
+        logger().info("Dyscom start")
 
 
     async def stop(self):
@@ -138,3 +156,4 @@ class LayerDyscom(Layer):
         p = PacketDyscomStop()
         ack: PacketDyscomStopAck = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomStop")
+        logger().info("Dyscom stop")

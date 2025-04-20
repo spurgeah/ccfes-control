@@ -24,7 +24,7 @@ class DyscomFrequencyOut(IntEnum):
 class DyscomInitState(IntEnum):
     """Represent dyscom type for init state"""
     UNUSED = 0
-    SUCESS = 1
+    SUCCESS = 1
     ERROR_STORAGE_INIT = 2
     ERROR_STORAGE_WRITE = 3
     ERROR_STORAGE_FULL = 4
@@ -121,8 +121,8 @@ class DyscomFileByNameMode(IntEnum):
 class DyscomEnergyFlag(IntEnum):
     """Represents dyscom energy flag type"""
     UNDEFINED = 0
-    MULTIBLOCK = 1
-    SINGLEBLOCK = 2
+    CABLE_CONNECTED = 1
+    DEVICE_IS_LOADING = 2
 
 
 class DyscomSysType(IntEnum):

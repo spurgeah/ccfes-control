@@ -10,7 +10,7 @@ class PacketGeneralGetDeviceId(Packet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.GetDeviceId
+        self._command = Commands.GET_DEVICE_ID
 
 
 class PacketGeneralGetDeviceIdAck(PacketAck):
@@ -19,7 +19,7 @@ class PacketGeneralGetDeviceIdAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.GetDeviceIdAck
+        self._command = Commands.GET_DEVICE_ID_ACK
         self._result_error = ResultAndError.NO_ERROR
         self._device_id = ""
 

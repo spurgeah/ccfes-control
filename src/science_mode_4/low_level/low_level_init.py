@@ -13,7 +13,7 @@ class PacketLowLevelInit(Packet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.LowLevelInit
+        self._command = Commands.LOW_LEVEL_INIT
         self._mode = LowLevelMode.NO_MEASUREMENT
         self._high_voltage_source = LowLevelHighVoltageSource.STANDARD
 
@@ -57,7 +57,7 @@ class PacketLowLevelInitAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.LowLevelInitAck
+        self._command = Commands.LOW_LEVEL_INIT_ACK
         self._result_error = ResultAndError.NO_ERROR
 
         if not data is None:

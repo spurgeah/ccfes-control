@@ -1,5 +1,6 @@
-"""Provides a paket factory class"""
+"""Provides a packet factory class"""
 
+from science_mode_4.utils.logger import logger
 from .packet import Packet, PacketAck
 
 
@@ -12,23 +13,7 @@ class PacketFactory():
         # keys for dict: command, kind, packet class
         self.data: dict[int, int, Packet] = {}
         # register all subclasses of Packet (exclude Packet and PacketAck, because these are base classes)
-        self.handle_class(Packet)
-
-
-    def handle_class(self, cls: type[Packet]):
-        """Register all subclasses from cls"""
-        for x in cls.__subclasses__():
-            # print(f"Handle type {x.__name__}")
-
-            # ignore PacketAck
-            if x is not PacketAck:
-                if issubclass(x, PacketAck):
-                    self.register_packet(x(None))
-                else:
-                    self.register_packet(x())
-
-            # handle subclasses of this class
-            self.handle_class(x)
+        self._handle_class(Packet)
 
 
     def register_packet(self, packet: Packet):
@@ -54,4 +39,21 @@ class PacketFactory():
             proto = self.data[command, kind]
             copy = proto.create_copy_with_data(data)
         copy.number = number
+        logger().debug("Read package, %s", copy)
         return copy
+
+
+    def _handle_class(self, cls: type[Packet]):
+        """Register all subclasses from cls"""
+        for x in cls.__subclasses__():
+            logger().debug("Register packet: %s", x.__name__)
+
+            # ignore PacketAck
+            if x is not PacketAck:
+                if issubclass(x, PacketAck):
+                    self.register_packet(x(None))
+                else:
+                    self.register_packet(x())
+
+            # handle subclasses of this class
+            self._handle_class(x)

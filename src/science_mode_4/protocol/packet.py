@@ -1,18 +1,21 @@
 """Provides base class for packets"""
 
 
+from .commands import Commands
+
+
 class Packet():
     """Base class for all packets"""
 
 
     def __init__(self):
-        self._command = -1
+        self._command = Commands.UNDEFINED
         self._kind = -1
         self._number = 0
 
 
     @property
-    def command(self) -> int:
+    def command(self) -> Commands:
         """Getter for command"""
         return self._command
 
@@ -46,11 +49,11 @@ class Packet():
 
 
     def __repr__(self) -> str:
-        return f"command {self._command} - nr {self._number}"
+        return f"command: {self._command.name}, nr {self._number}"
 
 
     def __str__(self) -> str:
-        return f"command {self._command} - nr {self._number}"
+        return f"command: {self._command.name}, nr {self._number}"
 
 
 class PacketAck(Packet):

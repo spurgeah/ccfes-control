@@ -17,7 +17,7 @@ class PacketDyscomSendFile(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.DlSendFile
+        self._command = Commands.DL_SEND_FILE
         self._block_number = 0
         self._block_size = 0
         self._data: bytes = bytes()
@@ -52,7 +52,7 @@ class PacketDyscomSendFileAck(Packet):
 
     def __init__(self, block_number: int = 0):
         super().__init__()
-        self._command = Commands.DlSendFileAck
+        self._command = Commands.DL_SEND_FILE_ACK
         self._block_number = block_number
 
 

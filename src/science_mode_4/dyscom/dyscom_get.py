@@ -13,7 +13,7 @@ class PacketDyscomGet(Packet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.DlGet
+        self._command = Commands.DL_GET
         self._type = DyscomGetType.BATTERY
 
 
@@ -29,7 +29,7 @@ class PacketDyscomGetAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.DlGetAck
+        self._command = Commands.DL_GET_ACK
         self._result_error = ResultAndError.NO_ERROR
         self._type = DyscomGetType.BATTERY
 

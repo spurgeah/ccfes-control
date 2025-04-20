@@ -3,6 +3,7 @@
 from science_mode_4.protocol.packet_number_generator import PacketNumberGenerator
 from science_mode_4.protocol.packet_factory import PacketFactory
 from science_mode_4.layer import Layer
+from science_mode_4.utils import logger
 from science_mode_4.utils.packet_buffer import PacketBuffer
 from .general_reset import PacketGeneralReset, PacketGeneralResetAck
 from .general_stim_status import GetStimStatusResult, PacketGeneralGetStimStatus, PacketGeneralGetStimStatusAck
@@ -40,7 +41,7 @@ class LayerGeneral(Layer):
 
 
     async def initialize(self):
-        """Calls initialze commands"""
+        """Calls initialize commands"""
         await self.get_device_id()
         await self.get_version()
 
@@ -51,11 +52,13 @@ class LayerGeneral(Layer):
         ack: PacketGeneralGetDeviceIdAck = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "GetDeviceId")
         self._device_id = ack.device_id
+        logger().info("Get device id: %s", ack.device_id)
         return self._device_id
 
 
     async def reset(self):
         """Sends reset command and waits for response"""
+        logger().info("Reset",)
         p = PacketGeneralReset()
         # maybe we get no ack because the device resets before sending ack
         ack: PacketGeneralResetAck = await self._send_packet_and_wait(p)
@@ -68,6 +71,7 @@ class LayerGeneral(Layer):
         ack: PacketGeneralGetStimStatusAck = await self._send_packet_and_wait(p)
         if not ack.successful:
             raise ValueError("Error get stim status")
+        logger().info("Get stim status: %s, active: %r", ack.stim_status.name, ack.high_voltage_on)
         return GetStimStatusResult(ack.stim_status, ack.high_voltage_on)
 
 
@@ -79,4 +83,5 @@ class LayerGeneral(Layer):
             raise ValueError("Error get extended version")
         self._firmware_version = ack.firmware_version
         self._science_mode_version = ack.science_mode_version
+        logger().info("Get version, firmware version: %s science mode version: %s", ack.firmware_version, ack.science_mode_version)
         return GetExtendedVersionResult(self._firmware_version, self._science_mode_version)

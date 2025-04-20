@@ -43,17 +43,19 @@ class ProtocolHelper:
                 ack = packet_buffer.get_packet_from_buffer()
                 if ack:
                     if (ack.command == packet.command + 1) and (ack.number == packet.number):
+                        # we got expected response in time, so remove open acknowledges
+                        packet_buffer.remove_open_acknowledge(packet)
                         return ack
 
                     # check if we got an error
-                    if ack.command == Commands.GeneralError:
+                    if ack.command == Commands.GENERAL_ERROR:
                         ge: PacketGeneralError = ack
-                        raise ValueError(f"General error packet {ge.error}")
-                    if ack.command == Commands.UnkownCommand:
+                        raise ValueError(f"General error packet {ge.result_error.name}")
+                    if ack.command == Commands.UNKNOWN_COMMAND:
                         uc: PacketGeneralUnknownCommand = ack
-                        raise ValueError(f"Unknown command packet {uc.error}")
+                        raise ValueError(f"Unknown command packet {uc.result_error.name}")
 
-                    # discard ackowledge and continue
+                    # discard acknowledge and continue
 
                 # no acknowledge arrived, sleep and check again
                 break

@@ -10,7 +10,7 @@ class PacketMidLevelStop(Packet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.MidLevelStop
+        self._command = Commands.MID_LEVEL_STOP
 
 
 class PacketMidLevelStopAck(PacketAck):
@@ -19,7 +19,7 @@ class PacketMidLevelStopAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.MidLevelStopAck
+        self._command = Commands.MID_LEVEL_STOP_ACK
         self._result_error = ResultAndError.NO_ERROR
 
         if not data is None:

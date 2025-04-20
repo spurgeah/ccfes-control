@@ -4,7 +4,7 @@ from enum import IntEnum
 
 
 class Channel(IntEnum):
-    """Representa a channel"""
+    """Represents a channel"""
     RED = 0
     BLUE = 1
     BLACK = 2
@@ -12,13 +12,13 @@ class Channel(IntEnum):
 
 
 class Connector(IntEnum):
-    """Representa a cable connector"""
+    """Represents a cable connector"""
     YELLOW = 0
     GREEN = 1
 
 
 class ResultAndError(IntEnum):
-    """Represent science mode type ResultAndError"""
+    """Represents science mode type ResultAndError"""
     NO_ERROR = 0
     TRANSFER_ERROR = 1
     PARAMETER_ERROR = 2

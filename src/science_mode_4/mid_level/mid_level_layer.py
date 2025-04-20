@@ -1,6 +1,7 @@
 """Provides mid level layer"""
 
 from science_mode_4.layer import Layer
+from science_mode_4.utils.logger import logger
 from .mid_level_current_data import PacketMidLevelGetCurrentData, PacketMidLevelGetCurrentDataAck
 from .mid_level_stop import PacketMidLevelStop, PacketMidLevelStopAck
 from .mid_level_update import PacketMidLevelUpdate, PacketMidLevelUpdateAck
@@ -18,6 +19,7 @@ class LayerMidLevel(Layer):
         p.do_stop_on_all_errors = do_stop_on_all_errors
         ack: PacketMidLevelInitAck = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "MidLevelInit")
+        logger().info("Mid level init")
 
 
     async def stop(self):
@@ -25,6 +27,7 @@ class LayerMidLevel(Layer):
         p = PacketMidLevelStop()
         ack: PacketMidLevelStopAck = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "MidLevelStop")
+        logger().info("Mid level stop")
 
 
     async def update(self, channel_configuration: list[MidLevelChannelConfiguration]):
@@ -33,6 +36,7 @@ class LayerMidLevel(Layer):
         p.channel_configuration = channel_configuration
         ack: PacketMidLevelUpdateAck = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "MidLevelUpdate")
+        logger().info("Mid level update")
 
 
     async def get_current_data(self) -> list[bool]:
@@ -42,4 +46,5 @@ class LayerMidLevel(Layer):
         self._check_result_error(ack.result_error, "MidLevelGetCurrentData")
         if True in ack.channel_error:
             raise ValueError(f"Error mid level get current data channel error {ack.channel_error}")
+        logger().info("Mid level get current data, active channels: %s", ack.is_stimulation_active_per_channel)
         return ack.is_stimulation_active_per_channel

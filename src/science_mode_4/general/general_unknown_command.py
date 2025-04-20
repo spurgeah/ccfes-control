@@ -11,7 +11,7 @@ class PacketGeneralUnknownCommand(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.UnkownCommand
+        self._command = Commands.UNKNOWN_COMMAND
         self._result_error = ResultAndError.NO_ERROR
 
         if not data is None:

@@ -2,7 +2,7 @@
 
 from science_mode_4.protocol.channel_point import ChannelPoint
 from science_mode_4.protocol.types import Channel, Connector
-from science_mode_4.utils.packet_buffer import PacketBuffer
+from science_mode_4.utils.logger import logger
 from science_mode_4.layer import Layer
 from .low_level_channel_config import PacketLowLevelChannelConfig
 from .low_level_init import PacketLowLevelInit, PacketLowLevelInitAck
@@ -17,12 +17,6 @@ class LayerLowLevel(Layer):
     """
 
 
-    @property
-    def packet_buffer(self) -> PacketBuffer:
-        """Getter for packet buffer"""
-        return self._packet_buffer
-
-
     async def init(self, mode: LowLevelMode, high_voltage_source: LowLevelHighVoltageSource):
         """Send low level init command and waits for response"""
         p = PacketLowLevelInit()
@@ -30,6 +24,7 @@ class LayerLowLevel(Layer):
         p.high_voltage_source = high_voltage_source
         ack: PacketLowLevelInitAck = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "LowLevelInit")
+        logger().info("Low level init")
 
 
     async def stop(self):
@@ -37,6 +32,7 @@ class LayerLowLevel(Layer):
         p = PacketLowLevelStop()
         ack: PacketLowLevelStopAck = await self._send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "LowLevelStop")
+        logger().info("Low level stop")
 
 
     def send_init(self, mode: LowLevelMode, high_voltage_source: LowLevelHighVoltageSource):
@@ -46,6 +42,7 @@ class LayerLowLevel(Layer):
         p.high_voltage_source = high_voltage_source
         self._send_packet(p)
         self._packet_buffer.add_open_acknowledge(p)
+        logger().info("Low level send init")
 
 
     def send_channel_config(self, execute_stimulation: bool, channel: Channel,
@@ -58,6 +55,7 @@ class LayerLowLevel(Layer):
         p.points = points
         self._send_packet(p)
         self._packet_buffer.add_open_acknowledge(p)
+        logger().info("Low level send channel config")
 
 
     def send_stop(self):
@@ -65,3 +63,4 @@ class LayerLowLevel(Layer):
         p = PacketLowLevelStop()
         self._send_packet(p)
         self._packet_buffer.add_open_acknowledge(p)
+        logger().info("Low level send stop")

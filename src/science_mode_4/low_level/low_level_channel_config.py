@@ -14,7 +14,7 @@ class PacketLowLevelChannelConfig(Packet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.LowLevelChannelConfig
+        self._command = Commands.LOW_LEVEL_CHANNEL_CONFIG
         self._execute_stimulation = False
         self._channel: Channel = Channel.RED
         self._connector: Connector = Connector.YELLOW
@@ -89,7 +89,7 @@ class PacketLowLevelChannelConfigAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.LowLevelChannelConfigAck
+        self._command = Commands.LOW_LEVEL_CHANNEL_CONFIG_ACK
         self._result = LowLevelResult.SUCCESSFUL
         self._connector = 0
         self._channel = 0

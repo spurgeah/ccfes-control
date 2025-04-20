@@ -15,3 +15,4 @@ from .device_p24 import *
 from .device_i24 import *
 
 __version__ = version("science_mode_4")
+logger().info("Library version %s", __version__)

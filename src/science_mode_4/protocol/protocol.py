@@ -2,6 +2,7 @@
 
 from science_mode_4.utils.byte_builder import ByteBuilder
 from science_mode_4.utils.crc16 import Crc16
+from science_mode_4.utils import logger
 from .packet import Packet
 
 
@@ -22,7 +23,7 @@ class Protocol:
         # command and packet number
         bb.set_bit_to_position(packet.command, 0, 10)
         bb.set_bit_to_position(packet.number, 10, 6)
-        # swap command and packet number to ensure little endianess
+        # swap command and packet number to ensure little endianness
         bb.swap(0, 2)
         # append packet data
         bb.append_bytes(packet.get_data())
@@ -46,7 +47,8 @@ class Protocol:
         # stop byte
         bb.append_byte(Protocol.STOP_BYTE)
 
-        # print(f"Outgoing {bb}")
+        logger().debug("Build package, %s", packet)
+        logger().debug("Outgoing data, %s", bb)
         result = bb.get_bytes()
         return bytes(result)
 
