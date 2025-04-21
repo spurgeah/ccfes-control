@@ -74,8 +74,8 @@ This page describes implementation details.
 - Datetime parameters have a different order
 
 ### DL_init
-- Output data rate seems always be SAMPLES_PER_SECOND_4K, even if set to a different frequency
-  - Property time_offset from PacketDyscomSendLiveData seems to be correct, so only return value from init is wrong
+- Init state seems always be UNUSED
+- Output data rate depends on init params filter property
 
 ### DL_get_ack for type file by name
 - Additional parameter mode (1 byte)

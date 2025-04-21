@@ -18,7 +18,7 @@ class PacketFactory():
 
     def register_packet(self, packet: Packet):
         """Register a packet"""
-        # print(f"Register type {packet.__class__.__name__} command {packet.command} kind {packet.kind}")
+        logger().debug("Register packet: %s", packet.__class__.__name__)
         self.data[packet.command, packet.kind] = packet
 
 
@@ -46,8 +46,6 @@ class PacketFactory():
     def _handle_class(self, cls: type[Packet]):
         """Register all subclasses from cls"""
         for x in cls.__subclasses__():
-            logger().debug("Register packet: %s", x.__name__)
-
             # ignore PacketAck
             if x is not PacketAck:
                 if issubclass(x, PacketAck):

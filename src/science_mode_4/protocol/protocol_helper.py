@@ -20,7 +20,6 @@ class ProtocolHelper:
         packet.number = packet_number
         packet_buffer.add_open_acknowledge(packet)
 
-        # print(f"O {packet}")
         packet_buffer.connection.write(Protocol.packet_to_bytes(packet))
 
 
@@ -43,8 +42,6 @@ class ProtocolHelper:
                 ack = packet_buffer.get_packet_from_buffer()
                 if ack:
                     if (ack.command == packet.command + 1) and (ack.number == packet.number):
-                        # we got expected response in time, so remove open acknowledges
-                        packet_buffer.remove_open_acknowledge(packet)
                         return ack
 
                     # check if we got an error
