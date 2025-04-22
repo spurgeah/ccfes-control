@@ -5,7 +5,6 @@ import serial.tools.list_ports
 import serial.tools.list_ports_common
 
 from .connection import Connection
-from .logger import logger
 
 
 class SerialPortConnection(Connection):
@@ -59,5 +58,5 @@ class SerialPortConnection(Connection):
         result = []
         if self._ser.in_waiting > 0:
             result = self._ser.read_all()
-            
+
         return bytes(result)
