@@ -74,7 +74,7 @@ class Device():
 
     async def initialize(self):
         """Initialize device to get basic information (serial, versions) and stop any active stimulation/measurement"""
-        if [DeviceCapability.LOW_LEVEL, DeviceCapability.MID_LEVEL] in self._capabilities:
+        if {DeviceCapability.LOW_LEVEL, DeviceCapability.MID_LEVEL}.issubset(self._capabilities):
             # get stim status to see if low/mid level is initialized or running
             stim_status = await self.get_layer_general().get_stim_status()
             if stim_status.stim_status == StimStatus.LOW_LEVEL_INITIALIZED:

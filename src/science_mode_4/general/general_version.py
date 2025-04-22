@@ -17,7 +17,7 @@ class PacketGeneralGetExtendedVersion(Packet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.GetExtendedVersion
+        self._command = Commands.GET_EXTENDED_VERSION
 
 
 class PacketGeneralGetExtendedVersionAck(PacketAck):
@@ -26,7 +26,7 @@ class PacketGeneralGetExtendedVersionAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.GetExtendedVersionAck
+        self._command = Commands.GET_EXTENDED_VERSION_ACK
         self._successful = False
         self._firmware_version = ""
         self._science_mode_version = ""

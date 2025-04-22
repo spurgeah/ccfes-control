@@ -1,50 +1,55 @@
 """Provides all science mode command numbers"""
 
 
-class Commands:
-    """Class with all commands"""
+from enum import IntEnum
 
-    GetDeviceId: int = 52
-    GetDeviceIdAck: int = 53
-    Reset: int = 58
-    ResetAck: int = 59
-    GetStimStatus: int = 62
-    GetStimStatusAck: int = 63
-    GetExtendedVersion: int = 68
-    GetExtendedVersionAck: int = 69
-    GeneralError: int = 66
-    UnkownCommand: int = 67
 
-    LowLevelInit: int = 0
-    LowLevelInitAck: int = 1
-    LowLevelChannelConfig: int = 2
-    LowLevelChannelConfigAck: int = 3
-    LowLevelStop: int = 4
-    LowLevelStopAck: int = 5
+class Commands(IntEnum):
+    """Enum with all commands"""
 
-    MidLevelInit: int = 30
-    MidLevelInitAck: int = 31
-    MidLevelUpdate: int = 32
-    MidLevelUpdateAck: int = 33
-    MidLevelStop: int = 34
-    MidLevelStopAck: int = 35
-    MidLevelGetCurrentData: int = 36
-    MidLevelGetCurrentDataAck: int = 37
+    UNDEFINED = -1
 
-    DlInit: int = 100
-    DlInitAck: int = 101
-    DlStart: int = 102
-    DlStartAck: int = 103
-    DlStop: int = 104
-    DlStopAck: int = 105
-    DlGet: int = 109
-    DlGetAck: int = 110
-    DlPowerModule: int = 111
-    DlPowerModuleAck: int = 112
-    DlSys: int = 114
-    DlSysAck: int = 115
+    GET_DEVICE_ID = 52
+    GET_DEVICE_ID_ACK = 53
+    RESET = 58
+    RESET_ACK = 59
+    GET_STIM_STATUS = 62
+    GET_STIM_STATUS_ACK = 63
+    GET_EXTENDED_VERSION = 68
+    GET_EXTENDED_VERSION_ACK = 69
+    GENERAL_ERROR = 66
+    UNKNOWN_COMMAND = 67
 
-    DlSendLiveData: int = 106
-    DlSendFile: int = 107
-    DlSendFileAck: int = 113
-    DlMmi: int = 108
+    LOW_LEVEL_INIT = 0
+    LOW_LEVEL_INIT_ACK = 1
+    LOW_LEVEL_CHANNEL_CONFIG = 2
+    LOW_LEVEL_CHANNEL_CONFIG_ACK = 3
+    LOW_LEVEL_STOP = 4
+    LOW_LEVEL_STOP_ACK = 5
+
+    MID_LEVEL_INIT = 30
+    MID_LEVEL_INIT_ACK = 31
+    MID_LEVEL_UPDATE = 32
+    MID_LEVEL_UPDATE_ACK = 33
+    MID_LEVEL_STOP = 34
+    MID_LEVEL_STOP_ACK = 35
+    MID_LEVEL_GET_CURRENT_DATA = 36
+    MID_LEVEL_GET_CURRENT_DATA_ACK = 37
+
+    DL_INIT = 100
+    DL_INIT_ACK = 101
+    DL_START = 102
+    DL_START_ACK = 103
+    DL_STOP = 104
+    DL_STOP_ACK = 105
+    DL_GET = 109
+    DL_GET_ACK = 110
+    DL_POWER_MODULE = 111
+    DL_POWER_MODULE_ACK = 112
+    DL_SYS = 114
+    DL_SYS_ACK = 115
+
+    DL_SEND_LIVE_DATA = 106
+    DL_SEND_FILE = 107
+    DL_SEND_FILE_ACK = 113
+    DL_MMI = 108

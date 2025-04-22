@@ -20,7 +20,7 @@ class PacketDyscomPowerModule(Packet):
 
     def __init__(self, module: DyscomPowerModuleType = DyscomPowerModuleType.MEASUREMENT, power = DyscomPowerModulePowerType.SWITCH_OFF):
         super().__init__()
-        self._command = Commands.DlPowerModule
+        self._command = Commands.DL_POWER_MODULE
         self._module = module
         self._power = power
 
@@ -38,7 +38,7 @@ class PacketDyscomPowerModuleAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.DlPowerModuleAck
+        self._command = Commands.DL_POWER_MODULE_ACK
         self._result_error = ResultAndError.NO_ERROR
         self._module = DyscomPowerModuleType.MEASUREMENT
         self._power = DyscomPowerModulePowerType.SWITCH_OFF

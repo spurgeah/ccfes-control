@@ -48,6 +48,8 @@ Python 3.11 or higher
 - Located in folder `examples`
 - Run examples with `python -m examples.<layer>.<example>`
   - Example: `python -m examples.dyscom.example_dyscom_fastplotlib`
+  - All examples try to find the serial port that a science mode device is connected to automatically
+  - If that fails, provide serial port name as parameter, e.g. `python -m examples.<layer>.<example> COM3`
 - Examples have own dependencies, see [Dependencies for examples](#dependencies-for-examples)
 - General layer
   - `example_general.py`

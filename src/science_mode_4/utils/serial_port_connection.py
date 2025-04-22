@@ -3,7 +3,10 @@
 import serial
 import serial.tools.list_ports
 import serial.tools.list_ports_common
+
 from .connection import Connection
+from .logger import logger
+
 
 class SerialPortConnection(Connection):
     """Serial connection class"""
@@ -51,7 +54,7 @@ class SerialPortConnection(Connection):
         result = []
         if self._ser.in_waiting > 0:
             result = self._ser.read_all()
-            # print(f"Incoming {len(result)} - {result.hex(" ").upper()}")
+            logger().debug("Incoming data, length: %d, bytes: %s", len(result), result.hex(" ").upper())
         return bytes(result)
 
 

@@ -13,7 +13,7 @@ class PacketMidLevelUpdate(Packet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.MidLevelUpdate
+        self._command = Commands.MID_LEVEL_UPDATE
         self._channel_configuration: list[MidLevelChannelConfiguration] = [None] * 8
 
 
@@ -49,7 +49,7 @@ class PacketMidLevelUpdateAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.MidLevelUpdateAck
+        self._command = Commands.MID_LEVEL_UPDATE_ACK
         self._result_error = ResultAndError.NO_ERROR
 
         if not data is None:

@@ -17,7 +17,7 @@ class PacketGeneralGetStimStatus(Packet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.GetStimStatus
+        self._command = Commands.GET_STIM_STATUS
 
 
 class PacketGeneralGetStimStatusAck(PacketAck):
@@ -26,7 +26,7 @@ class PacketGeneralGetStimStatusAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.GetStimStatusAck
+        self._command = Commands.GET_STIM_STATUS_ACK
         self._successful: bool = False
         self._stim_status = StimStatus.NO_LEVEL_INITIALIZED
         self._high_voltage_on: bool = False

@@ -11,7 +11,7 @@ class PacketDyscomStart(Packet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.DlStart
+        self._command = Commands.DL_START
 
 
 class PacketDyscomStartAck(PacketAck):
@@ -20,7 +20,7 @@ class PacketDyscomStartAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.DlStartAck
+        self._command = Commands.DL_START_ACK
         self._result_error = ResultAndError.NO_ERROR
 
         if not data is None:

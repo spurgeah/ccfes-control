@@ -24,6 +24,12 @@ This page describes implementation details.
   - The acknowledge needs to handled manually by using _PacketBuffer_ object from device
   - _PacketBuffer_ reads data from connection and separates packets from data stream
 
+## Logging
+- Library creates a custom logger, see class _Logger_
+- By default some information is logged to console
+- Set log level to DEBUG to get more detailed information
+- For more performance, disable logger
+
 ## General layer
 - Contains functions to get common information like device serial or firmware version
 
@@ -57,6 +63,7 @@ This page describes implementation details.
     - Device sends now _DlSendLiveData_ packets with measurement data
   - Call _stop()_ to end measurement
   - Call _power_module()_ to power off measurement module
+- Important: all storage related functions are untested
 
 # Deviation from Instruction for Use
 
@@ -66,8 +73,12 @@ This page describes implementation details.
 - Strings are 1 byte less long (null termination is not an extra byte) in acknowledge packets
 - Datetime parameters have a different order
 
+### DL_init
+- Init state seems always be UNUSED
+- Output data rate depends on init params filter property
+
 ### DL_get_ack for type file by name
-- Addition parameter mode (1 byte)
+- Additional parameter mode (1 byte)
   - Undefined = 0
   - Multiblock = 1
   - Singleblock = 2

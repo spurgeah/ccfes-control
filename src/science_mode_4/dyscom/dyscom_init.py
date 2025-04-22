@@ -21,7 +21,7 @@ class PacketDyscomInit(Packet):
 
     def __init__(self, params: DyscomInitParams = DyscomInitParams()):
         super().__init__()
-        self._command = Commands.DlInit
+        self._command = Commands.DL_INIT
         self._params = params
 
 
@@ -47,11 +47,11 @@ class PacketDyscomInitAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.DlInitAck
+        self._command = Commands.DL_INIT_ACK
         self._result_error = ResultAndError.NO_ERROR
         self._register_map_ads129x: Ads129x
         self._measurement_file_id: str
-        self._init_state = DyscomInitState.SUCESS
+        self._init_state = DyscomInitState.SUCCESS
         self._frequency_out = DyscomFrequencyOut.SAMPLES_PER_SECOND_4K
 
         if not data is None:

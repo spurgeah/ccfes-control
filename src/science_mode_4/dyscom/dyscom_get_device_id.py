@@ -12,7 +12,7 @@ class PacketDyscomGetDeviceId(PacketDyscomGet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.DlGet
+        self._command = Commands.DL_GET
         self._type = DyscomGetType.DEVICE_ID
         self._kind = int(self._type)
 

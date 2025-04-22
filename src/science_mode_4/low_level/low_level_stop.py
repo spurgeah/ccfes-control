@@ -11,7 +11,7 @@ class PacketLowLevelStop(Packet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.LowLevelStop
+        self._command = Commands.LOW_LEVEL_STOP
 
 
 class PacketLowLevelStopAck(PacketAck):
@@ -20,7 +20,7 @@ class PacketLowLevelStopAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.LowLevelStopAck
+        self._command = Commands.LOW_LEVEL_STOP_ACK
         self._result_error = ResultAndError.NO_ERROR
 
         if not data is None:

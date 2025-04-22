@@ -20,7 +20,6 @@ class ProtocolHelper:
         packet.number = packet_number
         packet_buffer.add_open_acknowledge(packet)
 
-        # print(f"O {packet}")
         packet_buffer.connection.write(Protocol.packet_to_bytes(packet))
 
 
@@ -46,14 +45,14 @@ class ProtocolHelper:
                         return ack
 
                     # check if we got an error
-                    if ack.command == Commands.GeneralError:
+                    if ack.command == Commands.GENERAL_ERROR:
                         ge: PacketGeneralError = ack
-                        raise ValueError(f"General error packet {ge.error}")
-                    if ack.command == Commands.UnkownCommand:
+                        raise ValueError(f"General error packet {ge.result_error.name}")
+                    if ack.command == Commands.UNKNOWN_COMMAND:
                         uc: PacketGeneralUnknownCommand = ack
-                        raise ValueError(f"Unknown command packet {uc.error}")
+                        raise ValueError(f"Unknown command packet {uc.result_error.name}")
 
-                    # discard ackowledge and continue
+                    # discard acknowledge and continue
 
                 # no acknowledge arrived, sleep and check again
                 break

@@ -13,7 +13,7 @@ class PacketDyscomSendLiveData(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.DlSendLiveData
+        self._command = Commands.DL_SEND_LIVE_DATA
         self._number_of_channels = 0
         self._time_offset = 0
         self._samples: list[DyscomElectrodeSample] = []

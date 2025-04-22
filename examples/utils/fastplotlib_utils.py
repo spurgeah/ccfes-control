@@ -19,7 +19,7 @@ class FastPlotLibValueChannel(PlotValueChannel):
         self._sub_plot = sub_plot
 
         # we use an array with zero as start data
-        y_data = np.array([0] * max_value_count)
+        y_data = np.array([0.0] * max_value_count, dtype=np.float32)
         self._line = sub_plot.add_line(y_data, name="values", colors=color)
 
         # this queue is used to synchronize data between background and main thread
@@ -88,7 +88,7 @@ class FastPlotLibHelper(PlotHelper):
 
             sub_plot_counter += 1
 
-        # set animation function that is called regulary to update plots
+        # set animation function that is called regularly to update plots
         self._figure.add_animations(self._animation)
         # show figure
         self._figure.show(maintain_aspect=False)

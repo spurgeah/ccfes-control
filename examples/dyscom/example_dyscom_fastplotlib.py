@@ -79,13 +79,13 @@ def main():
                 if ack:
                     # because there are multiple get commands, we need to additionally check kind,
                     # which is always associated DyscomGetType
-                    if ack.command == Commands.DlGetAck and ack.kind == DyscomGetType.OPERATION_MODE:
+                    if ack.command == Commands.DL_GET_ACK and ack.kind == DyscomGetType.OPERATION_MODE:
                         om_ack: PacketDyscomGetAckOperationMode = ack
-                        print(f"Operation mode {om_ack.operation_mode}")
+                        print(f"Operation mode {om_ack.operation_mode.name}")
                         # check if measurement is still active
                         if om_ack.result_error != ResultAndError.NO_ERROR:
                             break
-                    elif ack.command == Commands.DlSendLiveData:
+                    elif ack.command == Commands.DL_SEND_LIVE_DATA:
                         live_data_counter += 1
 
                         sld: PacketDyscomSendLiveData = ack
@@ -110,9 +110,6 @@ def main():
                     break
 
             await asyncio.sleep(0.01)
-
-        # wait until all acknowledges are received
-        await asyncio.sleep(0.5)
 
         # stop measurement
         await dyscom.stop()

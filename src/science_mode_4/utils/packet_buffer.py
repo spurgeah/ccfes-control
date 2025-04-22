@@ -4,6 +4,7 @@ from science_mode_4.protocol.packet import Packet
 from science_mode_4.protocol.packet_factory import PacketFactory
 from science_mode_4.protocol.protocol import Protocol
 from science_mode_4.protocol.commands import Commands
+from science_mode_4.utils.logger import logger
 from .connection import Connection
 
 
@@ -12,6 +13,7 @@ class PacketBuffer():
 
     def __init__(self, conn: Connection, packet_factory: PacketFactory):
         self._buffer: bytes = b""
+        # dict with command and packet number as key and open count as value
         self._open_acknowledges: dict[tuple[int, int], int] = {}
         self._connection = conn
         self._packet_factory = packet_factory
@@ -54,8 +56,10 @@ class PacketBuffer():
 
     def print_open_acknowledge(self):
         """Print open acknowledges"""
+        logger().info("Open acknowledges")
         for key, value in self._open_acknowledges.items():
-            print(f"{key} {value}")
+            if value != 0:
+                logger().info("Command: %s, number: %d, value: %d", Commands(key[0]).name, key[1], value)
 
 
     def get_packet_from_buffer(self, do_update_buffer = True) -> Packet | None:
@@ -75,8 +79,8 @@ class PacketBuffer():
         key = ack_data[0], ack_data[1]
         wait_ack = self._open_acknowledges.get(key)
         if wait_ack is None:
-            if ack_data[0] not in [Commands.DlSendLiveData]:
-                print(f"Unexpected acknowledge command {ack_data[0]}, number {ack_data[1]}")
+            if ack_data[0] not in [Commands.DL_SEND_LIVE_DATA]:
+                logger().warning("Unexpected acknowledge command: %s, number: %d", Commands(ack_data[0]).name, ack_data[1])
         else:
             self._open_acknowledges[ack_data[0], ack_data[1]] -= 1
 

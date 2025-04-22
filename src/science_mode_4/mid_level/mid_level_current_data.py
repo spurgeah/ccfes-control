@@ -12,7 +12,7 @@ class PacketMidLevelGetCurrentData(Packet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.MidLevelGetCurrentData
+        self._command = Commands.MID_LEVEL_GET_CURRENT_DATA
 
 
     def get_data(self) -> bytes:
@@ -27,7 +27,7 @@ class PacketMidLevelGetCurrentDataAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.MidLevelGetCurrentDataAck
+        self._command = Commands.MID_LEVEL_GET_CURRENT_DATA_ACK
         self._result_error = ResultAndError.NO_ERROR
         self._data_selection = 0
         self._is_stimulation_active_per_channel = [False] * 8

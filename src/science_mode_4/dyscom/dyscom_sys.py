@@ -23,7 +23,7 @@ class PacketDyscomSys(Packet):
 
     def __init__(self, sys_type: DyscomSysType = DyscomSysType.UNDEFINED, filename: str = ""):
         super().__init__()
-        self._command = Commands.DlSys
+        self._command = Commands.DL_SYS
         self._sys_type = sys_type
         self._filename = filename
 
@@ -41,7 +41,7 @@ class PacketDyscomSysAck(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.DlSysAck
+        self._command = Commands.DL_SYS_ACK
         self._result_error = ResultAndError.NO_ERROR
         self._sys_type = DyscomSysType.UNDEFINED
         self._state = DyscomSysState.UNDEFINED
