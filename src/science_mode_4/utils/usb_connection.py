@@ -32,6 +32,7 @@ class UsbConnection(Connection):
         self._device = device
         self._out_endpoint: usb.core.Endpoint = None
         self._in_endpoint: usb.core.Endpoint = None
+        self._in_endpoint_buffer_size = 128 * 64
         self._is_open = False
 
 
@@ -40,16 +41,18 @@ class UsbConnection(Connection):
         self._device.set_configuration()
         # get an endpoint instance
         cfg = self._device.get_active_configuration()
-        intf = cfg[(1,0)]
+        # Interface 0: CDC Communication
+        # Interface 1: CDC Data
+        interface: usb.core.Interface = cfg[(1,0)]
 
         # match the first OUT endpoint
         self._out_endpoint = usb.util.find_descriptor(
-            intf,
-            custom_match = lambda e: (print(e) or usb.util.endpoint_direction(e.bEndpointAddress) == usb.util.ENDPOINT_OUT))
+            interface,
+            custom_match = lambda e: usb.util.endpoint_direction(e.bEndpointAddress) == usb.util.ENDPOINT_OUT)
         # match the first IN endpoint
         self._in_endpoint = usb.util.find_descriptor(
-            intf,
-            custom_match = lambda e: (print(e) or usb.util.endpoint_direction(e.bEndpointAddress) == usb.util.ENDPOINT_IN))
+            interface,
+            custom_match = lambda e: usb.util.endpoint_direction(e.bEndpointAddress) == usb.util.ENDPOINT_IN)
 
         self._is_open = True
 
@@ -68,8 +71,25 @@ class UsbConnection(Connection):
 
 
     def clear_buffer(self):
-        pass
+        # there is no way to clear the buffer from in endpoint, so
+        # read all data and discard it
+        self._read_intern()
 
 
     def _read_intern(self) -> bytes:
-        return bytes(self._in_endpoint.read(self._in_endpoint.wMaxPacketSize))
+        data = bytes()
+        try:
+            while True:
+                # Read up to endpoint's max packet size (64 bytes in this case)
+                tmp = self._in_endpoint.read(self._in_endpoint_buffer_size)
+                data += bytes(tmp)
+                if len(tmp) < self._in_endpoint_buffer_size:
+                    break
+        except usb.core.USBError as e:
+            if e.errno == 10060:
+                # Timeout error (no data available)
+                pass
+            else:
+                raise
+
+        return data

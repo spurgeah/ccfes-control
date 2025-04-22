@@ -20,7 +20,8 @@ license-files = [
   "LICENSE"
 ]
 dependencies = [
-  "pyserial >= 3.5",
+  "pyserial",
+  "pyusb"
 ]
 
 [project.urls]
