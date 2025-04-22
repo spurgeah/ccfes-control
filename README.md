@@ -11,13 +11,11 @@ Python 3.11 or higher
 # Library
 
 ## Installation
-
 - Install science_mode_4 library inclusive dependencies via pip
   - `pip install science_mode_4`
   - https://pypi.org/project/science-mode-4/
 
 ## Dependencies
-
 - PySerial
   - https://pypi.org/project/pyserial/
   - `pip install pyserial`
@@ -33,8 +31,10 @@ Python 3.11 or higher
 
 ## Build library
 - Only necessary, if you made changes to the library or install a version from a branch
-- Install dependencies
+- Install build dependencies
   - `python -m pip install --upgrade build`
+- Install other library dependencies
+  - `pip install -r src/science_mode_4/requirements.txt`
 - Optional run linter
   - `pip install pylint`
   - `pylint .\src\science_mode_4\`
