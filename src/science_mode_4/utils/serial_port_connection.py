@@ -47,16 +47,17 @@ class SerialPortConnection(Connection):
 
 
     def write(self, data: bytes):
+        super().write(data)
         self._ser.write(data)
-
-
-    def read(self) -> bytes:
-        result = []
-        if self._ser.in_waiting > 0:
-            result = self._ser.read_all()
-            logger().debug("Incoming data, length: %d, bytes: %s", len(result), result.hex(" ").upper())
-        return bytes(result)
 
 
     def clear_buffer(self):
         self._ser.reset_input_buffer()
+
+
+    def _read_intern(self) -> bytes:
+        result = []
+        if self._ser.in_waiting > 0:
+            result = self._ser.read_all()
+            
+        return bytes(result)

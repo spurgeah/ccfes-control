@@ -21,14 +21,15 @@ Python 3.11 or higher
 - PySerial
   - https://pypi.org/project/pyserial/
   - `pip install pyserial`
-- PyUSB - currently not used
+- PyUSB
   - https://pypi.org/project/pyusb/
-  - `pip install pyusb`
+  - `pip install pyusb` 
   - On Windows
-    - Download libusb from https://libusb.info/
-    - Copy libusb-XX.dll into environment root folder (besides python.exe)
-    - Under Windows there are driver issues
-    - Code is currently commented out and not usable
+    - Install libusb-package to get _libusb-XX.dll_
+      - `pip install libusb-package`
+    - Under Windows there may be driver issues
+      - See https://github.com/libusb/libusb/wiki/Windows#How_to_use_libusb_on_Windows
+      - Use Zadig to change driver for _STM32 Virtual ComPort_ to _libusb-XX.dll_ and reinstall driver
 
 ## Build library
 - Only necessary, if you made changes to the library or install a version from a branch

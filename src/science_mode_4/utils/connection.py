@@ -2,6 +2,8 @@
 
 from abc import ABC, abstractmethod
 
+from .logger import logger
+
 
 class Connection(ABC):
     """Abstract base class for connection"""
@@ -22,16 +24,23 @@ class Connection(ABC):
         """Checks if connection is open"""
 
 
-    @abstractmethod
     def write(self, data: bytes):
         """Write data to connection"""
+        logger().debug("Outgoing data, length: %d, bytes: %s", len(data), data.hex(" ").upper())
 
 
-    @abstractmethod
     def read(self) -> bytes:
         """Read all data from connection"""
+        result = self._read_intern()
+        logger().debug("Incoming data, length: %d, bytes: %s", len(result), result.hex(" ").upper())
+        return result
 
 
     @abstractmethod
     def clear_buffer(self):
         """Clear buffer from connection"""
+
+
+    @abstractmethod
+    def _read_intern(self):
+        """Read all data from connection"""
