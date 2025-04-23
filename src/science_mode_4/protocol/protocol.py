@@ -48,7 +48,6 @@ class Protocol:
         bb.append_byte(Protocol.STOP_BYTE)
 
         logger().debug("Build package, %s", packet)
-        logger().debug("Outgoing data, %s", bb)
         result = bb.get_bytes()
         return bytes(result)
 

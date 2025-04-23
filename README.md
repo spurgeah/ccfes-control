@@ -11,29 +11,31 @@ Python 3.11 or higher
 # Library
 
 ## Installation
-
 - Install science_mode_4 library inclusive dependencies via pip
   - `pip install science_mode_4`
   - https://pypi.org/project/science-mode-4/
 
 ## Dependencies
-
 - PySerial
   - https://pypi.org/project/pyserial/
   - `pip install pyserial`
-- PyUSB - currently not used
+- PyUSB
   - https://pypi.org/project/pyusb/
-  - `pip install pyusb`
+  - `pip install pyusb` 
   - On Windows
-    - Download libusb from https://libusb.info/
-    - Copy libusb-XX.dll into environment root folder (besides python.exe)
-    - Under Windows there are driver issues
-    - Code is currently commented out and not usable
+    - Install libusb-package to get _libusb-XX.dll_
+      - https://pypi.org/project/libusb-package/
+      - `pip install libusb-package`
+    - Under Windows there may be driver issues
+      - See https://github.com/libusb/libusb/wiki/Windows#How_to_use_libusb_on_Windows
+      - Use Zadig to change driver for _STM32 Virtual ComPort_ to _libusb-XX.dll_ and reinstall driver
 
 ## Build library
 - Only necessary, if you made changes to the library or install a version from a branch
-- Install dependencies
+- Install build dependencies
   - `python -m pip install --upgrade build`
+- Install other library dependencies
+  - `pip install -r src/science_mode_4/requirements.txt`
 - Optional run linter
   - `pip install pylint`
   - `pylint .\src\science_mode_4\`
@@ -87,6 +89,13 @@ Python 3.11 or higher
   - https://pypi.org/project/matplotlib/
   - `pip install matplotlib`
 - Fastplotlib with glfw backend
+  - https://pypi.org/project/fastplotlib/
   - `pip install -U fastplotlib`
   - `pip install -U glfw`
 
+# Changes
+
+## 0.0.11
+- Implemented UsbConnection class
+  - Alternative for SerialPortConnection, both share the same base class Connection
+  - Added _PyUSB_ and _libusb-package_ as dependencies

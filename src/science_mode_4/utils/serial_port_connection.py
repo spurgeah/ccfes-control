@@ -1,11 +1,11 @@
 """Provides a class for a serial connection"""
 
+import os
 import serial
 import serial.tools.list_ports
 import serial.tools.list_ports_common
 
 from .connection import Connection
-from .logger import logger
 
 
 class SerialPortConnection(Connection):
@@ -35,7 +35,9 @@ class SerialPortConnection(Connection):
 
     def open(self):
         self._ser.open()
-        self._ser.set_buffer_size(4096*128)
+
+        if os.name == "nt":
+            self._ser.set_buffer_size(4096*128)
 
 
     def close(self):
@@ -47,16 +49,17 @@ class SerialPortConnection(Connection):
 
 
     def write(self, data: bytes):
+        super().write(data)
         self._ser.write(data)
-
-
-    def read(self) -> bytes:
-        result = []
-        if self._ser.in_waiting > 0:
-            result = self._ser.read_all()
-            logger().debug("Incoming data, length: %d, bytes: %s", len(result), result.hex(" ").upper())
-        return bytes(result)
 
 
     def clear_buffer(self):
         self._ser.reset_input_buffer()
+
+
+    def _read_intern(self) -> bytes:
+        result = []
+        if self._ser.in_waiting > 0:
+            result = self._ser.read_all()
+
+        return bytes(result)
