@@ -1,5 +1,6 @@
 """Provides a class for a serial connection"""
 
+import os
 import serial
 import serial.tools.list_ports
 import serial.tools.list_ports_common
@@ -34,7 +35,9 @@ class SerialPortConnection(Connection):
 
     def open(self):
         self._ser.open()
-        self._ser.set_buffer_size(4096*128)
+
+        if os.name == "nt":
+            self._ser.set_buffer_size(4096*128)
 
 
     def close(self):
