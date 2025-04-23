@@ -24,6 +24,7 @@ Python 3.11 or higher
   - `pip install pyusb` 
   - On Windows
     - Install libusb-package to get _libusb-XX.dll_
+      - https://pypi.org/project/libusb-package/
       - `pip install libusb-package`
     - Under Windows there may be driver issues
       - See https://github.com/libusb/libusb/wiki/Windows#How_to_use_libusb_on_Windows
@@ -92,3 +93,9 @@ Python 3.11 or higher
   - `pip install -U fastplotlib`
   - `pip install -U glfw`
 
+# Changes
+
+## 0.0.11
+- Implemented UsbConnection class
+  - Alternative for SerialPortConnection, both share the same base class Connection
+  - Added _PyUSB_ and _libusb-package_ as dependencies
