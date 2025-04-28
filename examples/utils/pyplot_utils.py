@@ -2,9 +2,9 @@
 
 from queue import Empty, Full, Queue
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
+from matplotlib import animation
 
-from examples.utils.plot_base import PlotHelper, PlotValueChannel
+from .plot_base import PlotHelper, PlotValueChannel
 
 
 class PyPlotValueChannel(PlotValueChannel):
@@ -91,6 +91,7 @@ class PyPlotHelper(PlotHelper):
 
 
     def update(self):
+        """Wait for a short time to process events"""
         plt.pause(0.0001)
 
 

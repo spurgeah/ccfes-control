@@ -5,7 +5,7 @@ from queue import Empty, Full, Queue
 import numpy as np
 import fastplotlib as fpl
 
-from examples.utils.plot_base import PlotHelper, PlotValueChannel
+from .plot_base import PlotHelper, PlotValueChannel
 
 
 class FastPlotLibValueChannel(PlotValueChannel):
@@ -13,7 +13,7 @@ class FastPlotLibValueChannel(PlotValueChannel):
 
 
     def __init__(self, sub_plot, max_value_count: int, color: str):
-        """sub_plot type in Subplot from fastplotlib"""
+        """sub_plot type is Subplot from fastplotlib"""
 
         super().__init__(max_value_count)
         self._sub_plot = sub_plot

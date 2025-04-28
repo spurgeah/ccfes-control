@@ -25,5 +25,7 @@ jobs:
           --user
       - name: Build a binary wheel and a source tarball
         run: python3 -m build
-      - name: Run linter
-        run: pylint ./src/science_mode_4
+      - name: Run linter lib
+        run: pylint ./src
+      - name: Run linter examples
+        run: pylint ./examples

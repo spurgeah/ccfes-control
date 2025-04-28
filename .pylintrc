@@ -10,3 +10,6 @@ check-quote-consistency=yes
 
 [MESSAGES CONTROL]
 disable=too-few-public-methods
+
+[SIMILARITIES]
+min-similarity-lines=50
