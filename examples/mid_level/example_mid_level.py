@@ -13,7 +13,7 @@ from examples.utils.example_utils import ExampleUtils, KeyboardInputThread
 async def main() -> int:
     """Main function"""
 
-    # keyboard is our trigger to start specific stimulation
+    # keyboard is our trigger to end program
     def input_callback(input_value: str) -> bool:
         """Callback call from keyboard input thread"""
         # print(f"Input value {input_value}")

@@ -22,7 +22,7 @@ from examples.utils.csv_utils import CsvHelper
 def main():
     """Main function"""
 
-    csv_helper = CsvHelper("values.csv", ["package_nr", "bi", "emg_1", "emg_2", "breathing", "temperature", "time_delta"])
+    csv_helper = CsvHelper("values.csv", ["package_nr", "Channel 1", "Channel 2", "Channel 3", "Channel 4", "Channel 5", "time_delta"])
     csv_helper.start()
 
     async def device_communication() -> int:
@@ -52,7 +52,7 @@ def main():
         # call init with 4k sample rate and enable signal types
         init_params = DyscomInitParams()
         init_params.signal_type = [DyscomSignalType.BI, DyscomSignalType.EMG_1,\
-                                DyscomSignalType.EMG_2, DyscomSignalType.BREATHING, DyscomSignalType.TEMPERATURE]
+                                DyscomSignalType.EMG_2, DyscomSignalType.BREATHING]
         init_params.register_map_ads129x.config_register_1.output_data_rate = Ads129xOutputDataRate.HR_MODE_4_KSPS__LP_MODE_2_KSPS
         init_params.register_map_ads129x.config_register_1.power_mode = Ads129xPowerMode.HIGH_RESOLUTION
         await dyscom.init(init_params)
@@ -100,7 +100,7 @@ def main():
                     # print(f"Live data acknowledges per iteration {live_data_counter}")
                     break
 
-            await asyncio.sleep(0.001)
+            # await asyncio.sleep(0.001)
 
         # print stats
         end_time = timer()
