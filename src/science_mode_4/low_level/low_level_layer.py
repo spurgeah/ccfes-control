@@ -22,7 +22,7 @@ class LayerLowLevel(Layer):
         p = PacketLowLevelInit()
         p.mode = mode
         p.high_voltage_source = high_voltage_source
-        ack: PacketLowLevelInitAck = await self._send_packet_and_wait(p)
+        ack: PacketLowLevelInitAck = await self.send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "LowLevelInit")
         logger().info("Low level init")
 
@@ -30,7 +30,7 @@ class LayerLowLevel(Layer):
     async def stop(self):
         """Send low level stop command and waits for response"""
         p = PacketLowLevelStop()
-        ack: PacketLowLevelStopAck = await self._send_packet_and_wait(p)
+        ack: PacketLowLevelStopAck = await self.send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "LowLevelStop")
         logger().info("Low level stop")
 
@@ -40,7 +40,7 @@ class LayerLowLevel(Layer):
         p = PacketLowLevelInit()
         p.mode = mode
         p.high_voltage_source = high_voltage_source
-        self._send_packet(p)
+        self.send_packet(p)
         self._packet_buffer.add_open_acknowledge(p)
         logger().info("Low level send init")
 
@@ -53,7 +53,7 @@ class LayerLowLevel(Layer):
         p.channel = channel
         p.connector = connector
         p.points = points
-        self._send_packet(p)
+        self.send_packet(p)
         self._packet_buffer.add_open_acknowledge(p)
         logger().info("Low level send channel config")
 
@@ -61,6 +61,6 @@ class LayerLowLevel(Layer):
     def send_stop(self):
         """Send low level stop command"""
         p = PacketLowLevelStop()
-        self._send_packet(p)
+        self.send_packet(p)
         self._packet_buffer.add_open_acknowledge(p)
         logger().info("Low level send stop")

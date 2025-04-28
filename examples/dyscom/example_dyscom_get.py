@@ -46,6 +46,14 @@ async def main() -> int:
     file_system_status = await dyscom.get_file_system_status()
     print(file_system_status)
 
+    ####
+    calibration_filename = f"rehaingest_{device_id}.cal"
+    # get calibration file info
+    await dyscom.get_file_info(calibration_filename)
+    # get calibration file -> does not work
+    # there should be DL_Send_File commands afterwards
+    await dyscom.get_file_by_name(calibration_filename)
+
     # close serial port connection
     connection.close()
     return 0

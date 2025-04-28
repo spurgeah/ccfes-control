@@ -11,7 +11,7 @@ from science_mode_4 import SerialPortConnection
 from science_mode_4.dyscom.ads129x.ads129x_config_register_1 import Ads129xOutputDataRate, Ads129xPowerMode
 from science_mode_4.dyscom.dyscom_get_operation_mode import PacketDyscomGetAckOperationMode
 from science_mode_4.dyscom.dyscom_send_live_data import PacketDyscomSendLiveData
-from science_mode_4.dyscom.dyscom_types import DyscomFilterType, DyscomGetType, DyscomInitParams, DyscomPowerModulePowerType,\
+from science_mode_4.dyscom.dyscom_types import DyscomGetType, DyscomInitParams, DyscomPowerModulePowerType,\
     DyscomPowerModuleType, DyscomSignalType
 from science_mode_4.protocol.types import ResultAndError
 from science_mode_4.utils.logger import logger
@@ -51,7 +51,6 @@ def main():
         await dyscom.power_module(DyscomPowerModuleType.MEASUREMENT, DyscomPowerModulePowerType.SWITCH_ON)
         # call init with 4k sample rate and enable signal types
         init_params = DyscomInitParams()
-        init_params.filter = DyscomFilterType.PREDEFINED_FILTER_3
         init_params.signal_type = [DyscomSignalType.BI, DyscomSignalType.EMG_1,\
                                 DyscomSignalType.EMG_2, DyscomSignalType.BREATHING, DyscomSignalType.TEMPERATURE]
         init_params.register_map_ads129x.config_register_1.output_data_rate = Ads129xOutputDataRate.HR_MODE_4_KSPS__LP_MODE_2_KSPS
@@ -101,7 +100,7 @@ def main():
                     # print(f"Live data acknowledges per iteration {live_data_counter}")
                     break
 
-            # await asyncio.sleep(0.01)
+            await asyncio.sleep(0.001)
 
         # print stats
         end_time = timer()

@@ -72,13 +72,13 @@ class PyPlotHelper(PlotHelper):
         super().__init__()
 
         x_dimension, y_dimension = self._calc_layout_dimension(len(channels))
-        self._figure, self._axes = plt.subplots(x_dimension, y_dimension, constrained_layout=True, squeeze=False)
+        self._figure, self._axes = plt.subplots(y_dimension, x_dimension, constrained_layout=True, squeeze=False)
 
         sub_plot_counter = 0
 
         for key, value in channels.items():
-            x_pos, y_pos = self._calc_layout_pos(sub_plot_counter)
-            ax = self._axes[x_pos, y_pos]
+            x_pos, y_pos = self._calc_layout_pos(sub_plot_counter, len(channels))
+            ax = self._axes[y_pos, x_pos]
             sub_plot_counter += 1
 
             ax.set(xlabel="Samples", ylabel=value[0], title=value[0])

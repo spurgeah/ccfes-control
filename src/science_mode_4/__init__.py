@@ -1,6 +1,6 @@
 """Init file"""
 
-from importlib.metadata import version
+from importlib.metadata import PackageNotFoundError, version
 
 from .protocol import *
 from .utils import *
@@ -14,5 +14,8 @@ from .layer import *
 from .device_p24 import *
 from .device_i24 import *
 
-__version__ = version("science_mode_4")
-logger().info("Library version %s", __version__)
+try:
+    __version__ = version("science_mode_4")
+    logger().info("Library version %s", __version__)
+except PackageNotFoundError:
+    pass

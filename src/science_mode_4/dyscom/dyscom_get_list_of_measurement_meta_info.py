@@ -26,7 +26,7 @@ class PacketDyscomGetAckListOfMeasurementMetaInfo(PacketDyscomGetAck):
         self._number_of_measurements = 0
 
         if not data is None:
-            self._number_of_measurements = int.from_bytes(data[2:4], "little")
+            self._number_of_measurements = int.from_bytes(data[2:4], "big")
 
 
     @property

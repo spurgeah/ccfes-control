@@ -23,7 +23,7 @@ class Protocol:
         # command and packet number
         bb.set_bit_to_position(packet.command, 0, 10)
         bb.set_bit_to_position(packet.number, 10, 6)
-        # swap command and packet number to ensure little endianness
+        # swap command and packet number to ensure big endianness
         bb.swap(0, 2)
         # append packet data
         bb.append_bytes(packet.get_data())

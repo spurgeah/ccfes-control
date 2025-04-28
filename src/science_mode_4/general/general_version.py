@@ -3,16 +3,20 @@
 from typing import NamedTuple
 from science_mode_4.protocol.commands import Commands
 from science_mode_4.protocol.packet import Packet, PacketAck
+from .general_types import GeneralHashType
 
 
 class GetExtendedVersionResult(NamedTuple):
     """Helper class for dyscom get with type file system status"""
     firmware_version: str
     science_mode_version: str
+    firmware_hash: str
+    hash_type: GeneralHashType
+    is_valid_hash: bool
 
 
 class PacketGeneralGetExtendedVersion(Packet):
-    """Packet for general GetExtendetVersion"""
+    """Packet for general GetExtendedVersion"""
 
 
     def __init__(self):
@@ -21,7 +25,7 @@ class PacketGeneralGetExtendedVersion(Packet):
 
 
 class PacketGeneralGetExtendedVersionAck(PacketAck):
-    """Packet for general GetExtendetVersion acknowledge"""
+    """Packet for general GetExtendedVersion acknowledge"""
 
 
     def __init__(self, data: bytes):
@@ -31,15 +35,16 @@ class PacketGeneralGetExtendedVersionAck(PacketAck):
         self._firmware_version = ""
         self._science_mode_version = ""
         self._firmware_hash = 0
-        self._hash_type = 0
+        self._hash_type = GeneralHashType.UNINITIALIZED
         self._is_valid_hash = False
 
         if not data is None:
             self._successful = data[0] == 0
             self._firmware_version = f"{data[1]}.{data[2]}.{data[3]}"
             self._science_mode_version = f"{data[4]}.{data[5]}.{data[6]}"
-            self._firmware_hash = int.from_bytes(data[7:10], "little")
-            self._hash_type = data[11]
+            firmware_hash = int.from_bytes(data[7:11], "big")
+            self._firmware_hash = f"{firmware_hash:0x}"
+            self._hash_type = GeneralHashType(data[11])
             self._is_valid_hash = data[12] == 1
 
 

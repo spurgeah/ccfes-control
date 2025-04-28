@@ -93,23 +93,15 @@ def main():
                             print(f"SendLiveData status error {sld.samples}")
                             break
 
-                        # these samples match signal types from dl_init command
-                        plot_helper.append_value(0, sld.samples[0].value)
-                        plot_helper.append_value(1, sld.samples[1].value)
-                        plot_helper.append_value(2, sld.samples[2].value)
-                        plot_helper.append_value(3, sld.samples[3].value)
-                        plot_helper.append_value(4, sld.samples[4].value)
-
-                        # signal type seems to be always 0, so we can't use it
-                        # for s in sld.samples:
-                        #     ph.append_value(int(s.signal_type), s.value)
+                        for x, sample in enumerate(sld.samples):
+                            plot_helper.append_value(x, sample.value)
 
                         plot_helper.update()
                 else:
                     # print(f"Live data acknowledges per iteration {live_data_counter}")
                     break
 
-            await asyncio.sleep(0.01)
+            await asyncio.sleep(0.001)
 
         # stop measurement
         await dyscom.stop()

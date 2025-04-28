@@ -51,10 +51,10 @@ class DyscomSignalType(IntEnum):
 
 class DyscomFilterType(IntEnum):
     """Represent dyscom type for filter type"""
-    FILTER_OFF = 0
-    PREDEFINED_FILTER_1 = 1
-    PREDEFINED_FILTER_2 = 2
-    PREDEFINED_FILTER_3 = 3
+    FILTER_OFF = 0 # 4k sample rate
+    PREDEFINED_FILTER_1 = 1 # 1k sample rate
+    PREDEFINED_FILTER_2 = 2 # 4k sample rate
+    PREDEFINED_FILTER_3 = 3 # 1k sample rate
 
 
 class DyscomInitFlag(IntEnum):
@@ -92,6 +92,7 @@ class DyscomGetOperationModeType(IntEnum):
 
 class DyscomPowerModuleType(IntEnum):
     """Represents dyscom power module type"""
+    UNDEFINED = 0
     BLUETOOTH = 1
     MEMORY_CARD = 2
     MEASUREMENT = 3
@@ -114,8 +115,8 @@ class DyscomPowerLiveDataStatusFlag(IntEnum):
 class DyscomFileByNameMode(IntEnum):
     """Represents dyscom file by name mode type"""
     UNDEFINED = 0
-    MULTIBLOCK = 1
-    SINGLEBLOCK = 2
+    MULTI_BLOCK = 1
+    SINGLE_BLOCK = 2
 
 
 class DyscomEnergyFlag(IntEnum):

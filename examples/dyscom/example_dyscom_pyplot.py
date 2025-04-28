@@ -18,7 +18,6 @@ async def main() -> int:
     """Main function"""
 
     plot_helper = PyPlotHelper({0: ["BI", "blue"]}, 250)
-
     # disable logger to increase performance
     logger().disabled = True
 
@@ -42,7 +41,7 @@ async def main() -> int:
     await dyscom.power_module(DyscomPowerModuleType.MEASUREMENT, DyscomPowerModulePowerType.SWITCH_ON)
     # call init with lowest sample rate (because of performance issues with plotting values)
     init_params = DyscomInitParams()
-    init_params.signal_type = [DyscomSignalType.BI, DyscomSignalType.EMG_1]
+    init_params.signal_type = [DyscomSignalType.BI]
     init_params.register_map_ads129x.config_register_1.output_data_rate = Ads129xOutputDataRate.HR_MODE_500_SPS__LP_MODE_250_SPS
     init_params.register_map_ads129x.config_register_1.power_mode = Ads129xPowerMode.LOW_POWER
     await dyscom.init(init_params)
@@ -79,7 +78,7 @@ async def main() -> int:
                 # print(f"Live data acknowledges per iteration {live_data_counter}")
                 break
 
-        await asyncio.sleep(0.01)
+        await asyncio.sleep(0.001)
 
     # stop measurement
     await dyscom.stop()

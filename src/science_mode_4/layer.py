@@ -24,14 +24,14 @@ class Layer():
         return self._packet_buffer
 
 
-    def _send_packet(self, packet: Packet):
+    def send_packet(self, packet: Packet):
         """Generates a new packet number and send packet"""
         ack = ProtocolHelper.send_packet(packet, self._packet_number_generator.get_next_number(),
                                          self._packet_buffer)
         return ack
 
 
-    async def _send_packet_and_wait(self, packet: Packet) -> PacketAck:
+    async def send_packet_and_wait(self, packet: Packet) -> PacketAck:
         """Generates a new packet number, send packet and waits for response"""
         ack = await ProtocolHelper.send_packet_and_wait(packet, self._packet_number_generator.get_next_number(),
                                                         self._packet_buffer)

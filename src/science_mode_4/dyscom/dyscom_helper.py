@@ -43,9 +43,12 @@ class DyscomHelper:
     @staticmethod
     def str_to_bytes(value: str, byte_count: int) -> bytes:
         """Converts value to bytes with byte_count bytes, last byte will always be 0"""
-        temp = bytearray(value.zfill(byte_count), "ascii")
-        for x in range(len(value), byte_count):
-            temp[x] = 0
+        temp = bytearray(byte_count)
+        for x in range(byte_count):
+            if x < len(value):
+                temp[x] = ord(value[x])
+            else:
+                temp[x] = 0
         temp[byte_count-1] = 0
         return bytes(temp)
 

@@ -76,12 +76,12 @@ class FastPlotLibHelper(PlotHelper):
         names.extend([""] * ((x_dimension * y_dimension) - len(channels)))
 
         # create figure
-        self._figure = fpl.Figure(size=(1024, 768), shape=(x_dimension, y_dimension), names=names, )
+        self._figure = fpl.Figure(size=(1024, 768), shape=(y_dimension, x_dimension), names=names, )
 
         sub_plot_counter = 0
         for key, value in channels.items():
-            x_pos, y_pos = self._calc_layout_pos(sub_plot_counter)
-            sub_plot = self._figure[x_pos, y_pos]
+            x_pos, y_pos = self._calc_layout_pos(sub_plot_counter, len(channels))
+            sub_plot = self._figure[y_pos, x_pos]
             # setting name here does not work
             # sub_plot.name = value[0]
             self._data[key] = FastPlotLibValueChannel(sub_plot, max_value_count, value[1])

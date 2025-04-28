@@ -1,6 +1,7 @@
 """Provides packet classes for dyscom init"""
 
 from typing import NamedTuple
+from science_mode_4.dyscom.dyscom_helper import DyscomHelper
 from science_mode_4.protocol.commands import Commands
 from science_mode_4.protocol.types import ResultAndError
 from science_mode_4.protocol.packet import Packet, PacketAck
@@ -11,6 +12,7 @@ from .ads129x.ads129x import Ads129x
 class DyscomInitResult(NamedTuple):
     """Helper class for dyscom get with type file system status"""
     register_map_ads129x: Ads129x
+    measurement_file_id: str
     init_state: DyscomInitState
     frequency_out: DyscomFrequencyOut
 
@@ -58,7 +60,7 @@ class PacketDyscomInitAck(PacketAck):
             self._result_error = ResultAndError(data[0])
             self._register_map_ads129x = Ads129x()
             self._register_map_ads129x.set_data(data[1:27])
-            self._measurement_file_id = data[27:87]
+            self._measurement_file_id = DyscomHelper.bytes_to_str(data[27:87], 60)
             self._init_state = DyscomInitState(data[87])
             self._frequency_out = DyscomFrequencyOut(data[88])
 
@@ -73,6 +75,12 @@ class PacketDyscomInitAck(PacketAck):
     def register_map_ads129x(self) -> Ads129x:
         """Getter for register map from ADS129x"""
         return self._register_map_ads129x
+
+
+    @property
+    def measurement_file_id(self) -> str:
+        """Getter for measurement file id"""
+        return self._measurement_file_id
 
 
     @property
