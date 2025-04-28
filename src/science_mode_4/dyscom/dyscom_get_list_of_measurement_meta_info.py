@@ -1,6 +1,5 @@
 """Provides packet classes for dyscom get with type list of measurement meta info"""
 
-from science_mode_4.protocol.commands import Commands
 from .dyscom_types import DyscomGetType
 from .dyscom_get import PacketDyscomGet, PacketDyscomGetAck
 
@@ -11,7 +10,6 @@ class PacketDyscomGetListOfMeasurementMetaInfo(PacketDyscomGet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.DL_GET
         self._type = DyscomGetType.LIST_OF_MEASUREMENT_META_INFO
         self._kind = int(self._type)
 
@@ -26,7 +24,7 @@ class PacketDyscomGetAckListOfMeasurementMetaInfo(PacketDyscomGetAck):
         self._number_of_measurements = 0
 
         if not data is None:
-            self._number_of_measurements = int.from_bytes(data[2:4], "little")
+            self._number_of_measurements = int.from_bytes(data[2:4], "big")
 
 
     @property

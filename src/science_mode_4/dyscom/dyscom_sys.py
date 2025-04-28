@@ -30,7 +30,7 @@ class PacketDyscomSys(Packet):
 
     def get_data(self) -> bytes:
         bb = ByteBuilder()
-        bb.append_bytes(DyscomHelper.str_to_bytes(self._filename, 129))
+        bb.append_bytes(DyscomHelper.str_to_bytes(self._filename, 128))
         bb.append_byte(self._sys_type)
         return bb.get_bytes()
 

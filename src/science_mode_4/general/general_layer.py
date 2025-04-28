@@ -49,7 +49,7 @@ class LayerGeneral(Layer):
     async def get_device_id(self) -> str:
         """Send get device id command and waits for response"""
         p = PacketGeneralGetDeviceId()
-        ack: PacketGeneralGetDeviceIdAck = await self._send_packet_and_wait(p)
+        ack: PacketGeneralGetDeviceIdAck = await self.send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "GetDeviceId")
         self._device_id = ack.device_id
         logger().info("Get device id: %s", ack.device_id)
@@ -61,14 +61,14 @@ class LayerGeneral(Layer):
         logger().info("Reset",)
         p = PacketGeneralReset()
         # maybe we get no ack because the device resets before sending ack
-        ack: PacketGeneralResetAck = await self._send_packet_and_wait(p)
+        ack: PacketGeneralResetAck = await self.send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "Reset")
 
 
     async def get_stim_status(self) -> GetStimStatusResult:
         """Sends get stim status and waits for response"""
         p = PacketGeneralGetStimStatus()
-        ack: PacketGeneralGetStimStatusAck = await self._send_packet_and_wait(p)
+        ack: PacketGeneralGetStimStatusAck = await self.send_packet_and_wait(p)
         if not ack.successful:
             raise ValueError("Error get stim status")
         logger().info("Get stim status: %s, active: %r", ack.stim_status.name, ack.high_voltage_on)
@@ -78,10 +78,12 @@ class LayerGeneral(Layer):
     async def get_version(self) -> GetExtendedVersionResult:
         """Sends get extended version and waits for response, returns firmware and science mode version"""      
         p = PacketGeneralGetExtendedVersion()
-        ack: PacketGeneralGetExtendedVersionAck = await self._send_packet_and_wait(p)
+        ack: PacketGeneralGetExtendedVersionAck = await self.send_packet_and_wait(p)
         if not ack.successful:
             raise ValueError("Error get extended version")
         self._firmware_version = ack.firmware_version
         self._science_mode_version = ack.science_mode_version
-        logger().info("Get version, firmware version: %s science mode version: %s", ack.firmware_version, ack.science_mode_version)
-        return GetExtendedVersionResult(self._firmware_version, self._science_mode_version)
+        logger().info("Get version, firmware version: %s science mode version: %s, firmware hash: %s, hash type: %s, is valid hash: %r",\
+                      ack.firmware_version, ack.science_mode_version, ack.firmware_hash, ack.hash_type.name, ack.is_valid_hash)
+        return GetExtendedVersionResult(self._firmware_version, self._science_mode_version, ack.firmware_hash,\
+                                        ack.hash_type, ack.is_valid_hash)

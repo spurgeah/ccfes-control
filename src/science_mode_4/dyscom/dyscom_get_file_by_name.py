@@ -2,6 +2,7 @@
 
 from typing import NamedTuple
 
+from science_mode_4.utils.byte_builder import ByteBuilder
 from .dyscom_types import DyscomFileByNameMode, DyscomGetType
 from .dyscom_helper import DyscomHelper
 from .dyscom_get import PacketDyscomGet, PacketDyscomGetAck
@@ -20,10 +21,20 @@ class PacketDyscomGetFileByName(PacketDyscomGet):
     """Packet for dyscom get with type file by name"""
 
 
-    def __init__(self):
+    def __init__(self, filename: str = ""):
         super().__init__()
         self._type = DyscomGetType.FILE_BY_NAME
         self._kind = int(self._type)
+        self._filename = filename
+
+
+    def get_data(self) -> bytes:
+        bb = ByteBuilder()
+        bb.append_bytes(super().get_data())
+        bb.append_bytes(DyscomHelper.str_to_bytes(self._filename, 128))
+        # maybe more parameters are necessary here
+        # block_offset, file_size, n_blocks, mode
+        return bb.get_bytes()
 
 
 class PacketDyscomGetAckFileByName(PacketDyscomGetAck):
@@ -41,9 +52,9 @@ class PacketDyscomGetAckFileByName(PacketDyscomGetAck):
 
         if not data is None:
             self._filename = DyscomHelper.bytes_to_str(data[2:130], 128)
-            self._block_offset = int.from_bytes(data[130:134], "little")
-            self._filesize = int.from_bytes(data[134:142], "little")
-            self._number_of_blocks = int.from_bytes(data[142:146], "little")
+            self._block_offset = int.from_bytes(data[130:134], "big")
+            self._filesize = int.from_bytes(data[134:142], "big")
+            self._number_of_blocks = int.from_bytes(data[142:146], "big")
             self._mode = DyscomFileByNameMode(data[146])
 
 

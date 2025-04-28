@@ -1,6 +1,5 @@
 """Provides packet classes for dyscom get with type device id"""
 
-from science_mode_4.protocol.commands import Commands
 from .dyscom_types import DyscomGetType
 from .dyscom_helper import DyscomHelper
 from .dyscom_get import PacketDyscomGet, PacketDyscomGetAck
@@ -12,7 +11,6 @@ class PacketDyscomGetDeviceId(PacketDyscomGet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.DL_GET
         self._type = DyscomGetType.DEVICE_ID
         self._kind = int(self._type)
 

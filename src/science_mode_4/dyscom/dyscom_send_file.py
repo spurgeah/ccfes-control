@@ -8,8 +8,8 @@ from science_mode_4.utils.byte_builder import ByteBuilder
 
 
 class PacketDyscomSendFile(PacketAck):
-    """Packet for dyscom send file (this is technically not an acknowledge, but it is handled as such,
-    because it is send automatically from device)"""
+    """Packet for dyscom send file ack (this is technically not an acknowledge, but it is handled as such,
+    because it is send automatically from device). This should probably never be used on PC side"""
 
 
     _unpack_func = struct.Struct(">IH").unpack
@@ -46,7 +46,7 @@ class PacketDyscomSendFile(PacketAck):
 
 
 class PacketDyscomSendFileAck(Packet):
-    """Packet for dyscom send file acknowledge (this is technically not apacket, but it is handled as such,
+    """Packet for dyscom send file acknowledge (this is technically not a packet, but it is handled as such,
     because it is send from PC to device)"""
 
 
@@ -58,5 +58,5 @@ class PacketDyscomSendFileAck(Packet):
 
     def get_data(self) -> bytes:
         bb = ByteBuilder()
-        bb.append_bytes(self._block_number)
+        bb.append_value(self._block_number, 4, True)
         return bb.get_bytes()

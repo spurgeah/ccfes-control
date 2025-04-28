@@ -7,7 +7,7 @@ This page describes implementation details.
 - Starting point is using a _Device_ object matching attached hardware: _DeviceP24_ or _DeviceI24_
   - If you have multiple devices, create multiple _Device_ instances
   - With _capabilities_ it is possible to query for available layer
-- To create a _Device_ object a _Connection_ object is required, use _SerialConnection_ to connect to a serial port
+- To create a _Device_ object, a _Connection_ object is required, use _SerialConnection_ to connect to a serial port
   - _Connection_ must be opened and closed
 - Call _device.initialize()_ to get a defined state of the device (it stops any active stimulation/measurement)
 - _Device_ object has layers to access commands
@@ -18,8 +18,16 @@ This page describes implementation details.
   - Do not mix usage of layers because device has a single internal state, e.g. calling low level _init()_ and afterwards mid level _update()_ will not work
 
 ## Device communication
+- Each device has an instance of a _PacketBuffer_
+  - Should be used to read packets from connection
+  - Handles extraction of packets from byte stream
 - Most functions communicating with the device are async functions, because they wait for a matching acknowledge and return values from acknowledge
   - If no matching acknowledge or no acknowledge arrives in time, an exception is raised
+  - The async functions connection buffer handling is always identical:
+    - Clear buffer
+    - Send command
+    - Process incoming data until the expected acknowledge arrives
+    - More data remains in connection buffer
 - Additionally functions with naming schema _send_xxx_ are normal functions not waiting for acknowledge
   - The acknowledge needs to handled manually by using _PacketBuffer_ object from device
   - _PacketBuffer_ reads data from connection and separates packets from data stream
@@ -28,7 +36,9 @@ This page describes implementation details.
 - Library creates a custom logger, see class _Logger_
 - By default some information is logged to console
 - Set log level to DEBUG to get more detailed information
-- For more performance, disable logger
+  - `logger().setLevel(logging.DEBUG)`
+- For better performance, disable logger
+  - `logger().disabled = True`
 
 ## General layer
 - Contains functions to get common information like device serial or firmware version
@@ -63,19 +73,26 @@ This page describes implementation details.
     - Device sends now _DlSendLiveData_ packets with measurement data
   - Call _stop()_ to end measurement
   - Call _power_module()_ to power off measurement module
-- Important: all storage related functions are untested
+- IMPORTANT: all storage related functions are untested
 
 # Deviation from Instruction for Use
 
 ## Dyscom commands
 
 ### Common
-- Strings are 1 byte less long (null termination is not an extra byte) in acknowledge packets
 - Datetime parameters have a different order
 
 ### DL_init
 - Init state seems always be UNUSED
+- Strings are 1 byte longer than in other commands
 - Output data rate depends on init params filter property
+- Setting a filter overwrite other settings
+  - ADS129x register channel 1-4 settings
+  - ADS129x config register output data rate
+  - Maybe more register values are changed
+
+### DL_get for type file system status and list of measurement info
+- Return never meaningful values, probably not implemented on I24 side
 
 ### DL_get_ack for type file by name
 - Additional parameter mode (1 byte)
@@ -98,5 +115,6 @@ This page describes implementation details.
 - Block number, 4 byte, block number of DL_send_file
 
 ### DL_send_live_data
-- Parameters are big endian?
 - SignalType for each sample is always 0
+- Contains always 5 samples, regardless of selected signal types in DL_init
+  - Fifth sample value seems always be zero

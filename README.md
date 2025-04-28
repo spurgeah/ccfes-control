@@ -99,3 +99,7 @@ Python 3.11 or higher
 - Implemented UsbConnection class
   - Alternative for SerialPortConnection, both share the same base class Connection
   - Added _PyUSB_ and _libusb-package_ as dependencies
+
+## 0.0.12
+- Dyscom init
+  - Added channel settings register

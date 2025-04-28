@@ -24,8 +24,8 @@ def main():
     """Main function"""
 
     # initialize plot helper the handle plot specific things
-    plot_helper = FastPlotLibHelper({0: ["BI", "b"], 1: ["EMG1", "r"], 2: ["EMG2", "y"],\
-                        3: ["Breathing", "g"], 4: ["Temperature", "w"]}, 1000)
+    plot_helper = FastPlotLibHelper({0: ["Channel 1", "b"], 1: ["Channel 2", "r"], 2: ["Channel 3", "y"],\
+                        3: ["Channel 4", "g"]}, 1000)
     # flag to indicate
     is_window_open: bool = True
 
@@ -53,7 +53,7 @@ def main():
         # call init with lowest sample rate and enable signal types
         init_params = DyscomInitParams()
         init_params.signal_type = [DyscomSignalType.BI, DyscomSignalType.EMG_1,\
-                                DyscomSignalType.EMG_2, DyscomSignalType.BREATHING, DyscomSignalType.TEMPERATURE]
+                                DyscomSignalType.EMG_2, DyscomSignalType.BREATHING]
         init_params.register_map_ads129x.config_register_1.output_data_rate = Ads129xOutputDataRate.HR_MODE_500_SPS__LP_MODE_250_SPS
         init_params.register_map_ads129x.config_register_1.power_mode = Ads129xPowerMode.LOW_POWER
         await dyscom.init(init_params)
@@ -93,23 +93,15 @@ def main():
                             print(f"SendLiveData status error {sld.samples}")
                             break
 
-                        # these samples match signal types from dl_init command
-                        plot_helper.append_value(0, sld.samples[0].value)
-                        plot_helper.append_value(1, sld.samples[1].value)
-                        plot_helper.append_value(2, sld.samples[2].value)
-                        plot_helper.append_value(3, sld.samples[3].value)
-                        plot_helper.append_value(4, sld.samples[4].value)
-
-                        # signal type seems to be always 0, so we can't use it
-                        # for s in sld.samples:
-                        #     ph.append_value(int(s.signal_type), s.value)
+                        for x in range(4):
+                            plot_helper.append_value(x, sld.samples[x].value)
 
                         plot_helper.update()
                 else:
                     # print(f"Live data acknowledges per iteration {live_data_counter}")
                     break
 
-            await asyncio.sleep(0.01)
+            await asyncio.sleep(0.001)
 
         # stop measurement
         await dyscom.stop()

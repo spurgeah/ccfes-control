@@ -3,7 +3,6 @@
 # from dataclasses import dataclass
 
 from typing import NamedTuple
-from science_mode_4.protocol.commands import Commands
 from .dyscom_types import DyscomGetType
 from .dyscom_get import PacketDyscomGet, PacketDyscomGetAck
 
@@ -21,7 +20,6 @@ class PacketDyscomGetFileSystemStatus(PacketDyscomGet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.DL_GET
         self._type = DyscomGetType.FILESYSTEM_STATUS
         self._kind = int(self._type)
 
@@ -39,8 +37,8 @@ class PacketDyscomGetAckFileSystemStatus(PacketDyscomGetAck):
 
         if not data is None:
             self._file_system_ready = bool(data[2])
-            self._used_size = int.from_bytes(data[3:11], "little")
-            self._free_size = int.from_bytes(data[11:19], "little")
+            self._used_size = int.from_bytes(data[3:11], "big")
+            self._free_size = int.from_bytes(data[11:19], "big")
 
 
     @property

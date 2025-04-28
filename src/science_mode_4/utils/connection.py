@@ -32,7 +32,8 @@ class Connection(ABC):
     def read(self) -> bytes:
         """Read all data from connection"""
         result = self._read_intern()
-        logger().debug("Incoming data, length: %d, bytes: %s", len(result), result.hex(" ").upper())
+        if len(result) > 0:
+            logger().debug("Incoming data, length: %d, bytes: %s", len(result), result.hex(" ").upper())
         return result
 
 
