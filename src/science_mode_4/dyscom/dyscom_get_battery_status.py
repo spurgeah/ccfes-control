@@ -3,7 +3,6 @@
 from typing import NamedTuple
 import struct
 
-from science_mode_4.protocol.commands import Commands
 from .dyscom_types import DyscomEnergyFlag, DyscomGetType
 from .dyscom_get import PacketDyscomGet, PacketDyscomGetAck
 
@@ -23,7 +22,6 @@ class PacketDyscomGetBatteryStatus(PacketDyscomGet):
 
     def __init__(self):
         super().__init__()
-        self._command = Commands.DL_GET
         self._type = DyscomGetType.BATTERY
         self._kind = int(self._type)
 

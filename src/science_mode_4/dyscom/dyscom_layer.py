@@ -26,7 +26,7 @@ class LayerDyscom(Layer):
     """
 
 
-    async def init(self, params) -> DyscomInitResult:
+    async def init(self, params: DyscomInitParams) -> DyscomInitResult:
         """Send dyscom init command and waits for response"""
         p = PacketDyscomInit(params)
         ack: PacketDyscomInitAck = await self.send_packet_and_wait(p)

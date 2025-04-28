@@ -1,27 +1,19 @@
 """Test program how to use library without installing the library,
 DO NOT USE THIS FILE, USE EXAMPLES INSTEAD"""
 
-from timeit import default_timer as timer
-
 import logging
 import sys
 import asyncio
 
 from science_mode_4.device_i24 import DeviceI24
-from science_mode_4.device_p24 import DeviceP24
-from science_mode_4.dyscom.ads129x.ads129x_channel_settings_register import Ads129xChannelPowerMode
-from science_mode_4.dyscom.ads129x.ads129x_config_register_1 import Ads129xOutputDataRate, Ads129xPowerMode
-from science_mode_4.dyscom.dyscom_get_file_by_name import PacketDyscomGetAckFileByName, PacketDyscomGetFileByName
+from science_mode_4.dyscom.dyscom_get_file_by_name import PacketDyscomGetAckFileByName
 from science_mode_4.dyscom.dyscom_get_operation_mode import PacketDyscomGetAckOperationMode
 from science_mode_4.dyscom.dyscom_layer import LayerDyscom
 from science_mode_4.dyscom.dyscom_send_file import PacketDyscomSendFile
-from science_mode_4.dyscom.dyscom_send_live_data import PacketDyscomSendLiveData
-from science_mode_4.dyscom.dyscom_types import DyscomFilterType, DyscomGetType, DyscomInitFlag, DyscomInitParams, DyscomPowerModulePowerType, DyscomPowerModuleType, DyscomSignalType
+from science_mode_4.dyscom.dyscom_types import DyscomGetType
 from science_mode_4.protocol.commands import Commands
-from science_mode_4.protocol.types import ResultAndError
 from science_mode_4.utils import logger
 from science_mode_4.utils.serial_port_connection import SerialPortConnection
-from science_mode_4.utils.usb_connection import UsbConnection
 
 
 
@@ -70,18 +62,18 @@ async def main() -> int:
 
     # p = PacketDyscomGetFileByName(calibration_filename)
     # dyscom.send_packet(p)
-    get_file_by_name_ack = await dyscom.get_file_by_name(calibration_filename)
+    await dyscom.get_file_by_name(calibration_filename)
 
     # dyscom.send_send_file(get_file_by_name_ack.block_offset)
     # for x in range(get_file_by_name_ack.number_of_blocks):
     #     dyscom.send_send_file(get_file_by_name_ack.block_offset + x)
 
-    meas_info = await dyscom.get_file_info(init_ack.measurement_file_id)
-    await dyscom.get_operation_mode()
+    # meas_info = await dyscom.get_file_info(init_ack.measurement_file_id)
+    # await dyscom.get_operation_mode()
 
-    p = PacketDyscomGetFileByName(init_ack.measurement_file_id)
-    dyscom.send_packet(p)
-    dyscom.send_get_operation_mode()
+    # p = PacketDyscomGetFileByName(init_ack.measurement_file_id)
+    # dyscom.send_packet(p)
+    # dyscom.send_get_operation_mode()
     # get_file_by_name_ack = await dyscom.get_file_by_name(init_ack.measurement_file_id)
     # await dyscom.get_operation_mode()
 
@@ -96,6 +88,7 @@ async def main() -> int:
     return 0
 
 def process_ack(dyscom: LayerDyscom) -> int:
+    """Process all packets read from connection buffer"""
     offset = 0
     while True:
         # process all available packages
@@ -105,6 +98,7 @@ def process_ack(dyscom: LayerDyscom) -> int:
             if ack.command == Commands.DL_SEND_FILE:
                 send_file: PacketDyscomSendFile = ack
                 data = send_file.data
+                print(data)
             elif ack.command == Commands.DL_GET_ACK and ack.kind == DyscomGetType.OPERATION_MODE:
                 op_mode: PacketDyscomGetAckOperationMode = ack
                 print(op_mode.operation_mode.name)

@@ -32,6 +32,8 @@ class PacketDyscomGetFileByName(PacketDyscomGet):
         bb = ByteBuilder()
         bb.append_bytes(super().get_data())
         bb.append_bytes(DyscomHelper.str_to_bytes(self._filename, 128))
+        # maybe more parameters are necessary here
+        # block_offset, file_size, n_blocks, mode
         return bb.get_bytes()
 
 

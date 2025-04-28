@@ -2,7 +2,6 @@
 
 from typing import NamedTuple
 
-from science_mode_4.protocol.commands import Commands
 from science_mode_4.utils.byte_builder import ByteBuilder
 from .dyscom_types import DyscomGetType
 from .dyscom_helper import DyscomHelper
@@ -22,7 +21,6 @@ class PacketDyscomGetFileInfo(PacketDyscomGet):
 
     def __init__(self, filename: str = ""):
         super().__init__()
-        self._command = Commands.DL_GET
         self._type = DyscomGetType.FILE_INFO
         self._kind = int(self._type)
         self._filename = filename
@@ -32,6 +30,8 @@ class PacketDyscomGetFileInfo(PacketDyscomGet):
         bb = ByteBuilder()
         bb.append_bytes(super().get_data())
         bb.append_bytes(DyscomHelper.str_to_bytes(self._filename, 128))
+        # maybe more parameters are necessary here
+        # file_size, file_checksum
         return bb.get_bytes()
 
 

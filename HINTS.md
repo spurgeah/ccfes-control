@@ -80,11 +80,11 @@ This page describes implementation details.
 ## Dyscom commands
 
 ### Common
-- Strings are 1 byte less long (null termination is not an extra byte) in acknowledge packets
 - Datetime parameters have a different order
 
 ### DL_init
 - Init state seems always be UNUSED
+- Strings are 1 byte longer than in other commands
 - Output data rate depends on init params filter property
 - Setting a filter overwrite other settings
   - ADS129x register channel 1-4 settings
