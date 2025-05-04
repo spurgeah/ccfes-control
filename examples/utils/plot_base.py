@@ -64,11 +64,3 @@ class PlotHelper:
         equal in both directions"""
         layouts = {1: [1, 1], 2: [2, 1], 3: [3, 1], 4: [2, 2], 5: [3, 2]}
         return layouts[channel_count]
-
-
-    def _calc_layout_pos(self, index: int, channel_count: int) -> tuple[int, int]:
-        """Calculates from a 1 dimensional index a 2 dimensional position"""
-        cols, _ = self._calc_layout_dimension(channel_count)
-        x = index % cols
-        y = index // cols
-        return [x, y]

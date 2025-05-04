@@ -74,15 +74,9 @@ class FastPlotLibHelper(PlotHelper):
         # create figure
         self._figure = fpl.Figure(size=(1024, 768), shape=(y_dimension, x_dimension))
 
-        sub_plot_counter = 0
-        for key, value in channels.items():
-            x_pos, y_pos = self._calc_layout_pos(sub_plot_counter, len(channels))
-            sub_plot = self._figure[y_pos, x_pos]
+        for (key, value), sub_plot in zip(channels.items(), list(self._figure)):
             sub_plot.title = value[0]
-
             self._data[key] = FastPlotLibValueChannel(sub_plot, max_value_count, value[1])
-
-            sub_plot_counter += 1
 
         # set animation function that is called regularly to update plots
         self._figure.add_animations(self._animation)

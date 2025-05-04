@@ -103,3 +103,4 @@ Python 3.11 or higher
 ## 0.0.12
 - Dyscom init
   - Added channel settings register
+- Some bugfixes
