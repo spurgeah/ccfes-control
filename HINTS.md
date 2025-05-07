@@ -75,6 +75,18 @@ This page describes implementation details.
   - Call _power_module()_ to power off measurement module
 - IMPORTANT: all storage related functions are untested
 
+# Using USB under Linux with Hyper-V
+- On Windows
+  - Install [usbipd-win](https://github.com/dorssel/usbipd-win)
+  - `usbipd list`
+  - `usbipd bind --busid <BUSID>`
+- On Linux
+  - Install _usbip_
+    - `sudo apt install linux-tools-generic usbip`
+  - `sudo usbip attach -r <host-ip> -b <BUSID>`
+  - In case of permission error
+    - `sudo chmod 666 /dev/ttyACMx`
+
 # Deviation from Instruction for Use
 
 ## Dyscom commands

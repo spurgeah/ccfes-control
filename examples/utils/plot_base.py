@@ -50,9 +50,15 @@ class PlotHelper:
         return self._data
 
 
-    def append_value(self, channel: int, value: float) -> tuple[float, float]:
+    def append_value(self, channel: int, value: float):
         """Append value to channel buffer"""
         self._data[channel].append_value(value)
+
+
+    def append_values(self, channel: int, values: list[float]):
+        """Append values to channel buffer"""
+        for x in values:
+            self.append_value(channel, x)
 
 
     def update(self):
@@ -62,13 +68,5 @@ class PlotHelper:
     def _calc_layout_dimension(self, channel_count: int) -> tuple[int, int]:
         """Calculates layout for a specific number of channels, tries to grow
         equal in both directions"""
-        layouts = {1: [1, 1], 2: [2, 1], 3: [3, 1], 4: [2, 2], 5: [3, 2]}
+        layouts = {1: [1, 1], 2: [2, 1], 3: [3, 1], 4: [2, 2], 5: [3, 2], 6: [3, 2], 7: [4, 2], 8: [4, 2]}
         return layouts[channel_count]
-
-
-    def _calc_layout_pos(self, index: int, channel_count: int) -> tuple[int, int]:
-        """Calculates from a 1 dimensional index a 2 dimensional position"""
-        cols, _ = self._calc_layout_dimension(channel_count)
-        x = index % cols
-        y = index // cols
-        return [x, y]

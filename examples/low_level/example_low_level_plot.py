@@ -3,20 +3,52 @@
 import asyncio
 import sys
 
-import matplotlib.pyplot as plt
-import numpy as np
-
 from science_mode_4 import DeviceP24
 from science_mode_4 import ChannelPoint, Commands
 from science_mode_4 import SerialPortConnection
 from science_mode_4 import PacketLowLevelChannelConfigAck
 from science_mode_4 import Connector, Channel
 from science_mode_4 import LowLevelHighVoltageSource, LowLevelMode
+from science_mode_4 import LayerLowLevel
 from examples.utils.example_utils import ExampleUtils
+from examples.utils.pyplot_utils import PyPlotHelper
+
+
+def send_channel_config(low_level_layer: LayerLowLevel):
+    """Sends channel update"""
+    # device can store up to 10 channel config commands
+    for connector in Connector:
+        for channel in Channel:
+            factor = channel + 1
+            # send_channel_config does not wait for an acknowledge
+            low_level_layer.send_channel_config(True, channel, connector,
+                                                [ChannelPoint(500 * factor, 10 * factor),
+                                                 ChannelPoint(500 * factor, 0),
+                                                 ChannelPoint(500 * factor, -10 * factor),
+                                                 ChannelPoint(500 * factor, 0)])
+
+
+def calc_plot_index(connector: Connector, channel: Channel) -> int:
+    """Calculates index for plot from connector and channel"""
+    return connector * len(Channel) + channel
+
+
+def get_channel_color(channel: Channel) -> str:
+    """Retrieves color from channel"""
+    color = channel.name
+    if color == "WHITE":
+        color = "PINK"
+    return color
 
 
 async def main() -> int:
     """Main function"""
+
+    plots_info: dict[int, tuple[str, str]] =  {}
+    for connector in Connector:
+        for channel in Channel:
+            plots_info[calc_plot_index(connector, channel)] = f"Connector {connector.name}, channel {channel.name}", get_channel_color(channel)
+    plot_helper = PyPlotHelper(plots_info, 2500)
 
     # get comport from command line argument
     com_port = ExampleUtils.get_comport_from_commandline_argument()
@@ -37,43 +69,31 @@ async def main() -> int:
     # call init low level and enable measurement
     await low_level_layer.init(LowLevelMode.STIM_CURRENT, LowLevelHighVoltageSource.STANDARD)
 
-    # send one channel config so we get only one acknowledge
-    low_level_layer.send_channel_config(True, Channel.RED, Connector.GREEN,
-                                        [ChannelPoint(1000, 40), ChannelPoint(1000, 0),
-                                        ChannelPoint(1000, -20)])
+    for _ in range(3):
+        # send 8 channel config so we get only 8 acknowledges
+        send_channel_config(low_level_layer)
 
-    # wait for stimulation to happen
-    await asyncio.sleep(0.1)
+        # wait for stimulation to happen
+        await asyncio.sleep(0.25)
 
-    measurement_sample_time = 0
-    measurement_samples: list[float] = []
-    # get new data from connection
-    ack = low_level_layer.packet_buffer.get_packet_from_buffer()
-    if ack:
-        if ack.command == Commands.LOW_LEVEL_CHANNEL_CONFIG_ACK:
-            ll_config_ack: PacketLowLevelChannelConfigAck = ack
-            measurement_sample_time = ll_config_ack.sampling_time_in_microseconds
-            measurement_samples.extend(ll_config_ack.measurement_samples)
+        # process all acknowledges and append values to plot data
+        while True:
+            ack = low_level_layer.packet_buffer.get_packet_from_buffer()
+            if ack:
+                if ack.command == Commands.LOW_LEVEL_CHANNEL_CONFIG_ACK:
+                    ll_config_ack: PacketLowLevelChannelConfigAck = ack
+                    plot_helper.append_values(calc_plot_index(ll_config_ack.connector, ll_config_ack.channel),
+                                              ll_config_ack.measurement_samples)
+            else:
+                break
 
     # call stop low level
     await low_level_layer.stop()
+    # update plot with measured values
+    plot_helper.update()
 
     # close serial port connection
     connection.close()
-
-    # show plot
-    _, ax = plt.subplots()
-    # use measurement_sample_time as time frame for x-axis
-    # this may be wrong because measurement_sample_time seems to long and
-    # does not match actual stimulation duration
-    ax.plot(np.linspace(0, measurement_sample_time, len(measurement_samples)),
-            measurement_samples)
-
-    ax.set(xlabel="Sample Time (µs)", ylabel="Current (mA)",
-        title="Current measurement")
-    ax.grid()
-
-    plt.show()
 
     return 0
 

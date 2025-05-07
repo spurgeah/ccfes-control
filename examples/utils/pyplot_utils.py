@@ -57,7 +57,7 @@ class PyPlotValueChannel(PlotValueChannel):
 
             if len(new_x_data) > 1:
                 self._axes.set_xlim(new_x_data[0], new_x_data[-1])
-                offset = (new_maximum - new_minimum) * 0.1
+                offset = (new_maximum - new_minimum) * 0.1 + 0.1
                 self._axes.set_ylim(bottom=new_minimum - offset, top=new_maximum + offset)
         except Empty:
             # No new data in the queue
@@ -74,15 +74,9 @@ class PyPlotHelper(PlotHelper):
         x_dimension, y_dimension = self._calc_layout_dimension(len(channels))
         self._figure, self._axes = plt.subplots(y_dimension, x_dimension, constrained_layout=True, squeeze=False)
 
-        sub_plot_counter = 0
-
-        for key, value in channels.items():
-            x_pos, y_pos = self._calc_layout_pos(sub_plot_counter, len(channels))
-            ax = self._axes[y_pos, x_pos]
-            sub_plot_counter += 1
-
-            ax.set(xlabel="Samples", ylabel=value[0], title=value[0])
-            self._data[key] = PyPlotValueChannel(ax, max_value_count, value[1])
+        for (key, value), sub_plot in zip(channels.items(), self._axes.flat):
+            sub_plot.set(xlabel="Samples", ylabel=value[0], title=value[0])
+            self._data[key] = PyPlotValueChannel(sub_plot, max_value_count, value[1])
 
         # interactive mode and show plot
         self._animation_result = animation.FuncAnimation(self._figure, self._animation, interval=100)

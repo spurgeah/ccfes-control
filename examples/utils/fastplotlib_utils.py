@@ -48,7 +48,7 @@ class FastPlotLibValueChannel(PlotValueChannel):
 
 
     def update_plot(self):
-        """This function is call in context of main thread"""
+        """This function is called in context of main thread"""
         super().update_plot()
         try:
             new_x_data, new_y_data = self._data_queue.get_nowait()
@@ -71,22 +71,12 @@ class FastPlotLibHelper(PlotHelper):
         # calc layout for sub plots
         x_dimension, y_dimension = self._calc_layout_dimension(len(channels))
 
-        # length of names must match number of sub plots
-        names = [x[0] for x in channels.values()]
-        names.extend([""] * ((x_dimension * y_dimension) - len(channels)))
-
         # create figure
-        self._figure = fpl.Figure(size=(1024, 768), shape=(y_dimension, x_dimension), names=names, )
+        self._figure = fpl.Figure(size=(1024, 768), shape=(y_dimension, x_dimension))
 
-        sub_plot_counter = 0
-        for key, value in channels.items():
-            x_pos, y_pos = self._calc_layout_pos(sub_plot_counter, len(channels))
-            sub_plot = self._figure[y_pos, x_pos]
-            # setting name here does not work
-            # sub_plot.name = value[0]
+        for (key, value), sub_plot in zip(channels.items(), list(self._figure)):
+            sub_plot.title = value[0]
             self._data[key] = FastPlotLibValueChannel(sub_plot, max_value_count, value[1])
-
-            sub_plot_counter += 1
 
         # set animation function that is called regularly to update plots
         self._figure.add_animations(self._animation)
@@ -95,7 +85,7 @@ class FastPlotLibHelper(PlotHelper):
 
 
     def _animation(self, figure: fpl.Figure):
-        """This function is call in context of main thread"""
+        """This function is called in context of main thread"""
         for x in self._data.values():
             x.update_plot()
 
