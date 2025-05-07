@@ -57,7 +57,7 @@ class PyPlotValueChannel(PlotValueChannel):
 
             if len(new_x_data) > 1:
                 self._axes.set_xlim(new_x_data[0], new_x_data[-1])
-                offset = (new_maximum - new_minimum) * 0.1
+                offset = (new_maximum - new_minimum) * 0.1 + 0.1
                 self._axes.set_ylim(bottom=new_minimum - offset, top=new_maximum + offset)
         except Empty:
             # No new data in the queue
