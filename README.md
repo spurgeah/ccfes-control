@@ -104,3 +104,6 @@ Python 3.11 or higher
 - Dyscom init
   - Added channel settings register
 - Some bugfixes
+
+## 0.0.13
+- Fixed error with example keyboard utils under Linux

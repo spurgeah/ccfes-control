@@ -2,6 +2,7 @@
 
 import sys
 import threading
+import os
 from typing import Callable
 from getch import getch
 
@@ -21,7 +22,10 @@ class KeyboardInputThread(threading.Thread):
         while True:
             # getch() returns a bytes object
             key_raw = getch()
-            key = bytes.decode(key_raw)
+            if os.name == "nt":
+                key = bytes.decode(key_raw)
+            else:
+                key = key_raw
             # handle ctrl+c
             if key == "\x03":
                 raise KeyboardInterrupt
