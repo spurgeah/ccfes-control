@@ -9,7 +9,7 @@
       "type": "debugpy",
       "request": "launch",
       // "program": "src/__main__.py",
-      "module": "examples.low_level.example_low_level_plot",
+      "module": "examples.dyscom.example_dyscom_fastplotlib",
       "justMyCode": false,
       // "args": ["COM3"],
       "console": "integratedTerminal"

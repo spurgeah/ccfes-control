@@ -3,6 +3,7 @@
 import sys
 import threading
 import os
+import asyncio
 from typing import Callable
 from getch import getch
 
@@ -56,3 +57,21 @@ class ExampleUtils():
 
         com_port = sys.argv[1]
         return com_port
+
+
+    @staticmethod
+    async def wait_for_any_key_pressed(cb: Callable[[], None] | None):
+        # keyboard func
+        def input_callback(input_value: str) -> bool:
+            """Callback call from keyboard input thread"""
+            # quit on any key
+            return True
+
+        # create keyboard input thread for non blocking console input
+        keyboard_input_thread = KeyboardInputThread(input_callback)
+
+        # now we can start stimulation
+        while keyboard_input_thread.is_alive():
+            if cb is not None:
+                cb()
+            await asyncio.sleep(0.1)

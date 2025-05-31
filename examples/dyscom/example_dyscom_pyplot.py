@@ -49,9 +49,10 @@ async def main() -> int:
     # start dyscom measurement
     await dyscom.start()
 
-    for x in range(1000):
+    # loop for some time
+    for x in range(5000):
         # check operation mode from time to time
-        if x % 100 == 0:
+        if x % 500 == 0:
             dyscom.send_get_operation_mode()
 
         live_data_counter = 0
@@ -70,7 +71,7 @@ async def main() -> int:
                         break
 
                     # reduce framerate further
-                    if sld.number % 60 == 0:
+                    if sld.number % 10 == 0:
                         plot_helper.append_value(0, sld.samples[0].value)
                         plot_helper.update()
 
@@ -88,6 +89,8 @@ async def main() -> int:
     # close serial port connection
     connection.close()
 
+    print("Close plot window to quit")
+    plot_helper.loop()
     return 0
 
 
