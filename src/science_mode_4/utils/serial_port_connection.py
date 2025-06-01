@@ -58,8 +58,8 @@ class SerialPortConnection(Connection):
 
 
     def _read_intern(self) -> bytes:
-        result = []
+        result = bytes()
         if self._ser.in_waiting > 0:
             result = self._ser.read_all()
 
-        return bytes(result)
+        return result

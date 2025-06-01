@@ -65,6 +65,10 @@ class PlotHelper:
         """Update plot"""
 
 
+    def loop(self):
+        """Run event loop until plot window closed"""
+
+
     def _calc_layout_dimension(self, channel_count: int) -> tuple[int, int]:
         """Calculates layout for a specific number of channels, tries to grow
         equal in both directions"""

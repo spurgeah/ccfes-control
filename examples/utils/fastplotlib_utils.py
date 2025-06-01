@@ -23,7 +23,7 @@ class FastPlotLibValueChannel(PlotValueChannel):
         self._line = sub_plot.add_line(y_data, name="values", colors=color)
 
         # this queue is used to synchronize data between background and main thread
-        self._data_queue = Queue(maxsize=1)
+        self._data_queue = Queue(maxsize=0)
 
 
     def append_value(self, value: float):

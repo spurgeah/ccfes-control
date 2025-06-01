@@ -37,7 +37,7 @@ def get_channel_color(channel: Channel) -> str:
     """Retrieves color from channel"""
     color = channel.name
     if color == "WHITE":
-        color = "PINK"
+        color = "PURPLE"
     return color
 
 
@@ -48,7 +48,7 @@ async def main() -> int:
     for connector in Connector:
         for channel in Channel:
             plots_info[calc_plot_index(connector, channel)] = f"Connector {connector.name}, channel {channel.name}", get_channel_color(channel)
-    plot_helper = PyPlotHelper(plots_info, 2500)
+    plot_helper = PyPlotHelper(plots_info, 500)
 
     # get comport from command line argument
     com_port = ExampleUtils.get_comport_from_commandline_argument()
@@ -74,7 +74,7 @@ async def main() -> int:
         send_channel_config(low_level_layer)
 
         # wait for stimulation to happen
-        await asyncio.sleep(0.25)
+        await asyncio.sleep(1.0)
 
         # process all acknowledges and append values to plot data
         while True:
@@ -82,19 +82,23 @@ async def main() -> int:
             if ack:
                 if ack.command == Commands.LOW_LEVEL_CHANNEL_CONFIG_ACK:
                     ll_config_ack: PacketLowLevelChannelConfigAck = ack
+                    # update plot with measured values
                     plot_helper.append_values(calc_plot_index(ll_config_ack.connector, ll_config_ack.channel),
                                               ll_config_ack.measurement_samples)
+                    plot_helper.update()
             else:
                 break
 
+        await asyncio.sleep(0.1)
+
     # call stop low level
     await low_level_layer.stop()
-    # update plot with measured values
-    plot_helper.update()
 
     # close serial port connection
     connection.close()
 
+    print("Close plot window to quit")
+    plot_helper.loop()
     return 0
 
 

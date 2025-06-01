@@ -64,10 +64,10 @@ def main():
         total_count = 0
 
         # loop for some time
-        for x in range(1000):
+        for x in range(5000):
             # check operation mode from time to time, this function is not waiting for response
             # so we have to handle it by ourself later
-            if x % 100 == 0:
+            if x % 500 == 0:
                 dyscom.send_get_operation_mode()
 
             live_data_counter = 0

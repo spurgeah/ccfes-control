@@ -3,6 +3,7 @@
 from queue import Empty, Full, Queue
 import matplotlib.pyplot as plt
 from matplotlib import animation
+from matplotlib.backend_bases import CloseEvent
 
 from .plot_base import PlotHelper, PlotValueChannel
 
@@ -27,7 +28,7 @@ class PyPlotValueChannel(PlotValueChannel):
         self._maximum = None
 
         # this queue is used to synchronize data between background and main thread
-        self._data_queue = Queue(maxsize=1)
+        self._data_queue = Queue(maxsize=0)
 
 
     def append_value(self, value: float):
@@ -71,17 +72,21 @@ class PyPlotHelper(PlotHelper):
     def __init__(self, channels: dict[int, tuple[str, str]], max_value_count: int):
         super().__init__()
 
+        self._window_closed = False
         x_dimension, y_dimension = self._calc_layout_dimension(len(channels))
         self._figure, self._axes = plt.subplots(y_dimension, x_dimension, constrained_layout=True, squeeze=False)
+        self._figure.canvas.mpl_connect("close_event", self._on_close)
 
         for (key, value), sub_plot in zip(channels.items(), self._axes.flat):
             sub_plot.set(xlabel="Samples", ylabel=value[0], title=value[0])
             self._data[key] = PyPlotValueChannel(sub_plot, max_value_count, value[1])
 
         # interactive mode and show plot
-        self._animation_result = animation.FuncAnimation(self._figure, self._animation, interval=100)
-        # plt.ion()
+        self._animation_result = animation.FuncAnimation(self._figure, self._animation,
+                                                         interval=100, save_count=max_value_count)
+        plt.ion()
         plt.show(block=False)
+        self.update()
 
 
     def update(self):
@@ -89,7 +94,17 @@ class PyPlotHelper(PlotHelper):
         plt.pause(0.0001)
 
 
-    def _animation(self, frame: int, *fargs: tuple): # pylint:disable=unused-argument
+    def loop(self):
+        """Run event loop until plot window closed"""
+        while not self._window_closed:
+            self.update()
+
+
+    def _animation(self, _frame: int, *_fargs: tuple):
         """This function is call in context of main thread"""
         for x in self._data.values():
             x.update_plot()
+
+
+    def _on_close(self, _event: CloseEvent):
+        self._window_closed = True
