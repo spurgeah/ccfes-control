@@ -21,7 +21,7 @@ This page describes implementation details.
 - Each device has an instance of a _PacketBuffer_
   - Should be used to read packets from connection
   - Handles extraction of packets from byte stream
-- Most functions communicating with the device are async functions, because they wait for a matching acknowledge and return values from acknowledge
+- Most functions communicating with the device are async functions using name schema _xxx_, because they wait for a matching acknowledge and return values from acknowledge
   - If no matching acknowledge or no acknowledge arrives in time, an exception is raised
   - The async functions connection buffer handling is always identical:
     - Clear buffer
@@ -30,7 +30,6 @@ This page describes implementation details.
     - More data remains in connection buffer
 - Additionally functions with naming schema _send_xxx_ are normal functions not waiting for acknowledge
   - The acknowledge needs to handled manually by using _PacketBuffer_ object from device
-  - _PacketBuffer_ reads data from connection and separates packets from data stream
 
 ## Logging
 - Library creates a custom logger, see class _Logger_
@@ -40,10 +39,10 @@ This page describes implementation details.
 - For better performance, disable logger
   - `logger().disabled = True`
 
-## General layer
+## General layer (all devices)
 - Contains functions to get common information like device serial or firmware version
 
-## Mid level layer
+## Mid level layer (P24)
 - Contains functions for mid level stimulation
 - This mode is good to let the device stimulate a predefined pattern until _stop()_ is send
 - Usage
@@ -52,7 +51,7 @@ This page describes implementation details.
   - Call _get_current_data()_ every 1.5s to keep stimulation ongoing
   - Call _stop()_ to end stimulation and leave mid level mode
 
-## Low level layer
+## Low level layer (P24)
 - Contains functions for low level stimulation
 - This mode is good to react to a external trigger to change stimulation pattern
 - Without _send_channel_config()_ the device will not stimulate
@@ -63,7 +62,7 @@ This page describes implementation details.
     - It stops stimulation when stimulation pattern is over
   - Call _stop()_ to leave low level mode
 
-## Dyscom layer
+## Dyscom layer (I24)
 - Contains functions for dyscom level
 - This mode is used by I24 to measure EMG or BI
 - Usage
@@ -75,7 +74,9 @@ This page describes implementation details.
   - Call _power_module()_ to power off measurement module
 - IMPORTANT: all storage related functions are untested
 
-# Using USB under Linux with Hyper-V
+# Platform hints
+
+## Using USB under Linux with Hyper-V
 - On Windows
   - Install [usbipd-win](https://github.com/dorssel/usbipd-win)
   - `usbipd list`
@@ -86,6 +87,10 @@ This page describes implementation details.
   - `sudo usbip attach -r <host-ip> -b <BUSID>`
   - In case of permission error
     - `sudo chmod 666 /dev/ttyACMx`
+
+## Using MacOS under VirtualBox
+- https://www.reddit.com/r/macOSVMs/comments/1gb8egp/macos_sonoma_virtualbox_bootloop_afterduring/?rdt=48615
+
 
 # Deviation from Instruction for Use
 

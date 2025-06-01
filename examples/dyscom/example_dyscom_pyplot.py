@@ -71,7 +71,7 @@ async def main() -> int:
                         break
 
                     # reduce framerate further
-                    if sld.number % 10 == 0:
+                    if sld.number % 60 == 0:
                         plot_helper.append_value(0, sld.samples[0].value)
                         plot_helper.update()
 

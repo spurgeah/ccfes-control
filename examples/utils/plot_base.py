@@ -67,7 +67,6 @@ class PlotHelper:
 
     def loop(self):
         """Run event loop until plot window closed"""
-        pass
 
 
     def _calc_layout_dimension(self, channel_count: int) -> tuple[int, int]:

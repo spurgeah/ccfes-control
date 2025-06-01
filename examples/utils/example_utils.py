@@ -61,8 +61,10 @@ class ExampleUtils():
 
     @staticmethod
     async def wait_for_any_key_pressed(cb: Callable[[], None] | None):
+        """Helper function to wait for any key press"""
+
         # keyboard func
-        def input_callback(input_value: str) -> bool:
+        def input_callback(_input_value: str) -> bool:
             """Callback call from keyboard input thread"""
             # quit on any key
             return True

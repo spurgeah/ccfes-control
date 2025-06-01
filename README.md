@@ -107,4 +107,7 @@ Python 3.11 or higher
 
 ## 0.0.13
 - Fixed error with example keyboard utils under Linux
-- Enhance example low level plot to show all channels
+- Enhanced example low level plot to show all channels
+
+## 0.0.14
+- Improved examples
