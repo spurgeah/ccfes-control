@@ -110,4 +110,4 @@ Python 3.11 or higher
 - Enhanced example low level plot to show all channels
 
 ## 0.0.14
-- Improved examples
+- Improved examples under Linux/MacOS
