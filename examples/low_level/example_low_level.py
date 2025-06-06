@@ -9,8 +9,8 @@ from science_mode_4 import SerialPortConnection
 from science_mode_4 import LayerLowLevel
 from science_mode_4 import Connector, Channel
 from science_mode_4 import LowLevelHighVoltageSource, LowLevelMode
-from science_mode_4.low_level.low_level_channel_config import PacketLowLevelChannelConfigAck
-from science_mode_4.protocol.commands import Commands
+from science_mode_4 import PacketLowLevelChannelConfigAck
+from science_mode_4 import Commands
 from examples.utils.example_utils import ExampleUtils, KeyboardInputThread
 
 
