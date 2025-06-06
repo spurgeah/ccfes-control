@@ -7,9 +7,15 @@ class ChannelPoint():
     """Class for channel point"""
 
 
-    def __init__(self, duration_micro_seconds: int, current_milli_ampere: int):
+    def __init__(self, duration_micro_seconds: int, current_milli_ampere: float):
         self._duration_in_micro_seconds = duration_micro_seconds
         self._current_in_milli_ampere = current_milli_ampere
+
+
+    @property
+    def current_in_milli_ampere(self) -> float:
+        """Getter for current"""
+        return self._current_in_milli_ampere
 
 
     @property
@@ -18,20 +24,14 @@ class ChannelPoint():
         return self._duration_in_micro_seconds
 
 
-    @property
-    def current_in_milli_ampere(self) -> int:
-        """Getter for duration"""
-        return self._current_in_milli_ampere
-
-
     def get_data(self) -> bytes:
         """Convert information to bytes"""
-        if (self._current_in_milli_ampere < -150) or (self._current_in_milli_ampere > 150):
+        if (self._current_in_milli_ampere < -150.0) or (self._current_in_milli_ampere > 150.0):
             raise ValueError(f"Channel point current must be between -150..150 {self._current_in_milli_ampere}")
         if (self._duration_in_micro_seconds < 0) or (self._duration_in_micro_seconds > 4095):
             raise ValueError(f"Channel point duration must be between 0..4095 {self._duration_in_micro_seconds}")
 
-        c = 2 * self._current_in_milli_ampere + 300
+        c = round(2.0 * self._current_in_milli_ampere + 300.0)
 
         bb = ByteBuilder()
         bb.set_bit_to_position(0, 0, 10)
