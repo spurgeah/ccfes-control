@@ -49,32 +49,35 @@ Python 3.11 or higher
 ## Description
 - Located in folder `examples`
 - Run examples with `python -m examples.<layer>.<example>`
+  - From root directory of this repository
   - Example: `python -m examples.dyscom.example_dyscom_fastplotlib`
   - All examples try to find the serial port that a science mode device is connected to automatically
   - If that fails, provide serial port name as parameter, e.g. `python -m examples.<layer>.<example> COM3`
+- Good starting point for an simple stimulation is example `example_mid_level`
 - Examples have own dependencies, see [Dependencies for examples](#dependencies-for-examples)
 - General layer
-  - `example_general.py`
-    - Demonstrates how to use general layer to initialize device and get serial number and firmware version
+  - `python -m examples.general.example_general`
+    - Demonstrates how to use general layer to initialize device, get serial number and firmware version
+    - Does not call any stimulation functions
 - Mid level layer
-  - `example_mid_level_simple`
+  - `python -m examples.mid_level.example_mid_level_simple`
     - Demonstrates how to use mid level layer, where a stimulation pattern is send to the stimulator and the device automatically executes the pattern by itself for 15s
-  - `example_mid_level.py`
+  - `python -m examples.mid_level.example_mid_level`
     - Demonstrates how to use mid level layer, where a stimulation pattern is send to the stimulator and the device automatically executes the pattern by itself until user ends stimulation by keyboard
 - Low level layer
-  - `example_low_level.py`
+  - `python -m examples.low_level.example_low_level`
     - Demonstrates how to use low level layer, where host has to trigger stimulation manually, in this case by pressing a key 
-  - `example_low_level_plot.py`
+  - `python -m examples.low_level.example_low_level_plot`
     - Demonstrates how to use low level layer to stimulate, measure current and plot it in a graph using PyPlot
 - Dyscom layer
-  - `example_dyscom_get`
+  - `python -m examples.dyscom.example_dyscom_get`
     - Demonstrate how to use different get commands from dyscom layer
-  - `example_dyscom_fastplotlib`
-    - Demonstrate how to use dyscom layer to measure EMG and BI and plotting values using fastplotlib
-  - `example_dyscom_pyplot`
-    - Demonstrate how to use dyscom layer to measure BI and plotting values using PyPlot
-  - `example_dyscom_write_csv`
-    - Demonstrate how to use dyscom layer to measure BI and EMG and writing measurement data to a .csv-file
+  - `python -m examples.dyscom.example_dyscom_fastplotlib`
+    - Demonstrate how to use dyscom layer to measure data and plotting values using fastplotlib
+  - `python -m examples.dyscom.example_dyscom_pyplot`
+    - Demonstrate how to use dyscom layer to measure data and plotting values using PyPlot
+  - `python -m examples.dyscom.example_dyscom_write_csv`
+    - Demonstrate how to use dyscom layer to measure data and writing measurement data to a .csv-file
 
 ## Dependencies for examples
 - Install all dependencies
@@ -111,3 +114,7 @@ Python 3.11 or higher
 
 ## 0.0.14
 - Improved examples under Linux/MacOS
+
+## 0.0.15
+- Clarified readme
+- Changed current for ChannelPoint from int to float
