@@ -118,3 +118,6 @@ Python 3.11 or higher
 ## 0.0.15
 - Clarified readme
 - Changed current for ChannelPoint from int to float
+
+## 0.0.16
+- Fixed error with PacketLowLevelChannelConfigAck result

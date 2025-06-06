@@ -1,11 +1,11 @@
 """Provides packet classes for low level channel config"""
 
 from science_mode_4.protocol.commands import Commands
-from science_mode_4.protocol.types import Connector, Channel
+from science_mode_4.protocol.types import Connector, Channel, ResultAndError
 from science_mode_4.protocol.packet import Packet, PacketAck
 from science_mode_4.protocol.channel_point import ChannelPoint
 from science_mode_4.utils.byte_builder import ByteBuilder
-from .low_level_types import LowLevelMode, LowLevelResult
+from .low_level_types import LowLevelMode
 
 
 class PacketLowLevelChannelConfig(Packet):
@@ -90,7 +90,7 @@ class PacketLowLevelChannelConfigAck(PacketAck):
     def __init__(self, data: bytes):
         super().__init__(data)
         self._command = Commands.LOW_LEVEL_CHANNEL_CONFIG_ACK
-        self._result = LowLevelResult.SUCCESSFUL
+        self._result = ResultAndError.NO_ERROR
         self._connector = 0
         self._channel = 0
         self._mode = LowLevelMode.NO_MEASUREMENT
@@ -101,7 +101,7 @@ class PacketLowLevelChannelConfigAck(PacketAck):
         if not data is None:
             bb = ByteBuilder()
             bb.append_bytes(data)
-            self._result = LowLevelResult(data[0])
+            self._result = ResultAndError(data[0])
             self._channel = bb.get_bit_from_position(8, 4)
             self._connector = bb.get_bit_from_position(12, 4)
             self._mode = LowLevelMode(data[2])
@@ -117,7 +117,7 @@ class PacketLowLevelChannelConfigAck(PacketAck):
 
 
     @property
-    def result(self) -> LowLevelResult:
+    def result(self) -> ResultAndError:
         """Getter for result"""
         return self._result
 

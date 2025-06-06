@@ -3,14 +3,6 @@
 from enum import IntEnum
 
 
-class LowLevelResult(IntEnum):
-    """Represent low level type for result"""
-    SUCCESSFUL = 0
-    TRANSFER_ERROR = 1
-    PARAMETER_ERROR = 2
-    TIMEOUT_STIMULATION = 3
-
-
 class LowLevelMode(IntEnum):
     """Represent low level type for measurement"""
     NO_MEASUREMENT = 0
