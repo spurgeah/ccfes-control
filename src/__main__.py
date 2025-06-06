@@ -1,115 +1,109 @@
 """Test program how to use library without installing the library,
 DO NOT USE THIS FILE, USE EXAMPLES INSTEAD"""
 
-import logging
 import sys
 import asyncio
 
-from science_mode_4.device_i24 import DeviceI24
-from science_mode_4.dyscom.dyscom_get_file_by_name import PacketDyscomGetAckFileByName
-from science_mode_4.dyscom.dyscom_get_operation_mode import PacketDyscomGetAckOperationMode
-from science_mode_4.dyscom.dyscom_layer import LayerDyscom
-from science_mode_4.dyscom.dyscom_send_file import PacketDyscomSendFile
-from science_mode_4.dyscom.dyscom_types import DyscomGetType
+from science_mode_4 import DeviceP24
+from science_mode_4.low_level.low_level_channel_config import PacketLowLevelChannelConfigAck
+from science_mode_4.protocol import ChannelPoint
 from science_mode_4.protocol.commands import Commands
-from science_mode_4.utils import logger
-from science_mode_4.utils.serial_port_connection import SerialPortConnection
-
+from science_mode_4.utils import SerialPortConnection
+from science_mode_4.low_level import LayerLowLevel
+from science_mode_4.protocol import Connector, Channel
+from science_mode_4.low_level import LowLevelHighVoltageSource, LowLevelMode
 
 
 async def main() -> int:
     """Main function"""
 
-    # logger().disabled = True
-    logger().setLevel(logging.DEBUG)
+    # logger().setLevel(logging.DEBUG)
+    current = 70
 
-    devices = SerialPortConnection.list_science_mode_device_ports()
-    connection = SerialPortConnection(devices[0].device)
-    # devices = UsbConnection.list_science_mode_devices()
-    # connection = UsbConnection(devices[0])
-    # connection = NullConnection()
+    # # keyboard is our trigger to start specific stimulation
+    # def input_callback(input_value: str) -> bool:
+    #     """Callback call from keyboard input thread"""
+    #     print(f"Input value {input_value}")
+
+    #     nonlocal current
+    #     if input_value == "1":
+    #         send_channel_config(low_level_layer, Connector.GREEN)
+    #     elif input_value == "2":
+    #         send_channel_config(low_level_layer, Connector.YELLOW)
+    #     elif input_value == "+":
+    #         current += 0.5
+    #         print(f"current: {current}")
+    #     elif input_value == "-":
+    #         current -= 0.5
+    #         print(f"current: {current}")
+    #     elif input_value == "q":
+    #         # end keyboard input thread
+    #         return True
+    #     else:
+    #         print("Invalid command")
+
+    #     return False
+
+
+    def send_channel_config(low_level_layer: LayerLowLevel, connector: Connector):
+        """Sends channel update"""
+        # device can store up to 10 channel config commands
+        for channel in Channel:
+            # send_channel_config does not wait for an acknowledge
+            low_level_layer.send_channel_config(True, channel, connector,
+                                                [ChannelPoint(1000, current), ChannelPoint(4000, 0),
+                                                ChannelPoint(1000, -current)])
+
+
+    print("Usage:")
+    print("Press 1 or 2 to stimulate green or yellow connector")
+    print("Press + or - to increase or decrease current")
+    print("Press q to quit")
+    # create keyboard input thread for non blocking console input
+    # keyboard_input_thread = KeyboardInputThread(input_callback)
+
+    # get comport from command line argument
+    # com_port = ExampleUtils.get_comport_from_commandline_argument()
+    # create serial port connection
+    connection = SerialPortConnection(SerialPortConnection.list_science_mode_device_ports()[0].device)
+    # open connection, now we can read and write data
     connection.open()
 
-    device = DeviceI24(connection)
+    # create science mode device
+    device = DeviceP24(connection)
+    # call initialize to get basic information (serial, versions) and stop any active stimulation/measurement
+    # to have a defined state
     await device.initialize()
 
-    general = device.get_layer_general()
-    await general.get_version()
-    # get dyscom layer to call dyscom level commands
-    dyscom = device.get_layer_dyscom()
+    # get low level layer to call low level commands
+    low_level_layer = device.get_layer_low_level()
 
-    device_id = await dyscom.get_device_id()
+    # call init low level
+    await low_level_layer.init(LowLevelMode.NO_MEASUREMENT, LowLevelHighVoltageSource.STANDARD)
 
-    # await dyscom.power_module(DyscomPowerModuleType.MEMORY_CARD, DyscomPowerModulePowerType.SWITCH_ON)
-    # await dyscom.power_module(DyscomPowerModuleType.MEASUREMENT, DyscomPowerModulePowerType.SWITCH_ON)
-    # params = DyscomInitParams()
-    # params.flags = [DyscomInitFlag.ENABLE_SD_STORAGE_MODE]
-    # init_ack = await dyscom.init(params)
+    # now we can start stimulation
+    # while keyboard_input_thread.is_alive():
+    for x in range(500):
+        if x % 100 == 0:
+            send_channel_config(low_level_layer, Connector.YELLOW)
+        # get new packets from connection
+        ack = low_level_layer.packet_buffer.get_packet_from_buffer()
+        if ack and ack.command == Commands.LOW_LEVEL_CHANNEL_CONFIG_ACK:
+            cca: PacketLowLevelChannelConfigAck = ack
+            # do something with packet ack
+            # here we print that an acknowledge arrived
+            print(cca.result.name)
 
-    # dyscom.send_start()
-    # await asyncio.sleep(1)
-    # dyscom.send_get_operation_mode()
-    # await asyncio.sleep(4)
-    # dyscom.send_stop()
-    # await asyncio.sleep(5)
-    # process_ack(dyscom)
+        await asyncio.sleep(0.1)
 
-    # mmi = await dyscom.get_list_of_measurement_meta_info()
+    # wait until all acknowledges are received
+    await asyncio.sleep(0.5)
+    # call stop low level
+    await low_level_layer.stop()
 
-    # # get calibration file
-    calibration_filename = f"rehaingest_{device_id}.cal"
-    await dyscom.get_file_info(calibration_filename)
-
-    # p = PacketDyscomGetFileByName(calibration_filename)
-    # dyscom.send_packet(p)
-    await dyscom.get_file_by_name(calibration_filename)
-
-    # dyscom.send_send_file(get_file_by_name_ack.block_offset)
-    # for x in range(get_file_by_name_ack.number_of_blocks):
-    #     dyscom.send_send_file(get_file_by_name_ack.block_offset + x)
-
-    # meas_info = await dyscom.get_file_info(init_ack.measurement_file_id)
-    # await dyscom.get_operation_mode()
-
-    # p = PacketDyscomGetFileByName(init_ack.measurement_file_id)
-    # dyscom.send_packet(p)
-    # dyscom.send_get_operation_mode()
-    # get_file_by_name_ack = await dyscom.get_file_by_name(init_ack.measurement_file_id)
-    # await dyscom.get_operation_mode()
-
-    await asyncio.sleep(5)
-    offset = process_ack(dyscom)
-    dyscom.send_send_file(offset)
-    await asyncio.sleep(5)
-    process_ack(dyscom)
-
+    # close serial port connection
     connection.close()
-
     return 0
-
-def process_ack(dyscom: LayerDyscom) -> int:
-    """Process all packets read from connection buffer"""
-    offset = 0
-    while True:
-        # process all available packages
-        ack = dyscom.packet_buffer.get_packet_from_buffer()
-        print(ack)
-        if ack:
-            if ack.command == Commands.DL_SEND_FILE:
-                send_file: PacketDyscomSendFile = ack
-                data = send_file.data
-                print(data)
-            elif ack.command == Commands.DL_GET_ACK and ack.kind == DyscomGetType.OPERATION_MODE:
-                op_mode: PacketDyscomGetAckOperationMode = ack
-                print(op_mode.operation_mode.name)
-            elif ack.command == Commands.DL_GET_ACK and ack.kind == DyscomGetType.FILE_BY_NAME:
-                fbn: PacketDyscomGetAckFileByName = ack
-                print(fbn.block_offset)
-                offset = fbn.block_offset
-        else:
-            break
-
-    return offset
 
 
 if __name__ == "__main__":
