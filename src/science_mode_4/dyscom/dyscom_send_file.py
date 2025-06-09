@@ -23,8 +23,8 @@ class PacketDyscomSendFile(PacketAck):
         self._data: bytes = bytes()
 
         if not data is None:
-            self._block_number, self._block_size = PacketDyscomSendFile._unpack_func(">IH", data)
-            self._data = data[6:self._block_size]
+            self._block_number, self._block_size = PacketDyscomSendFile._unpack_func(data[0:6])
+            self._data = data[6:6+self._block_size]
 
 
     @property
