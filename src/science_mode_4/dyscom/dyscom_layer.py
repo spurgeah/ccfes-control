@@ -1,10 +1,12 @@
 """Provides low level layer"""
 
 import asyncio
+import struct
+
 from science_mode_4.layer import Layer
 from science_mode_4.protocol.commands import Commands
 from science_mode_4.utils.logger import logger
-from .dyscom_types import DyscomGetOperationModeType, DyscomPowerModuleType, DyscomPowerModulePowerType, DyscomSysType
+from .dyscom_types import DyscomFrequencyOut, DyscomGetOperationModeType, DyscomPowerModuleType, DyscomPowerModulePowerType, DyscomSignalType, DyscomSysType
 from .dyscom_init import DyscomInitResult, PacketDyscomInit, PacketDyscomInitAck, DyscomInitParams
 from .dyscom_get_file_system_status import PacketDyscomGetFileSystemStatus, PacketDyscomGetAckFileSystemStatus,\
     DyscomGetFileSystemStatusResult
@@ -187,6 +189,8 @@ class LayerDyscom(Layer):
         # we need number of blocks to know how many SendFile commands we expect
         # and filesize to know exact filesize
         file_by_name = await self.get_file_by_name(filename)
+        logger().info("Dyscom get file content, filesize: %d, number of blocks: %d", 
+                      file_by_name.filesize, file_by_name.number_of_blocks)
 
         # start measurement, so device send automatically SendFile packets
         await self.start()
@@ -209,7 +213,7 @@ class LayerDyscom(Layer):
                     if sf.block_number >= file_by_name.number_of_blocks:
                         break
                 else:
-                    print(f"Unexpected command: {ack.command}")
+                    logger().warning("Unexpected command: %d", ack.command)
 
             await asyncio.sleep(0.01)
 
@@ -219,3 +223,41 @@ class LayerDyscom(Layer):
         # trim to filesize (because SendFile sends always data with blocksize)
         result = result[0:file_by_name.filesize]
         return result
+
+
+    async def get_meas_file_content(self, filename: str) -> tuple[DyscomFrequencyOut, dict[DyscomSignalType, list[float]]]:
+        """Gets measurement data of a file. Device must be in Idle operating mode"""
+        meas_data = await self.get_file_content(filename)
+
+        result: dict[DyscomSignalType, list[float]] = {}
+        # signal types differ from DyscomSignalType enum
+        signal_type_map = {	1: 1, 2: 10, 3: 2, 4: 3, 5: 11, 6: 9, 7: 12}
+        signal_types: list[DyscomSignalType] = []
+        for x in range(meas_data[10]):
+            signal_type = DyscomSignalType(signal_type_map[meas_data[11+x]])
+            signal_types.append(signal_type)
+
+            result[signal_type] = []
+
+        # sample rate
+        sample_rate = DyscomFrequencyOut(meas_data[3])
+
+        # build string to unpack samples
+        # each sample consist of a time difference and n time signal type values
+        value_structure = "<I"
+        for x in range(len(signal_types)):
+            value_structure += "f"
+        unpack_struct = struct.Struct(value_structure)
+
+        # skip header
+        pos = 512
+        sample_size = unpack_struct.size
+        while pos + sample_size < len(meas_data):
+            r = unpack_struct.unpack(meas_data[pos:pos+sample_size])
+            for index, value in enumerate(signal_types):
+                result[value].append(r[1+index])
+
+            # advance to next sample
+            pos += sample_size
+
+        return sample_rate, result
