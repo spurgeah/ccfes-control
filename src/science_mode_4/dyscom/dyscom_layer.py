@@ -6,7 +6,8 @@ import struct
 from science_mode_4.layer import Layer
 from science_mode_4.protocol.commands import Commands
 from science_mode_4.utils.logger import logger
-from .dyscom_types import DyscomFrequencyOut, DyscomGetOperationModeType, DyscomPowerModuleType, DyscomPowerModulePowerType, DyscomSignalType, DyscomSysType
+from .dyscom_types import DyscomFrequencyOut, DyscomGetOperationModeType, DyscomPowerModuleType,\
+    DyscomPowerModulePowerType, DyscomSignalType, DyscomSysType
 from .dyscom_init import DyscomInitResult, PacketDyscomInit, PacketDyscomInitAck, DyscomInitParams
 from .dyscom_get_file_system_status import PacketDyscomGetFileSystemStatus, PacketDyscomGetAckFileSystemStatus,\
     DyscomGetFileSystemStatusResult
@@ -189,7 +190,7 @@ class LayerDyscom(Layer):
         # we need number of blocks to know how many SendFile commands we expect
         # and filesize to know exact filesize
         file_by_name = await self.get_file_by_name(filename)
-        logger().info("Dyscom get file content, filesize: %d, number of blocks: %d", 
+        logger().info("Dyscom get file content, filesize: %d, number of blocks: %d",
                       file_by_name.filesize, file_by_name.number_of_blocks)
 
         # start measurement, so device send automatically SendFile packets
