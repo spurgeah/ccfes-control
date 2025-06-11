@@ -87,7 +87,9 @@ class Device():
             if operation_mode in [DyscomGetOperationModeType.LIVE_MEASURING_PRE,
                                   DyscomGetOperationModeType.LIVE_MEASURING,
                                   DyscomGetOperationModeType.RECORD_PRE,
-                                  DyscomGetOperationModeType.RECORD]:
+                                  DyscomGetOperationModeType.RECORD,
+                                  DyscomGetOperationModeType.DATATRANSFER_PRE,
+                                  DyscomGetOperationModeType.DATATRANSFER]:
                 await self.get_layer_dyscom().stop()
 
         await self.get_layer_general().initialize()

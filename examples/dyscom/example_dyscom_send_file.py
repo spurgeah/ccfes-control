@@ -1,20 +1,21 @@
-"""Test program how to use library without installing the library,
-DO NOT USE THIS FILE, USE EXAMPLES INSTEAD"""
+"""Provides an example how to use dyscom level layer to read stored data from device"""
 
-import sys
 import asyncio
 
-from science_mode_4.device_i24 import DeviceI24
+from science_mode_4 import DeviceI24
+from science_mode_4 import SerialPortConnection
 from science_mode_4.dyscom.dyscom_types import DyscomFilterType, DyscomInitFlag, DyscomInitParams, DyscomPowerModulePowerType,\
     DyscomPowerModuleType, DyscomSignalType
-from science_mode_4.utils.serial_port_connection import SerialPortConnection
+from examples.utils.example_utils import ExampleUtils
 
 
 async def main() -> int:
     """Main function"""
 
+    # get comport from command line argument
+    com_port = ExampleUtils.get_comport_from_commandline_argument()
     # create serial port connection
-    connection = SerialPortConnection(SerialPortConnection.list_science_mode_device_ports()[0].device)
+    connection = SerialPortConnection(com_port)
     # open connection, now we can read and write data
     connection.open()
 
@@ -30,7 +31,7 @@ async def main() -> int:
     # call enable measurement power module and memory card for measurement
     await dyscom.power_module(DyscomPowerModuleType.MEASUREMENT, DyscomPowerModulePowerType.SWITCH_ON)
     await dyscom.power_module(DyscomPowerModuleType.MEMORY_CARD, DyscomPowerModulePowerType.SWITCH_ON)
-    # call init with lowest sample rate (because of performance issues with plotting values)
+    # call init with 1k sample rate
     init_params = DyscomInitParams()
     init_params.signal_type = [DyscomSignalType.BI, DyscomSignalType.EMG_1]
     init_params.filter = DyscomFilterType.PREDEFINED_FILTER_1
@@ -64,5 +65,4 @@ async def main() -> int:
 
 
 if __name__ == "__main__":
-    res = asyncio.run(main())
-    sys.exit(res)
+    asyncio.run(main())

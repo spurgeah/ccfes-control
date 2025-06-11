@@ -4,6 +4,7 @@ max-attributes=15
 
 [DESIGN]
 max-statements=100
+max-locals = 20
 
 [STRING]
 check-quote-consistency=yes

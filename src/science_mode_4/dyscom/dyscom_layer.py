@@ -1,8 +1,13 @@
 """Provides low level layer"""
 
+import asyncio
+import struct
+
 from science_mode_4.layer import Layer
+from science_mode_4.protocol.commands import Commands
 from science_mode_4.utils.logger import logger
-from .dyscom_types import DyscomGetOperationModeType, DyscomPowerModuleType, DyscomPowerModulePowerType, DyscomSysType
+from .dyscom_types import DyscomFrequencyOut, DyscomGetOperationModeType, DyscomPowerModuleType,\
+    DyscomPowerModulePowerType, DyscomSignalType, DyscomSysType
 from .dyscom_init import DyscomInitResult, PacketDyscomInit, PacketDyscomInitAck, DyscomInitParams
 from .dyscom_get_file_system_status import PacketDyscomGetFileSystemStatus, PacketDyscomGetAckFileSystemStatus,\
     DyscomGetFileSystemStatusResult
@@ -17,7 +22,7 @@ from .dyscom_get_device_id import PacketDyscomGetAckDeviceId, PacketDyscomGetDev
 from .dyscom_get_file_info import DyscomGetFileInfoResult, PacketDyscomGetAckFileInfo, PacketDyscomGetFileInfo
 from .dyscom_get_battery_status import DyscomGetBatteryResult, PacketDyscomGetAckBatteryStatus, PacketDyscomGetBatteryStatus
 from .dyscom_sys import DyscomSysResult, PacketDyscomSys, PacketDyscomSysAck
-from .dyscom_send_file import PacketDyscomSendFile
+from .dyscom_send_file import PacketDyscomSendFile, PacketDyscomSendFileAck
 
 
 class LayerDyscom(Layer):
@@ -138,10 +143,10 @@ class LayerDyscom(Layer):
         return DyscomSysResult(ack.sys_type, ack.state, ack.filename)
 
 
-    def send_send_file(self, block_number: int):
+    def send_send_file_ack(self, block_number: int):
         """Sends dyscom send file ack and returns immediately without waiting for response"""
         logger().info("Dyscom send file ack, block_number: %d", block_number)
-        p = PacketDyscomSendFile(block_number)
+        p = PacketDyscomSendFileAck(block_number)
         self.send_packet(p)
 
 
@@ -173,3 +178,87 @@ class LayerDyscom(Layer):
         logger().info("Dyscom stop")
         p = PacketDyscomStop()
         self.send_packet(p)
+
+
+    async def get_file_content(self, filename: str) -> bytes:
+        """Gets content of a file. Device must be in Idle operating mode"""
+        om = await self.get_operation_mode()
+        if om != DyscomGetOperationModeType.IDLE:
+            raise ValueError(f"Error wrong operation mode {om.name}")
+
+        # get meta information and sets device in mode DATATRANSFER_PRE
+        # we need number of blocks to know how many SendFile commands we expect
+        # and filesize to know exact filesize
+        file_by_name = await self.get_file_by_name(filename)
+        logger().info("Dyscom get file content, filesize: %d, number of blocks: %d",
+                      file_by_name.filesize, file_by_name.number_of_blocks)
+
+        # start measurement, so device send automatically SendFile packets
+        await self.start()
+
+        result = bytes()
+        while True:
+            # process all available packages
+            ack = self.packet_buffer.get_packet_from_buffer()
+            if ack:
+                if ack.command == Commands.DL_SEND_FILE:
+                    # process SendFile data
+                    sf: PacketDyscomSendFile = ack
+                    result += sf.data
+
+                    # send acknowledge for this packet, so device can send
+                    # next block automatically
+                    self.send_send_file_ack(sf.block_number)
+
+                    # check if we have all blocks
+                    if sf.block_number >= file_by_name.number_of_blocks:
+                        break
+                else:
+                    logger().warning("Unexpected command: %d", ack.command)
+
+            await asyncio.sleep(0.01)
+
+        # stop measurement, we have all blocks
+        await self.stop()
+
+        # trim to filesize (because SendFile sends always data with blocksize)
+        result = result[0:file_by_name.filesize]
+        return result
+
+
+    async def get_meas_file_content(self, filename: str) -> tuple[DyscomFrequencyOut, dict[DyscomSignalType, list[float]]]:
+        """Gets measurement data of a file. Device must be in Idle operating mode"""
+        meas_data = await self.get_file_content(filename)
+
+        result: dict[DyscomSignalType, list[float]] = {}
+        # signal types differ from DyscomSignalType enum
+        signal_type_map = {	1: 1, 2: 10, 3: 2, 4: 3, 5: 11, 6: 9, 7: 12}
+        signal_types: list[DyscomSignalType] = []
+        for x in range(meas_data[10]):
+            signal_type = DyscomSignalType(signal_type_map[meas_data[11+x]])
+            signal_types.append(signal_type)
+
+            result[signal_type] = []
+
+        # sample rate
+        sample_rate = DyscomFrequencyOut(meas_data[3])
+
+        # build string to unpack samples
+        # each sample consist of a time difference and n time signal type values
+        value_structure = "<I"
+        for x in range(len(signal_types)):
+            value_structure += "f"
+        unpack_struct = struct.Struct(value_structure)
+
+        # skip header
+        pos = 512
+        sample_size = unpack_struct.size
+        while pos + sample_size < len(meas_data):
+            r = unpack_struct.unpack(meas_data[pos:pos+sample_size])
+            for index, value in enumerate(signal_types):
+                result[value].append(r[1+index])
+
+            # advance to next sample
+            pos += sample_size
+
+        return sample_rate, result

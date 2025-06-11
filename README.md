@@ -78,6 +78,8 @@ Python 3.11 or higher
     - Demonstrate how to use dyscom layer to measure data and plotting values using PyPlot
   - `python -m examples.dyscom.example_dyscom_write_csv`
     - Demonstrate how to use dyscom layer to measure data and writing measurement data to a .csv-file
+  - `python -m examples.dyscom.example_dyscom_send_file`
+    - Demonstrate how to use dyscom layer to save measurement data on memory card and reading it afterwards
 
 ## Dependencies for examples
 - Install all dependencies
@@ -116,8 +118,11 @@ Python 3.11 or higher
 - Improved examples under Linux/MacOS
 
 ## 0.0.15
-- Clarified readme
+- Enhanced readme
 - Changed current for ChannelPoint from int to float
 
 ## 0.0.16
 - Fixed error with PacketLowLevelChannelConfigAck result
+
+## 0.0.17
+- Added sample that demonstrates how to read measurement data files from I24 devices

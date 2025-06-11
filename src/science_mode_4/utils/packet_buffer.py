@@ -79,7 +79,7 @@ class PacketBuffer():
         key = ack_data[0], ack_data[1]
         wait_ack = self._open_acknowledges.get(key)
         if wait_ack is None:
-            if ack_data[0] not in [Commands.DL_SEND_LIVE_DATA]:
+            if ack_data[0] not in [Commands.DL_SEND_LIVE_DATA, Commands.DL_SEND_FILE]:
                 logger().warning("Unexpected acknowledge command: %s, number: %d", Commands(ack_data[0]).name, ack_data[1])
         else:
             self._open_acknowledges[ack_data[0], ack_data[1]] -= 1

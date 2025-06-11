@@ -65,14 +65,24 @@ This page describes implementation details.
 ## Dyscom layer (I24)
 - Contains functions for dyscom level
 - This mode is used by I24 to measure EMG or BI
-- Usage
+- Usage for live data
   - Call _power_module()_ to power on measurement module
-  - Call _init()_ with parameter for measurement
+  - Call _init()_ with parameter for measurement and DyscomInitFlag for live data
   - Call _start()_ to start measurement
     - Device sends now _DlSendLiveData_ packets with measurement data
   - Call _stop()_ to end measurement
   - Call _power_module()_ to power off measurement module
-- IMPORTANT: all storage related functions are untested
+- Usage for measurement data read from memory card
+  - Call _power_module()_ to power on measurement module and memory card
+  - Call _init()_ with parameter for measurement and DyscomInitFlag for storage mode
+    - Result contains measurement id, that is the filename used later
+  - Call _start()_ to start measurement
+    - Device sends nothing but stores measurement data on memory card
+  - Call _stop()_ to end measurement
+  - Call _power_module()_ to power off measurement module
+  - Call _get_meas_file_content()_ with filename from _init()_ to get measurement data
+  - Call _power_module()_ to power off memory card
+- IMPORTANT: not all storage related functions are tested
 
 # Platform hints
 

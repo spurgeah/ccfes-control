@@ -14,7 +14,7 @@ class PacketDyscomSendMeasurementMetaInfo(PacketAck):
 
     def __init__(self, data: bytes):
         super().__init__(data)
-        self._command = Commands.DL_SEND_FILE
+        self._command = Commands.DL_MMI
         self._init_params: DyscomInitParams = DyscomInitParams()
         self._file_name = ""
         self._file_size = 0
