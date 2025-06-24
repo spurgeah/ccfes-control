@@ -46,10 +46,20 @@ async def main() -> int:
     file_system_status = await dyscom.get_file_system_status()
     print(file_system_status)
 
-    ####
+    # this is the default calibration filename
     calibration_filename = f"rehaingest_{device_id}.cal"
+    ####
+    # get calibration file content
     calibration_content = await dyscom.get_file_content(calibration_filename)
     print(f"Calibration content length: {len(calibration_content)}")
+    # I24 devices calculates checksum from first 2 bytes of the file content
+    calculated_checksum = (calibration_content[0] << 8) | calibration_content[1]
+    print(f"Calculated calibration content checksum: {calculated_checksum}")
+
+    ####
+    # get file info for calibration file
+    file_info = await dyscom.get_file_info(calibration_filename)
+    print(f"Calibration file info checksum: {file_info.checksum}")
 
     # close serial port connection
     connection.close()

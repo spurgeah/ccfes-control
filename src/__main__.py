@@ -6,7 +6,7 @@ import asyncio
 
 from science_mode_4.device_i24 import DeviceI24
 from science_mode_4.dyscom.dyscom_types import DyscomFilterType, DyscomInitFlag, DyscomInitParams, DyscomPowerModulePowerType,\
-    DyscomPowerModuleType, DyscomSignalType
+    DyscomPowerModuleType, DyscomSignalType, DyscomSysType
 from science_mode_4.utils.serial_port_connection import SerialPortConnection
 
 
@@ -24,9 +24,23 @@ async def main() -> int:
     # to have a defined state
     await device.initialize()
 
+
     # get dyscom layer to call low level commands
     dyscom = device.get_layer_dyscom()
+    device_id = await dyscom.get_device_id()
 
+    ####
+    calibration_filename = f"rehaingest_{device_id}.cal"
+    calibration_content = await dyscom.get_file_content(calibration_filename)
+    print(f"Calibration content length: {len(calibration_content)}")
+    calculated_checksum = (calibration_content[0] << 8) | calibration_content[1]
+    print(f"Calculated calibration content checksum: {calculated_checksum}")
+
+    ####
+    file_info = await dyscom.get_file_info(calibration_filename)
+    print(f"Calibration file info checksum: {file_info.checksum}")
+
+    sys = await dyscom.sys(DyscomSysType.DEVICE_STORAGE)
     # call enable measurement power module and memory card for measurement
     await dyscom.power_module(DyscomPowerModuleType.MEASUREMENT, DyscomPowerModulePowerType.SWITCH_ON)
     await dyscom.power_module(DyscomPowerModuleType.MEMORY_CARD, DyscomPowerModulePowerType.SWITCH_ON)

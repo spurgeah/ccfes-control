@@ -31,7 +31,7 @@ class Ads129x:
     channel_4_setting_register = Ads129xChannelSettingsRegister() # CH4SET
 
     positive_signal_derivation_register = 0x02 # RLD_SENSP
-    negative_signal_derivation_register = 0xEA # RLD_SENSN
+    negative_signal_derivation_register = 0x02 # RLD_SENSN
     positive_signal_lead_off_detection_register = 0 # LOFF_SENSP
     negative_signal_lead_off_detection_register = 0 # LOFF_SENSN
 

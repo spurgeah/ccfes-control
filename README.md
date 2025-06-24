@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Python implementation of HasomedScience ScienceMode 4 protocol for P24 (https://github.com/ScienceMode/ScienceMode4_P24) and I24 (https://github.com/ScienceMode/ScienceMode4_I24) devices. To use this library see section [Installation](#installation).
+Pure Python implementation of HasomedScience ScienceMode 4 protocol for P24 (https://github.com/ScienceMode/ScienceMode4_P24) and I24 (https://github.com/ScienceMode/ScienceMode4_I24) devices. To use this library see section [Installation](#installation). Library and examples are tested under Windows, Linux and MacOS.
 
 ## Requirements
 
@@ -126,3 +126,6 @@ Python 3.11 or higher
 
 ## 0.0.17
 - Added sample that demonstrates how to read measurement data files from I24 devices
+
+## 0.0.18
+- More documentation

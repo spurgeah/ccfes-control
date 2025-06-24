@@ -6,8 +6,8 @@ import struct
 from science_mode_4.layer import Layer
 from science_mode_4.protocol.commands import Commands
 from science_mode_4.utils.logger import logger
-from .dyscom_types import DyscomFrequencyOut, DyscomGetOperationModeType, DyscomPowerModuleType,\
-    DyscomPowerModulePowerType, DyscomSignalType, DyscomSysType
+from .dyscom_types import DyscomFrequencyOut, DyscomGetOperationModeType, DyscomInitState, DyscomPowerModuleType,\
+    DyscomPowerModulePowerType, DyscomSignalType, DyscomSysState, DyscomSysType
 from .dyscom_init import DyscomInitResult, PacketDyscomInit, PacketDyscomInitAck, DyscomInitParams
 from .dyscom_get_file_system_status import PacketDyscomGetFileSystemStatus, PacketDyscomGetAckFileSystemStatus,\
     DyscomGetFileSystemStatusResult
@@ -36,6 +36,9 @@ class LayerDyscom(Layer):
         p = PacketDyscomInit(params)
         ack: PacketDyscomInitAck = await self.send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomInit")
+        if ack.init_state not in [DyscomInitState.UNUSED, DyscomInitState.SUCCESS]:
+            raise ValueError(f"Dyscom error init {ack.init_state.name}")
+
         logger().info("Dyscom init, measurement_file_id: %s, state: %s, frequency: %s",\
                       ack.measurement_file_id, ack.init_state.name, ack.frequency_out.name)
         return DyscomInitResult(ack.register_map_ads129x, ack.measurement_file_id, ack.init_state, ack.frequency_out)
@@ -139,6 +142,9 @@ class LayerDyscom(Layer):
         p = PacketDyscomSys(sys_type, filename)
         ack: PacketDyscomSysAck = await self.send_packet_and_wait(p)
         self._check_result_error(ack.result_error, "DyscomSys")
+        if ack.state not in [DyscomSysState.SUCCESSFUL]:
+            raise ValueError(f"Dyscom error sys {ack.state.name}")
+
         logger().info("Dyscom sys, type: %s, state: %s, filename: %s", ack.sys_type.name, ack.state.name, ack.filename)
         return DyscomSysResult(ack.sys_type, ack.state, ack.filename)
 
