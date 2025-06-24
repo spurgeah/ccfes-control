@@ -40,7 +40,9 @@ async def main() -> int:
     file_info = await dyscom.get_file_info(calibration_filename)
     print(f"Calibration file info checksum: {file_info.checksum}")
 
-    sys = await dyscom.sys(DyscomSysType.DEVICE_STORAGE)
+    s_y_s = await dyscom.sys(DyscomSysType.DEVICE_STORAGE)
+    print(f"Sys {s_y_s.state.name}")
+
     # call enable measurement power module and memory card for measurement
     await dyscom.power_module(DyscomPowerModuleType.MEASUREMENT, DyscomPowerModulePowerType.SWITCH_ON)
     await dyscom.power_module(DyscomPowerModuleType.MEMORY_CARD, DyscomPowerModulePowerType.SWITCH_ON)
