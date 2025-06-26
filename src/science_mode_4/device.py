@@ -84,7 +84,8 @@ class Device():
         if DeviceCapability.DYSCOM in self._capabilities:
             # get operation mode to see if dyscom measurement is running
             operation_mode = await self.get_layer_dyscom().get_operation_mode()
-            if operation_mode in [DyscomGetOperationModeType.LIVE_MEASURING_PRE,
+            if operation_mode in [DyscomGetOperationModeType.UNDEFINED,
+                                  DyscomGetOperationModeType.LIVE_MEASURING_PRE,
                                   DyscomGetOperationModeType.LIVE_MEASURING,
                                   DyscomGetOperationModeType.RECORD_PRE,
                                   DyscomGetOperationModeType.RECORD,

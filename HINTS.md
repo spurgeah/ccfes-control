@@ -102,16 +102,10 @@ This page describes implementation details.
 - https://www.reddit.com/r/macOSVMs/comments/1gb8egp/macos_sonoma_virtualbox_bootloop_afterduring/?rdt=48615
 
 
-# Deviation from Instruction for Use
-
-## Dyscom commands
-
-### Common
-- Datetime parameters have a different order
+## I24 protocol hints
 
 ### DL_init
 - Init state seems always be UNUSED
-- Strings are 1 byte longer than in other commands
 - Output data rate depends on init params filter property
 - Setting a filter overwrite other settings
   - ADS129x register channel 1-4 settings
@@ -121,25 +115,9 @@ This page describes implementation details.
 ### DL_get for type file system status and list of measurement info
 - Return never meaningful values, probably not implemented on I24 side
 
-### DL_get_ack for type file by name
-- Additional parameter mode (1 byte)
-  - Undefined = 0
-  - Multiblock = 1
-  - Singleblock = 2
-
 ### DL_get for type battery
 - Dl get types (table 23)
   - 0 -> Battery (was Unused)
-
-### DL_get_ack for type battery
-- Energy state, 1 byte, is a flag, bit 1: cable connected, bit 2: device is loading
-- Percentage, 1 byte, [0, 100] in percent
-- Temperature, 1 byte, [-128, 127] in degrees
-- Current, 4 bytes, [-327675, 327675] in milliampere
-- Voltage, 4 bytes, [0, 65535] in millivolt
-
-### DL_send_file_ack
-- Block number, 4 byte, block number of DL_send_file
 
 ### DL_send_live_data
 - SignalType for each sample is always 0
