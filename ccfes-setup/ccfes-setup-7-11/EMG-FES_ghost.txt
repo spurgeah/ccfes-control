@@ -1,0 +1,58 @@
+example_mid_level.py and run2live4.py are fromdifferent python libraries used to control the hasomed P24 stimulator.
+write a code to control the P24 that works with the commands from the example_mid_level.py library to create a code that does everything that run2live4.py does.
+leave notes throughout the code explaining what each line does to a non-programmer
+
+
+
+read and filter EMG
+translate to FES command
+
+figure shows
+live EMG
+live FES amplitude / reaction
+
+add FES parameters to CSV file output
+
+
+CCFES.py --
+establish starting FES parameters
+import tools and utility modules
+import all device information
+print device information
+prompt file name to save to 
+data will save to: 
+
+-- main -- 
+    find I24 COM port
+    find P24 COM port
+
+    input - press enter to start recording/stimming
+
+    real time plotting of EMG channels
+    real time monitor of FES channel parameters
+        FES chord colors red;1,5 blue;2,6 black;3,7 white;4,8
+
+    start thread - press enter to stop recording
+    start thread press something to close EMG/FES windows
+
+        data aquisition function --
+        collect data
+        loop until stop button is pressed
+        while -live data-
+            send threshold input to FES command application
+            retrieve new FES values
+            plot EMG data - append value
+            add desired values to CSV file
+                channels, delta time, time overall, FES parameters
+
+        finally
+            shut down EMG data stream
+            stop FES
+            stut down devices
+
+
+start listening threads
+run live plotting window(s)
+
+
+Ask the user where to save the data and rename the file

@@ -24,13 +24,13 @@ class Ads129xClockConnection(IntEnum):
 
 class Ads129xOutputDataRate(IntEnum):
     """Represent ADS129xtype for output data rate (configuration register 1, 0x01)"""
-    HR_MODE_32_KSPS__LP_MODE_16_KSPS = 0
-    HR_MODE_16_KSPS__LP_MODE_8_KSPS = 1
-    HR_MODE_8_KSPS__LP_MODE_4_KSPS = 2
-    HR_MODE_4_KSPS__LP_MODE_2_KSPS = 3
-    HR_MODE_2_KSPS__LP_MODE_1_KSPS = 4
-    HR_MODE_1_KSPS__LP_MODE_500_SPS = 5
-    HR_MODE_500_SPS__LP_MODE_250_SPS = 6
+    HR_MODE_32_KSPS__LP_MODE_16_KSPS = 0 # 32k sample rate
+    HR_MODE_16_KSPS__LP_MODE_8_KSPS = 1  # 16k sample rate
+    HR_MODE_8_KSPS__LP_MODE_4_KSPS = 2 # 8k sample rate
+    HR_MODE_4_KSPS__LP_MODE_2_KSPS = 3 # 4k sample rate
+    HR_MODE_2_KSPS__LP_MODE_1_KSPS = 4 # 2k sample rate
+    HR_MODE_1_KSPS__LP_MODE_500_SPS = 5 # 1k sample rate
+    HR_MODE_500_SPS__LP_MODE_250_SPS = 6 # 500 sample rate
 
 
 @dataclass
