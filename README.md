@@ -5,6 +5,12 @@
 3. no more EMG
 4. 
 
+
+branches
+- aug28branch: CCFES control repository, as-is
+- patch-1: edit beginning 9/19
+
+
 ## To Do 7/28
 - Channel 4 is reading a miniscule signal no matter what, and I cannot find any hardware issues, so why? 
     -/ check breathing mode criteria, could find none
@@ -242,3 +248,4 @@ example_mid_level.py and run2live4.py are fromdifferent python libraries used to
 write a code to control the P24 that works with the commands from the example_mid_level.py library to create a code that does everything that run2live4.py does.
 
 leave notes throughout the code explaining what each line does to a non-programmer
+
