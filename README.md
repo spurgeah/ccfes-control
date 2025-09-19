@@ -1,3 +1,10 @@
+## Edit 9/19
+# Purge all CCFES, Create CH+FES + Interface
+1. delete old days/versions of files
+2. clean up this README as you delete things
+3. no more EMG
+4. 
+
 ## To Do 7/28
 - Channel 4 is reading a miniscule signal no matter what, and I cannot find any hardware issues, so why? 
     -/ check breathing mode criteria, could find none
@@ -233,4 +240,5 @@ combine and rewrite dyscom_runlive3.py and midlevel_runlive2.py into a single co
 # 7/11 
 example_mid_level.py and run2live4.py are fromdifferent python libraries used to control the hasomed P24 stimulator.
 write a code to control the P24 that works with the commands from the example_mid_level.py library to create a code that does everything that run2live4.py does.
+
 leave notes throughout the code explaining what each line does to a non-programmer
