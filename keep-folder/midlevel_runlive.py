@@ -20,12 +20,12 @@ com_port = ExampleUtils.get_comport_from_commandline_argument()
 # ===== USER CONFIGURATION =====
 # Default settings for amplitude, frequency, and pulse width for both channels
 channel_defaults = {
-    "amp1":30,    # in milliamps
-    "amp2": 0,
+    "amp1":5,    # in milliamps
+    "amp2": 5,
     "freq1": 35,  # in Hz
     "freq2": 35,
     "pw1": 75,   # in microseconds
-    "pw2": 300
+    "pw2": 260
 }
 
 # Change steps when keys are pressed
