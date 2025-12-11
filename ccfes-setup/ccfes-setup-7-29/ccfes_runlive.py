@@ -272,12 +272,12 @@ async def main():
             await stim_layer.update([cc1, cc2])
 
             # Update stim_on_ch1/ch2 for overlay/plotting
-            stim_on_ch1 = converted[0] > emg_threshold
-            stim_on_ch2 = converted[1] > emg_threshold
+            stim_on_ch1 = converted[1] > emg_threshold
+            stim_on_ch2 = converted[2] > emg_threshold
 
                         # --- Update the live plot ---
-            plot_helper.append_value(0, converted[0])  # EMG CH1
-            plot_helper.append_value(1, converted[1])  # EMG CH2
+            plot_helper.append_value(0, converted[1])  # EMG CH1
+            plot_helper.append_value(1, converted[2])  # EMG CH2
             plot_helper.append_value(2, params["amp1"] if stim_on_ch1 else 0)  # Show stim amplitude if ON, else 0
             plot_helper.append_value(3, params["amp2"] if stim_on_ch2 else 0)
             plot_helper.update()

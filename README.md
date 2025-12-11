@@ -1,3 +1,18 @@
+## 12/10
+
+I need an electromyography only processing program, in a new file named asp_emg_processing.py. The program needs to read the incoming data from the Hasomed sciencmode I24 measurement device (processing tchannels 2 and 3, EMG_1 and EMG_2), 
+convert each channel respectively to microvolts, 
+apply a highpass filter (20 Hz (2nd–4th order) to remove motion/DC)
+applies a bandpass filter (20–450 Hz, zero-phase IIR or FIR).
+rectifies the signal (full wave)
+smoothes the signal with an RMS sliding window (e.g., 50–100 ms window; overlap 10 ms)
+determines an overall 'level' of 'muscle effort'. (Normalization: scale by per-muscle MVC, variables edited in the code by the user at the top)
+
+needs to detect and print to the terminal the emg threshold level, with a nested if statement
+
+
+
+
 ## To Do 7/28
 - Channel 4 is reading a miniscule signal no matter what, and I cannot find any hardware issues, so why? 
     -/ check breathing mode criteria, could find none

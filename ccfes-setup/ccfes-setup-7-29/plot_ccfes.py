@@ -1,9 +1,10 @@
 import csv
 import matplotlib.pyplot as plt
 
-csv_path = r"y:\Hasomed Code\HasomedSetup13\ScienceMode4Python\ccfes-setup\ccfes-setup-7-29\csv_files\7-29-10.csv"
-#csv_path = r"ccfes-setup\ccfes-setup-7-18\csv_files\7-18-7.csv"
+#csv_path = r"y:\Hasomed Code\HasomedSetup13\ScienceMode4Python\ccfes-setup\ccfes-setup-7-29\csv_files\12-11-2.csv"
+#csv_path = r"ccfes-setup\ccfes-setup-7-29\csv_files\12-11-2.csv"
 #csv_path = r"Y:\Hasomed Code\HasomedSetup13\ScienceMode4Python\examples\dyscom\csv_files\792.csv"
+csv_path = r"\\clusterfsnew.ceas1.uc.edu\students\spurgeah\My Documents\GitHub\ccfes-control\ccfes-setup\ccfes-setup-7-29\csv_files\12-11-2.csv"
 
 # Read data
 with open(csv_path, newline='') as csvfile:
